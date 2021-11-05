@@ -47,6 +47,7 @@
 		D0800D20272BF0A200347AB7 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D1E272BF0A200347AB7 /* PhotoCollectionViewCell.swift */; };
 		D0800D21272BF0A200347AB7 /* PhotoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0800D1F272BF0A200347AB7 /* PhotoCollectionViewCell.xib */; };
 		D0800D23272BF6DF00347AB7 /* FullscreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D22272BF6DF00347AB7 /* FullscreenViewController.swift */; };
+		D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D080897C2735500000A6394B /* CustomTabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		D0800D1E272BF0A200347AB7 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		D0800D1F272BF0A200347AB7 /* PhotoCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoCollectionViewCell.xib; sourceTree = "<group>"; };
 		D0800D22272BF6DF00347AB7 /* FullscreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenViewController.swift; sourceTree = "<group>"; };
+		D080897C2735500000A6394B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +250,7 @@
 				D08132142710719B00A280B0 /* Login */,
 				D06313CC270B148000D0E12C /* Assets.xcassets */,
 				D06313D1270B148000D0E12C /* Info.plist */,
+				D080897C2735500000A6394B /* CustomTabBarController.swift */,
 			);
 			path = "VK client";
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			files = (
 				D0615C7A273125300098F5D7 /* CustomNavigationController.swift in Sources */,
 				D0800D13272698BF00347AB7 /* NewsTableViewCellModel.swift in Sources */,
+				D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */,
 				D050CD592721BD9E0076D78E /* GradientView.swift in Sources */,
 				D0615C78273125300098F5D7 /* PopAnimator.swift in Sources */,
 				D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */,

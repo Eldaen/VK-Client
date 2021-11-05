@@ -10,17 +10,13 @@ import UIKit
 /// Entry point controller, responsible for the user Authorization
 final class LoginController: UIViewController {
     
-//    @IBOutlet weak var loginInput: UITextField!
-//    @IBOutlet weak var passwordInput: UITextField!
-//    @IBOutlet weak var scrollView: UIScrollView!
-//    @IBOutlet weak var loadingIndicator: loadingView!
-    
 //    @IBAction func logginButtonAction(_ sender: Any) {
 //
 //    }
 	
-	private lazy var scrollView: UIScrollView = {
-		let scrollView = UIScrollView()
+	private var scrollView: UIScrollView = {
+		let scrollView = UIScrollView(frame: .zero)
+		scrollView.backgroundColor = UIColor.systemTeal
 		return scrollView
 	}()
 	
@@ -53,8 +49,10 @@ final class LoginController: UIViewController {
 	
 	private lazy var loginInput: UITextField = {
 		let textField = UITextField()
+		textField.layer.cornerRadius = 8
 		textField.font = UIFont.systemFont(ofSize: 14)
 		textField.textColor = .black
+		textField.backgroundColor = .white
 		textField.textAlignment = .center
 		textField.text = "login"
 		textField.translatesAutoresizingMaskIntoConstraints = false
@@ -63,8 +61,10 @@ final class LoginController: UIViewController {
 	
 	private lazy var passwordInput: UITextField = {
 		let textField = UITextField()
+		textField.layer.cornerRadius = 8
 		textField.font = UIFont.systemFont(ofSize: 14)
 		textField.textColor = .black
+		textField.backgroundColor = .white
 		textField.textAlignment = .center
 		textField.text = "password"
 		textField.translatesAutoresizingMaskIntoConstraints = false
@@ -75,16 +75,23 @@ final class LoginController: UIViewController {
 		let button = UIButton(type: .system)
 		button.setTitle("Войти", for: .normal)
 		button.setTitleColor(.white, for: .normal)
+		button.backgroundColor = .tintColor
+		button.layer.cornerRadius = 8
 		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
 	
-    
+	lazy private var nextController: UITabBarController = CustomTabBarController()
+	
 	
 	// MARK: - Setting Views
 	private func setupViews() {
-		view.addSubview(scrollView)
 		
+		// если не задать frame, то не отрисовывается О_о
+		scrollView.frame = self.view.bounds
+		loginButton.addTarget(self, action: #selector(checkLogin), for: .touchUpInside)
+		
+		view.addSubview(scrollView)
 		scrollView.addSubview(appName)
 		scrollView.addSubview(loginLabel)
 		scrollView.addSubview(passwordLabel)
@@ -100,36 +107,31 @@ final class LoginController: UIViewController {
 		  scrollView.topAnchor.constraint(equalTo: view.topAnchor),
 		  scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		  scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-		  
-		  appName.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 180),
+
+		  appName.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 120),
 		  appName.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 87),
 		  appName.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-		  
-		  loginLabel.topAnchor.constraint(equalTo: appName.bottomAnchor, constant: 123),
+
+		  loginLabel.topAnchor.constraint(equalTo: appName.bottomAnchor, constant: 100),
 		  loginLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-		  
+
 		  loginInput.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 15),
 		  loginInput.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-		  loginLabel.widthAnchor.constraint(equalToConstant: 120),
-		  
+		  loginInput.widthAnchor.constraint(equalToConstant: 120),
+		  loginInput.heightAnchor.constraint(equalToConstant: 30),
 
-//		  cardView2.leadingAnchor.constraint(equalTo: cardView1.trailingAnchor),
-//		  cardView2.topAnchor.constraint(equalTo: safeArea.topAnchor),
-//		  cardView2.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.5),
-//		  cardView2.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.5),
-//		  cardView2.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-//
-//		  cardView3.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-//		  cardView3.topAnchor.constraint(equalTo: cardView1.bottomAnchor),
-//		  cardView3.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.5),
-//		  cardView3.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.5),
-//		  cardView3.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-//
-//		  cardView4.leadingAnchor.constraint(equalTo: cardView3.trailingAnchor),
-//		  cardView4.topAnchor.constraint(equalTo: cardView2.bottomAnchor),
-//		  cardView4.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.5),
-//		  cardView4.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.5),
-//		  cardView4.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+		  passwordLabel.topAnchor.constraint(equalTo: loginInput.bottomAnchor, constant: 40),
+		  passwordLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+
+		  passwordInput.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 15),
+		  passwordInput.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  passwordInput.widthAnchor.constraint(equalToConstant: 120),
+		  passwordInput.heightAnchor.constraint(equalToConstant: 30),
+
+		  loginButton.topAnchor.constraint(equalTo: passwordInput.bottomAnchor, constant: 50),
+		  loginButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 200),
+		  loginButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  loginButton.widthAnchor.constraint(equalToConstant: 65),
 		])
 	}
     
@@ -138,7 +140,8 @@ final class LoginController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        setupViews()
+		setupConstraints()
         
         // Жест нажатия на пустое место, чтобы скрывать клавиатуру
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -156,12 +159,6 @@ final class LoginController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillBeHidden(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        loadingIndicator.startAnimation()
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -169,7 +166,7 @@ final class LoginController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+    @objc func checkLogin() {
         // Проверяем данные
         let checkResult = checkUserData()
         
@@ -177,17 +174,18 @@ final class LoginController: UIViewController {
         if !checkResult {
             showLoginError()
         }
-        
-        // Вернем результат
-        return checkResult
+		
+		self.navigationController?.pushViewController(nextController, animated: true)
     }
     
     
-    // Проверяем данные для авторизации
-    func checkUserData() -> Bool {
-        guard let login = loginInput.text,
-              let pass = passwordInput.text else { return false }
-        
+    /// Проверяем данные для авторизации
+	func checkUserData() -> Bool {
+		guard
+			let login = loginInput.text,
+			let pass = passwordInput.text else {
+				return false
+			}
         
         if login == "login" && pass == "password" {
             return true
@@ -196,14 +194,18 @@ final class LoginController: UIViewController {
         }
     }
     
-    // Отображение ошибки авторизации
+    /// Отображение ошибки авторизации
     func showLoginError() {
-        // Создаем контроллер
-        let alter = UIAlertController(title: "Ошибка", message: "Введены не верные данные пользователя", preferredStyle: .alert)
+        // Создаём контроллер
+        let alter = UIAlertController(title: "Ошибка",
+									  message: "Введены не верные данные пользователя", preferredStyle: .alert)
+		
         // Создаем кнопку для UIAlertController
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+		
         // Добавляем кнопку на UIAlertController
         alter.addAction(action)
+		
         // Показываем UIAlertController
         present(alter, animated: true, completion: nil)
     }
@@ -211,7 +213,6 @@ final class LoginController: UIViewController {
     /// Рисуем облачко
     func showCloud() {
         let cloudView = CloudView()
-
         view.addSubview(cloudView)
 		cloudView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -221,11 +222,9 @@ final class LoginController: UIViewController {
 			cloudView.widthAnchor.constraint(equalToConstant: 120),
 			cloudView.heightAnchor.constraint(equalToConstant: 70)
 		])
-        
-        
     }
     
-    // Клавиатура появилась
+    /// Клавиатура появилась
     @objc func keyboardWasShown(notification: Notification) {
         
         // Получаем размер клавиатуры
@@ -234,27 +233,21 @@ final class LoginController: UIViewController {
         let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: kbSize.height, right: 0.0)
         
         // Добавляем отступ внизу UIScrollView, равный размеру клавиатуры
-        self.scrollView?.contentInset = contentInsets
-        scrollView?.scrollIndicatorInsets = contentInsets
+        self.scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
     }
     
-    //Когда клавиатура исчезает
+    ///Когда клавиатура исчезает
     @objc func keyboardWillBeHidden(notification: Notification) {
         // Устанавливаем отступ внизу UIScrollView, равный 0
         let contentInsets = UIEdgeInsets.zero
-        scrollView?.contentInset = contentInsets
+        scrollView.contentInset = contentInsets
     }
     
-    // Прячем клаву, когда нажали на пустое место
+    /// Прячем клаву, когда нажали на пустое место
     @objc func hideKeyboard() {
-        self.scrollView?.endEditing(true)
+        self.scrollView.endEditing(true)
     }
-    
-    // экшн для кнопки logOut
-    @IBAction func logOutFromFriends(seague: UIStoryboardSegue) {
-    }
-    
-    
 }
 
 // MARK: UISCrollViewDelegate
