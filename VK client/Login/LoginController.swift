@@ -20,6 +20,12 @@ final class LoginController: UIViewController {
 		return scrollView
 	}()
 	
+	private lazy var cloudView: CloudView = {
+		let cloudView = CloudView()
+		cloudView.translatesAutoresizingMaskIntoConstraints = false
+		return cloudView
+	}()
+	
 	private lazy var appName: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -81,6 +87,7 @@ final class LoginController: UIViewController {
 		return button
 	}()
 	
+	/// Контроллер, на который перекинет при успешной авторизации
 	lazy private var nextController: UITabBarController = CustomTabBarController()
 	
 	
@@ -92,6 +99,7 @@ final class LoginController: UIViewController {
 		loginButton.addTarget(self, action: #selector(checkLogin), for: .touchUpInside)
 		
 		view.addSubview(scrollView)
+		scrollView.addSubview(cloudView)
 		scrollView.addSubview(appName)
 		scrollView.addSubview(loginLabel)
 		scrollView.addSubview(passwordLabel)
@@ -107,12 +115,17 @@ final class LoginController: UIViewController {
 		  scrollView.topAnchor.constraint(equalTo: view.topAnchor),
 		  scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		  scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+		  
+		  cloudView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  cloudView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 60),
+		  cloudView.widthAnchor.constraint(equalToConstant: 120),
+		  cloudView.heightAnchor.constraint(equalToConstant: 70),
 
-		  appName.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 120),
+		  appName.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 140),
 		  appName.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 87),
 		  appName.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 
-		  loginLabel.topAnchor.constraint(equalTo: appName.bottomAnchor, constant: 100),
+		  loginLabel.topAnchor.constraint(equalTo: appName.bottomAnchor, constant: 80),
 		  loginLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 
 		  loginInput.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 15),
@@ -136,8 +149,7 @@ final class LoginController: UIViewController {
 	}
     
     
-    // MARK: ViewController life cycle
-    
+    // MARK: - ViewController life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -145,9 +157,9 @@ final class LoginController: UIViewController {
         
         // Жест нажатия на пустое место, чтобы скрывать клавиатуру
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+		
         // Присваиваем его UIScrollVIew
         scrollView.addGestureRecognizer(hideKeyboardGesture)
-        showCloud() // отрисуем облачко
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,6 +167,7 @@ final class LoginController: UIViewController {
         
         // Подписываемся на два уведомления: одно приходит при появлении клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWasShown), name: UIResponder.keyboardWillShowNotification, object: nil)
+		
         // Второе — когда она пропадает
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillBeHidden(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -166,7 +179,10 @@ final class LoginController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+	
+	// MARK: - Authorization methods
     @objc func checkLogin() {
+		
         // Проверяем данные
         let checkResult = checkUserData()
         
@@ -174,13 +190,12 @@ final class LoginController: UIViewController {
         if !checkResult {
             showLoginError()
         }
-		
 		self.navigationController?.pushViewController(nextController, animated: true)
     }
     
     
     /// Проверяем данные для авторизации
-	func checkUserData() -> Bool {
+	private func checkUserData() -> Bool {
 		guard
 			let login = loginInput.text,
 			let pass = passwordInput.text else {
@@ -195,7 +210,7 @@ final class LoginController: UIViewController {
     }
     
     /// Отображение ошибки авторизации
-    func showLoginError() {
+    private func showLoginError() {
         // Создаём контроллер
         let alter = UIAlertController(title: "Ошибка",
 									  message: "Введены не верные данные пользователя", preferredStyle: .alert)
@@ -210,22 +225,9 @@ final class LoginController: UIViewController {
         present(alter, animated: true, completion: nil)
     }
     
-    /// Рисуем облачко
-    func showCloud() {
-        let cloudView = CloudView()
-        view.addSubview(cloudView)
-		cloudView.translatesAutoresizingMaskIntoConstraints = false
-
-		NSLayoutConstraint.activate([
-			cloudView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			cloudView.topAnchor.constraint(equalTo: view.topAnchor, constant: 130),
-			cloudView.widthAnchor.constraint(equalToConstant: 120),
-			cloudView.heightAnchor.constraint(equalToConstant: 70)
-		])
-    }
-    
+	// MARK: - Keyboard methods
     /// Клавиатура появилась
-    @objc func keyboardWasShown(notification: Notification) {
+    @objc private func keyboardWasShown(notification: Notification) {
         
         // Получаем размер клавиатуры
         let info = notification.userInfo! as NSDictionary
@@ -238,19 +240,20 @@ final class LoginController: UIViewController {
     }
     
     ///Когда клавиатура исчезает
-    @objc func keyboardWillBeHidden(notification: Notification) {
+    @objc private func keyboardWillBeHidden(notification: Notification) {
+		
         // Устанавливаем отступ внизу UIScrollView, равный 0
         let contentInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInsets
     }
     
     /// Прячем клаву, когда нажали на пустое место
-    @objc func hideKeyboard() {
+    @objc private func hideKeyboard() {
         self.scrollView.endEditing(true)
     }
 }
 
-// MARK: UISCrollViewDelegate
+// MARK: - UISCrollViewDelegate
 extension LoginController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0.0

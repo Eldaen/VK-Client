@@ -6,7 +6,7 @@
 //
 
 // Делаем самые простые модели, т.к. они нам чисто показать данные, а потом можно их и переделать.
-struct GroupModel: Equatable {
+struct GroupModel: Hashable {
     let name: String
     let image: String
 }

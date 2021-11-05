@@ -7,25 +7,24 @@
 
 import UIKit
 
+/// Ячейка группы для контроллера MyGroupsController
 class MyGroupsCell: UITableViewCell {
     
-    @IBOutlet weak var groupName: UILabel!
-    @IBOutlet weak var groupImage: UIImageView!
+	/// Название группы
+	var groupName: UILabel = {
+		let label = UILabel()
+		return label
+	}()
+	
+	/// Логотип группы
+	var groupImage: UIImageView = {
+		let image = UIImageView()
+		return image
+	}()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
+	/// Конфигурируем ячейку для отображения группы
     func configure(name: String, image: UIImage?) {
         groupName.text = name
         groupImage.image = image
     }
-
 }

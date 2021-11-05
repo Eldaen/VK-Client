@@ -10,9 +10,12 @@ import UIKit
 class CustomTabBarController: UITabBarController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		let vc1 = UINavigationController(rootViewController: LoginController())
+		let groupsController = MyGroupsController()
+		
+		// Параметры отображения
+		self.view.tintColor = .black
 
-		viewControllers = [vc1]
+		viewControllers = [groupsController]
 	}
 
 }
