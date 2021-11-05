@@ -80,6 +80,58 @@ final class LoginController: UIViewController {
 	}()
 	
     
+	
+	// MARK: - Setting Views
+	private func setupViews() {
+		view.addSubview(scrollView)
+		
+		scrollView.addSubview(appName)
+		scrollView.addSubview(loginLabel)
+		scrollView.addSubview(passwordLabel)
+		scrollView.addSubview(loginInput)
+		scrollView.addSubview(passwordInput)
+		scrollView.addSubview(loginButton)
+	}
+	
+	// MARK: - Setting Constraints
+	private func setupConstraints() {
+		NSLayoutConstraint.activate([
+		  scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+		  scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+		  scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+		  scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+		  
+		  appName.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 180),
+		  appName.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 87),
+		  appName.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  
+		  loginLabel.topAnchor.constraint(equalTo: appName.bottomAnchor, constant: 123),
+		  loginLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  
+		  loginInput.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 15),
+		  loginInput.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  loginLabel.widthAnchor.constraint(equalToConstant: 120),
+		  
+
+//		  cardView2.leadingAnchor.constraint(equalTo: cardView1.trailingAnchor),
+//		  cardView2.topAnchor.constraint(equalTo: safeArea.topAnchor),
+//		  cardView2.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.5),
+//		  cardView2.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.5),
+//		  cardView2.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+//
+//		  cardView3.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+//		  cardView3.topAnchor.constraint(equalTo: cardView1.bottomAnchor),
+//		  cardView3.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.5),
+//		  cardView3.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.5),
+//		  cardView3.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+//
+//		  cardView4.leadingAnchor.constraint(equalTo: cardView3.trailingAnchor),
+//		  cardView4.topAnchor.constraint(equalTo: cardView2.bottomAnchor),
+//		  cardView4.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.5),
+//		  cardView4.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.5),
+//		  cardView4.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+		])
+	}
     
     
     // MARK: ViewController life cycle
@@ -91,7 +143,7 @@ final class LoginController: UIViewController {
         // Жест нажатия на пустое место, чтобы скрывать клавиатуру
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         // Присваиваем его UIScrollVIew
-        scrollView?.addGestureRecognizer(hideKeyboardGesture)
+        scrollView.addGestureRecognizer(hideKeyboardGesture)
         showCloud() // отрисуем облачко
     }
     
