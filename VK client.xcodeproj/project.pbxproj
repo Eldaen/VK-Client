@@ -250,7 +250,6 @@
 				D08132142710719B00A280B0 /* Login */,
 				D06313CC270B148000D0E12C /* Assets.xcassets */,
 				D06313D1270B148000D0E12C /* Info.plist */,
-				D080897C2735500000A6394B /* CustomTabBarController.swift */,
 			);
 			path = "VK client";
 			sourceTree = "<group>";
@@ -286,6 +285,7 @@
 		D08132142710719B00A280B0 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				D080897C2735500000A6394B /* CustomTabBarController.swift */,
 				D0615C8E27352C400098F5D7 /* Views */,
 				D06313C7270B147E00D0E12C /* LoginController.swift */,
 			);

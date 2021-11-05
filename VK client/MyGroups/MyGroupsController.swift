@@ -11,28 +11,30 @@ import UIKit
 final class MyGroupsController: UIViewController {
     
 	/// Список групп, в которых состоит пользователь
-    var myGroups = [GroupModel]()
+    var myGroups = [GroupModel(name: "В душе пираты", image: "pepe-pirate"),
+					GroupModel(name: "Дворник это призвание", image: "pepe-yard-keeper"),
+	 GroupModel(name: "Лайфхаки из Тиктока", image: "pepe-dunno"),
+	 GroupModel(name: "Годнота", image: "pepe-like"),
+]
 	
-	private var tableView: UITableView = {
-		let tableView = UITableView(frame: .zero)
+	private let tableView: UITableView = {
+		let tableView = UITableView()
 		tableView.backgroundColor = .orange
 		return tableView
 	}()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		configureNavigation()
+		setupTableView()
+		setupConstraints()
 		
-		// Задаём название экрана для TabBarViewController-a
-		self.title = "Мои группы"
+		// Регистрируем ячейку и обозначаем MyGroupsController как dataSource и delegate для нашей таблицы
+
 		
-		// регистрируем ячейку и обозначаем MyGroupsController как dataSource и delegate для нашей таблицы
-		tableView.frame = self.view.bounds
-		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: "MyGroupsCell")
-		tableView.dataSource = self
-		tableView.delegate = self
-		
-		self.view.addSubview(tableView)
     }
+	
+
 
     // Это метод, который принимает unwind seague из SearchGroups при клике на группу
 //    @IBAction func addGroup(segue: UIStoryboardSegue) {
@@ -59,17 +61,11 @@ final class MyGroupsController: UIViewController {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
-	
-	func numberOfSections(in tableView: UITableView) -> Int {
-		// #warning Incomplete implementation, return the number of sections
-		return 1
-	}
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// #warning Incomplete implementation, return the number of rows
 		return myGroups.count
 	}
-
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupsCell", for: indexPath) as? MyGroupsCell else {
@@ -85,12 +81,53 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 		return cell
 	}
 
-
-	// Override to support editing the table view.
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
 			myGroups.remove(at: indexPath.row)
 			tableView.deleteRows(at: [indexPath], with: .fade)
 		}
+	}
+}
+
+// MARK: - Nav bar configuration
+private extension MyGroupsController {
+	
+	// Конфигурируем Нав Бар
+	private func configureNavigation() {
+		self.title = "Мои группы"
+		
+		let add = UIBarButtonItem(
+			barButtonSystemItem: .add,
+			target: self,
+			action: #selector(addGroup)
+		)
+		add.tintColor = .white
+		navigationItem.rightBarButtonItem = add
+	}
+	
+	// Конфигурируем ячейку
+	private func setupTableView() {
+		tableView.frame = self.view.bounds
+		tableView.rowHeight = 80
+		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: "MyGroupsCell")
+		tableView.dataSource = self
+		tableView.delegate = self
+		
+		self.view.addSubview(tableView)
+	}
+	
+	// Задаём констрейнты таблице
+	func setupConstraints() {
+		NSLayoutConstraint.activate([
+			tableView.topAnchor.constraint(equalTo: view.topAnchor),
+			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+			tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
+		])
+	}
+	
+	/// Запускает переход на экран со всеми группами
+	@objc func addGroup() {
+		navigationController?.pushViewController(SearchGroupsController(), animated: true)
 	}
 }

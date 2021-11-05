@@ -14,19 +14,19 @@ final class LoginController: UIViewController {
 //
 //    }
 	
-	private var scrollView: UIScrollView = {
+	private let scrollView: UIScrollView = {
 		let scrollView = UIScrollView(frame: .zero)
 		scrollView.backgroundColor = UIColor.systemTeal
 		return scrollView
 	}()
 	
-	private lazy var cloudView: CloudView = {
+	private let cloudView: CloudView = {
 		let cloudView = CloudView()
 		cloudView.translatesAutoresizingMaskIntoConstraints = false
 		return cloudView
 	}()
 	
-	private lazy var appName: UILabel = {
+	private let appName: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
 		label.textColor = .black
@@ -35,7 +35,7 @@ final class LoginController: UIViewController {
 		return label
 	}()
 	
-	private lazy var loginLabel: UILabel = {
+	private let loginLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.systemFont(ofSize: 17)
 		label.textColor = .black
@@ -44,7 +44,7 @@ final class LoginController: UIViewController {
 		return label
 	}()
 	
-	private lazy var passwordLabel: UILabel = {
+	private let passwordLabel: UILabel = {
 		let label = UILabel()
 		label.font = UIFont.systemFont(ofSize: 17)
 		label.textColor = .black
@@ -53,7 +53,7 @@ final class LoginController: UIViewController {
 		return label
 	}()
 	
-	private lazy var loginInput: UITextField = {
+	private let loginInput: UITextField = {
 		let textField = UITextField()
 		textField.layer.cornerRadius = 8
 		textField.font = UIFont.systemFont(ofSize: 14)
@@ -65,7 +65,7 @@ final class LoginController: UIViewController {
 		return textField
 	}()
 	
-	private lazy var passwordInput: UITextField = {
+	private let passwordInput: UITextField = {
 		let textField = UITextField()
 		textField.layer.cornerRadius = 8
 		textField.font = UIFont.systemFont(ofSize: 14)
@@ -77,7 +77,7 @@ final class LoginController: UIViewController {
 		return textField
 	}()
 	
-	private lazy var loginButton: UIButton = {
+	private let loginButton: UIButton = {
 		let button = UIButton(type: .system)
 		button.setTitle("Войти", for: .normal)
 		button.setTitleColor(.white, for: .normal)
@@ -88,7 +88,7 @@ final class LoginController: UIViewController {
 	}()
 	
 	/// Контроллер, на который перекинет при успешной авторизации
-	lazy private var nextController: UITabBarController = CustomTabBarController()
+	private let nextController: UITabBarController = CustomTabBarController()
 	
 	
 	// MARK: - Setting Views
@@ -154,6 +154,8 @@ final class LoginController: UIViewController {
         super.viewDidLoad()
         setupViews()
 		setupConstraints()
+		navigationController?.isNavigationBarHidden = true
+		
         
         // Жест нажатия на пустое место, чтобы скрывать клавиатуру
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -190,6 +192,7 @@ final class LoginController: UIViewController {
         if !checkResult {
             showLoginError()
         }
+		
 		self.navigationController?.pushViewController(nextController, animated: true)
     }
     
