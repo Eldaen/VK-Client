@@ -103,6 +103,15 @@ private extension MyGroupsController {
 		)
 		add.tintColor = .white
 		navigationItem.rightBarButtonItem = add
+		
+		let logout = UIBarButtonItem(
+			title: "Logout",
+			style: .plain,
+			target: self,
+			action: #selector(logout)
+		)
+		logout.tintColor = .white
+		navigationItem.leftBarButtonItem = logout
 	}
 	
 	// Конфигурируем ячейку
@@ -126,8 +135,15 @@ private extension MyGroupsController {
 		])
 	}
 	
+
+	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
 		navigationController?.pushViewController(SearchGroupsController(), animated: true)
+	}
+	
+	// Делаем pop контроллера
+	@objc func logout() {
+		navigationController?.pushViewController(LoginController(), animated: true)
 	}
 }
