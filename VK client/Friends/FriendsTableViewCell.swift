@@ -1,6 +1,6 @@
 //
 //  FriendCell.swift
-//  test-gu
+//  VK Client
 //
 //  Created by Денис Сизов on 13.10.2021.
 //
@@ -21,7 +21,6 @@ class FriendsTableViewCell: UITableViewCell {
 	/// Вью для аватарки пользователя
 	private let friendImage: AvatarView = {
 		let avatar = AvatarView()
-		avatar.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
 		avatar.translatesAutoresizingMaskIntoConstraints = false
 		return avatar
 	}()

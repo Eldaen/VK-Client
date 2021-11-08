@@ -16,7 +16,6 @@ final class FriendsViewController: UIViewController {
 		searchBar.searchBarStyle = UISearchBar.Style.default
 		searchBar.isTranslucent = false
 		searchBar.placeholder = "Искать"
-		searchBar.showsCancelButton = false
 		searchBar.sizeToFit()
 		return searchBar
 	}()
@@ -172,7 +171,7 @@ extension FriendsViewController: UISearchBarDelegate {
 			let closure = self.searchBarAnimationClosure()
 			closure()
 		})
-	
+		
 		// Отменяем поиск, показываем всех друзей и перезагружаем таблицу
 		filteredData = friends
 		tableView.reloadData()
@@ -198,13 +197,15 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell", for: indexPath) as? FriendsTableViewCell {
+		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+													for: indexPath) as? FriendsTableViewCell {
 			cell.animate()
 		}
 	}
 	
 	func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell", for: indexPath) as? FriendsTableViewCell {
+		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+													for: indexPath) as? FriendsTableViewCell {
 			cell.animate()
 		}
 	}
@@ -226,7 +227,8 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell", for: indexPath) as? FriendsTableViewCell else {
+		guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+													   for: indexPath) as? FriendsTableViewCell else {
 			return UITableViewCell()
 		}
 		
@@ -245,22 +247,12 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		return lettersOfNames
 	}
 	
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-	{
-		if segue.destination is FriendProfileViewController {
-			guard let vc = segue.destination as? FriendProfileViewController else {
-				return
-			}
-			guard let indexPathSection = tableView.indexPathForSelectedRow?.section else {
-				return
-			}
-			guard let indexPathRow = tableView.indexPathForSelectedRow?.row else {
-				return
-			}
-			
-			let section = filteredData[indexPathSection]
-			vc.friend = section.data[indexPathRow]
-		}
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let profileController = FriendProfileViewController()
+		let section = filteredData[indexPath.section]
+		profileController.friend = section.data[indexPath.row]
+		
+		self.navigationController?.pushViewController(profileController, animated: true)
 	}
 }
 
@@ -281,6 +273,7 @@ extension FriendsViewController {
 		tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: "FriendsTableViewCell")
 		tableView.showsVerticalScrollIndicator = false
 		tableView.sectionHeaderTopPadding = 0
+		tableView.sectionIndexColor = .black
 		tableView.dataSource = self
 		tableView.delegate = self
 		self.view.addSubview(tableView)

@@ -45,7 +45,6 @@
 		D0800D192727F73900347AB7 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D182727F73900347AB7 /* LoadingView.swift */; };
 		D0800D1B27283B0800347AB7 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D1A27283B0800347AB7 /* CustomSearchBar.swift */; };
 		D0800D20272BF0A200347AB7 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D1E272BF0A200347AB7 /* PhotoCollectionViewCell.swift */; };
-		D0800D21272BF0A200347AB7 /* PhotoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0800D1F272BF0A200347AB7 /* PhotoCollectionViewCell.xib */; };
 		D0800D23272BF6DF00347AB7 /* FullscreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D22272BF6DF00347AB7 /* FullscreenViewController.swift */; };
 		D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D080897C2735500000A6394B /* CustomTabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -91,7 +90,6 @@
 		D0800D182727F73900347AB7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		D0800D1A27283B0800347AB7 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		D0800D1E272BF0A200347AB7 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
-		D0800D1F272BF0A200347AB7 /* PhotoCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoCollectionViewCell.xib; sourceTree = "<group>"; };
 		D0800D22272BF6DF00347AB7 /* FullscreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenViewController.swift; sourceTree = "<group>"; };
 		D080897C2735500000A6394B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -277,7 +275,6 @@
 			isa = PBXGroup;
 			children = (
 				D0800D1E272BF0A200347AB7 /* PhotoCollectionViewCell.swift */,
-				D0800D1F272BF0A200347AB7 /* PhotoCollectionViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -350,7 +347,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0800D21272BF0A200347AB7 /* PhotoCollectionViewCell.xib in Resources */,
 				D06313CD270B148000D0E12C /* Assets.xcassets in Resources */,
 				D050CD6027241CEF0076D78E /* NewsCell.xib in Resources */,
 			);
@@ -543,7 +539,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Denis-Sizov.VK client";
+				PRODUCT_BUNDLE_IDENTIFIER = "Denis-Sizov.VK-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -571,7 +567,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Denis-Sizov.VK client";
+				PRODUCT_BUNDLE_IDENTIFIER = "Denis-Sizov.VK-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

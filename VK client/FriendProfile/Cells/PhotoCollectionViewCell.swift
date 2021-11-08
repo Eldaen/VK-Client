@@ -1,18 +1,36 @@
 //
 //  PhotoCollectionViewCell.swift
-//  test-gu
+//  VK Client
 //
 //  Created by Денис Сизов on 29.10.2021.
 //
 
 import UIKit
 
+/// Ячейка для коллекции профиля пользователя
 class PhotoCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var photoView: UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
+	
+	/// Основная вью с картинкой
+	var photoView: UIImageView = {
+		let image = UIImageView()
+		image.translatesAutoresizingMaskIntoConstraints = false
+		image.contentMode = .scaleAspectFit
+		return image
+	}()
+	
+	/// Конфигурирует ячейку
+	func configure(with image: UIImage) {
+		contentView.addSubview(photoView)
+		photoView.image = image
+		setupConstraints()
+	}
+	
+	func setupConstraints() {
+		NSLayoutConstraint.activate([
+			photoView.topAnchor.constraint(equalTo: contentView.topAnchor),
+			photoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+			photoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+			photoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+		])
+	}
 }

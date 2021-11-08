@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 class LikeControl: UIControl {
     
     var likesCount: Int = 0
@@ -18,8 +19,6 @@ class LikeControl: UIControl {
         return recognizer
     }()
     
-    
-    private var stackView: UIStackView = UIStackView()
     private var likesImageEmpty: UIImageView = UIImageView()
     private var likesImageFill: UIImageView = UIImageView()
     private var likesLabel: UILabel = UILabel()

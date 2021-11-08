@@ -1,46 +1,130 @@
 //
 //  FriendCollectionController.swift
-//  test-gu
+//  VK Client
 //
 //  Created by Денис Сизов on 13.10.2021.
 //
 
 import UIKit
 
+/// Контроллер профиля пользователя
 final class FriendProfileViewController: UIViewController {
     
-    @IBOutlet weak var userAvatar: UIImageView!
-    @IBOutlet weak var userName: UILabel!
-    @IBOutlet weak var friendsCount: UILabel!
-    @IBOutlet weak var photosCount: UILabel!
-    @IBOutlet weak var collectionView: UICollectionView!
+	private var userAvatar: UIImageView = {
+		let avatar = UIImageView()
+		avatar.translatesAutoresizingMaskIntoConstraints = false
+		return avatar
+	}()
+	
+	private var friendName: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.font = UIFont.systemFont(ofSize: 17)
+		label.textColor = .black
+		return label
+	}()
+	
+	private var friendsCount: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.font = UIFont.systemFont(ofSize: 15)
+		label.textColor = .black
+		label.text = "300"
+		return label
+	}()
+	
+	private var friendsText: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.font = UIFont.systemFont(ofSize: 15)
+		label.textColor = .black
+		label.text = "Друзья"
+		return label
+	}()
+	
+	private var photosText: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.font = UIFont.systemFont(ofSize: 15)
+		label.textColor = .black
+		label.text = "Фото"
+		return label
+	}()
+	
+	private var photosCount: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.font = UIFont.systemFont(ofSize: 15)
+		label.textColor = .black
+		return label
+	}()
+	
+	private var leftStack: UIStackView = {
+		let stack = UIStackView()
+		stack.axis = .vertical
+		stack.distribution = .fillEqually
+		stack.alignment = .center
+		stack.spacing = 4
+		stack.contentMode = .scaleToFill
+		stack.translatesAutoresizingMaskIntoConstraints = false
+		return stack
+	}()
+	
+	private var rightStack: UIStackView = {
+		let stack = UIStackView()
+		stack.axis = .vertical
+		stack.distribution = .fillEqually
+		stack.alignment = .center
+		stack.spacing = 4
+		stack.contentMode = .scaleToFill
+		stack.translatesAutoresizingMaskIntoConstraints = false
+		return stack
+	}()
+	
+	private var horizontalStack: UIStackView = {
+		let stack = UIStackView()
+		stack.axis = .horizontal
+		stack.distribution = .fillEqually
+		stack.alignment = .fill
+		stack.spacing = 50
+		stack.contentMode = .scaleToFill
+		stack.translatesAutoresizingMaskIntoConstraints = false
+		return stack
+	}()
+	
+	private var collectionView: UICollectionView = {
+		let layout = UICollectionViewFlowLayout()
+		layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+		let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+		collection.translatesAutoresizingMaskIntoConstraints = false
+		
+		return collection
+	}()
     
     var friend: UserModel!
     let identifier = "PhotoCollectionViewCell"
     
-    // данные для галлереи
+    /// Количество колонок
     let cellsCount: CGFloat = 3.0
-    let cellsOffset: CGFloat = 2.0
+	
+	/// Отступы между фото
+    let cellsOffset: CGFloat = 10.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // задаём коллекции, что она тут будет данные получать и обрабатывать жесты
-        collectionView.delegate = self
-        collectionView.dataSource = self
-
+		setupView()
+		setupCollectionView()
+		setupConstaints()
+		
         // заполняем статичные данные
         userAvatar.image = friend.uiImage
         photosCount.text = String(friend.storedImages.count)
-        
-        // регистрируем новую ячейку
-        collectionView.register(UINib(nibName: "PhotoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: identifier)
+		friendName.text = friend.name
     }
     
 }
 
-// MARK: UICollectionViewDataSource
-
+// MARK: UICollectionViewDataSource, UICollectionViewDelegate
 extension FriendProfileViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -57,11 +141,9 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
             return UICollectionViewCell()
         }
         
-        cell.photoView.image = friend.storedImages[indexPath.item]
-        
+        cell.configure(with: friend.storedImages[indexPath.item])
         return cell
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
@@ -76,9 +158,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let vc = storyboard?.instantiateViewController(withIdentifier: "FullscreenViewController") as? FullscreenViewController else {
-            return
-        }
+        let vc = FullscreenViewController()
         
         vc.photos = friend.storedImages
         vc.selectedPhoto = indexPath.item
@@ -86,5 +166,62 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
         // переход на подробный просмотр
         self.navigationController?.pushViewController(vc, animated: true)
     }
+}
+
+// MARK: - Private methods
+extension FriendProfileViewController {
+	
+	/// Конфигурируем нашу collectionView и добавляем в основную view
+	func setupCollectionView() {
+		collectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
+		collectionView.backgroundColor = .white
+		collectionView.dataSource = self
+		collectionView.delegate = self
+		
+		self.view.addSubview(collectionView)
+	}
+	
+	/// Добавляет вьюхи в основную вью, все кроме collectionView
+	func setupView() {
+		view.backgroundColor = .white
+		view.addSubview(userAvatar)
+		view.addSubview(friendName)
+		
+		leftStack.addArrangedSubview(friendsCount)
+		leftStack.addArrangedSubview(friendsText)
+		
+		rightStack.addArrangedSubview(photosCount)
+		rightStack.addArrangedSubview(photosText)
+		
+		horizontalStack.addArrangedSubview(leftStack)
+		horizontalStack.addArrangedSubview(rightStack)
+		
+		view.addSubview(horizontalStack)
+	}
+	
+	func setupConstaints() {
+		NSLayoutConstraint.activate([
+			userAvatar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 15),
+			userAvatar.widthAnchor.constraint(equalToConstant: 100),
+			userAvatar.heightAnchor.constraint(equalTo: userAvatar.widthAnchor, multiplier: 1.0),
+			userAvatar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+			friendName.topAnchor.constraint(equalTo: userAvatar.bottomAnchor, constant: 20),
+			friendName.centerXAnchor.constraint(equalTo: userAvatar.centerXAnchor),
+			
+			leftStack.heightAnchor.constraint(equalToConstant: 50),
+			rightStack.heightAnchor.constraint(equalToConstant: 50),
+
+			horizontalStack.topAnchor.constraint(equalTo: friendName.bottomAnchor, constant: 20),
+			horizontalStack.heightAnchor.constraint(equalToConstant: 50),
+			horizontalStack.widthAnchor.constraint(equalToConstant: 160),
+			horizontalStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+			collectionView.topAnchor.constraint(equalTo: horizontalStack.bottomAnchor, constant: 16),
+			collectionView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -16),
+			collectionView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+			collectionView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+		])
+	}
 }
 
