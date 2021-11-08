@@ -1,54 +1,88 @@
 //
 //  SearchGroupsController.swift
-//  test-gu
+//  VK client
 //
 //  Created by Денис Сизов on 13.10.2021.
 //
 
 import UIKit
 
-class SearchGroupsController: UITableViewController {
+final class SearchGroupsController: UIViewController {
+	
+	private let searchBar: UISearchBar = {
+		let searchBar = UISearchBar()
+		searchBar.frame = .zero
+		searchBar.searchBarStyle = UISearchBar.Style.default
+		searchBar.isTranslucent = false
+		searchBar.sizeToFit()
+		return searchBar
+	}()
+	
+	private let tableView: UITableView = {
+		let tableView = UITableView()
+		tableView.backgroundColor = .orange
+		return tableView
+	}()
     
-    @IBOutlet weak var searchBar: UISearchBar!
-    
-    var groups = GroupsLoader.iNeedGroups()
-    lazy var filteredGroups = groups
+    private var groups = GroupsLoader.iNeedGroups()
+    lazy private var filteredGroups = groups
 
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return filteredGroups.count
-    }
-
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchGroupsCell", for: indexPath) as? SearchGroupsCell else {
-            return UITableViewCell()
-        }
-
-        let name = filteredGroups[indexPath.row].name
-        let image = filteredGroups[indexPath.row].image
-        
-        cell.groupName.text = name
-        cell.groupImage.image = UIImage(named: image)
-
-        return cell
+		setupTableView()
+		setupConstraints()
     }
 }
 
+// MARK: - UITableViewDataSource, UITableViewDelegate
+extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
+
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return filteredGroups.count
+	}
+
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchGroupsCell",
+													   for: indexPath) as? SearchGroupsCell
+		else {
+			return UITableViewCell()
+		}
+		
+		let name = filteredGroups[indexPath.row].name
+		let image = filteredGroups[indexPath.row].image
+		
+		//Конфигурируем и возвращаем готовую ячейку
+		cell.configure(name: name, image: UIImage(named: image))
+		
+		return cell
+	}
+	
+	/// По нажатию на ячейку группы, делает переход назад на список моих групп, если выбранной группы ещё нет в списке моих групп
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		if let viewControllers = navigationController?.viewControllers {
+			for viewController in viewControllers {
+				if viewController.isKind(of: MyGroupsController.self) {
+					let group = filteredGroups[indexPath.row]
+					let myGroupsController = viewController as! MyGroupsController
+					
+					if !myGroupsController.myGroups.contains(group) {
+						myGroupsController.myGroups.append(filteredGroups[indexPath.row])
+						myGroupsController.tableView.reloadData()
+						navigationController?.popViewController(animated: true)
+					}
+				}
+			}
+		}
+	}
+}
+
+// MARK: - UISearchBarDelegate
 extension SearchGroupsController: UISearchBarDelegate {
+	
+	/// Основной метод, который осуществляет поиск
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		
         // не случай повторных поисков
         filteredGroups = []
         
@@ -56,6 +90,7 @@ extension SearchGroupsController: UISearchBarDelegate {
         if searchText == "" {
             filteredGroups = groups
         } else {
+			
             //По сравнению с друзьями, тут вообще всё просто. Если в именни группы есть нужный текст, то добавляем в фильтр
             for group in groups {
                 if group.name.lowercased().contains(searchText.lowercased()) {
@@ -63,8 +98,34 @@ extension SearchGroupsController: UISearchBarDelegate {
                 }
             }
         }
+		
         // Перезагружаем данные
         self.tableView.reloadData()
-
     }
+}
+
+// MARK: - Private methods
+extension SearchGroupsController {
+	
+	/// Задаём констрейнты таблице
+	private func setupConstraints() {
+		NSLayoutConstraint.activate([
+			tableView.topAnchor.constraint(equalTo: view.topAnchor),
+			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+		])
+	}
+	
+	/// Конфигурируем ячейку
+	private func setupTableView() {
+		tableView.frame = self.view.bounds
+		tableView.rowHeight = 80
+		tableView.register(SearchGroupsCell.self, forCellReuseIdentifier: "SearchGroupsCell")
+		tableView.dataSource = self
+		tableView.delegate = self
+		
+		self.view.addSubview(tableView)
+		tableView.tableHeaderView = searchBar
+	}
 }

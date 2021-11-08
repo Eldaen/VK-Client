@@ -1,44 +1,63 @@
 //
 //  AvatarView.swift
-//  test-gu
+//  VK Client
 //
 //  Created by Денис Сизов on 15.10.2021.
 //
 
 import UIKit
 
+/// Кастомная вьюшка для аватарки друга
 @IBDesignable class AvatarView: UIView {
     
+	/// UIImage фотограции
     var image: UIImage = UIImage() {
         didSet {
             imageView.image = image
         }
     }
-    private var imageView: UIImageView = UIImageView()
-    private var containerView: UIView = UIView()
-    
+	
+    private var imageView: UIImageView = {
+		let image = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+		image.translatesAutoresizingMaskIntoConstraints = false
+		return image
+	}()
+	
+    private var containerView: UIView = {
+		let view = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	/// Цвет тени
     @IBInspectable var shadowColor: UIColor = .black {
         didSet {
             self.updateColor()
         }
     }
+	
+	/// Прозрачность тени
     @IBInspectable var shadowOpacity: Float = 3.0 {
         didSet {
             self.updateOpacity()
         }
     }
+	
+	/// Радиус тени
     @IBInspectable var shadowRadius: CGFloat = 4.0 {
         didSet {
             self.updateRadius()
         }
     }
+	
+	/// Сдвиг тени
     @IBInspectable var shadowOffset: CGSize = .zero {
         didSet {
             self.updateOffset()
         }
     }
     
-    // заставляет аватарки сжиматься
+    /// Запускает анимацию сжатия аватарки
     @objc func animate() {
         UIView.animate(withDuration: 0.2,
                        delay: 0,
@@ -56,7 +75,7 @@ import UIKit
         })
     }
     
-    // распознаём нажатие по аватарке
+    /// Устанавливаем жест для активации анимации автарки при нажатию на неё
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let recognizer = UITapGestureRecognizer(target: self,
                                                 action: #selector(animate))
@@ -68,24 +87,39 @@ import UIKit
     private func setupImage() {
         
         // Чтобы тень рисовалась и круглые картинки были
-        containerView.frame = self.bounds
+		containerView.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
         containerView.layer.cornerRadius = 20
         
         //чтобы округлялось
+		imageView.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
         imageView.layer.masksToBounds = true
-        imageView.frame = containerView.bounds
-        imageView.contentMode = .scaleAspectFill // если ставить fit, то что-то не то
+        imageView.contentMode = .scaleAspectFit // если ставить fit, то что-то не то
         imageView.layer.cornerRadius = imageView.frame.size.width / 2
         imageView.image = image
         
         //вьюхи нужно добавлять только после задания им параметров
         containerView.addSubview(imageView)
         self.addSubview(containerView)
+		
+		setupContraints()
         updateShadows()
     }
+	
+	private func setupContraints() {
+		NSLayoutConstraint.activate([
+			containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+			containerView.topAnchor.constraint(equalTo: self.topAnchor),
+			containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+			
+			imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+			imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+			imageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+			imageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+		])
+	}
     
     private func updateOpacity() {
-        
         self.containerView.layer.shadowOpacity = shadowOpacity
     }
     
@@ -108,6 +142,7 @@ import UIKit
         self.containerView.layer.shadowRadius = shadowRadius
     }
     
+	// MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupImage()
@@ -119,5 +154,4 @@ import UIKit
         self.setupImage()
         addGestureRecognizer(tapGestureRecognizer)
     }
-    
 }

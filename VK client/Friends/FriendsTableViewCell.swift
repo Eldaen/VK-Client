@@ -8,29 +8,37 @@
 import UIKit
 
 class FriendsTableViewCell: UITableViewCell {
+	
+	/// Имя друга
+	lazy var friendName: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.font = UIFont.systemFont(ofSize: 17)
+		label.textColor = .black
+		return label
+	}()
     
-    @IBOutlet weak var friendName: UILabel!
-    @IBOutlet weak var friendImage: AvatarView!
+	/// Вью для аватарки пользователя
+	private let friendImage: AvatarView = {
+		let avatar = AvatarView()
+		avatar.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
+		avatar.translatesAutoresizingMaskIntoConstraints = false
+		return avatar
+	}()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
-    // конфигурируем ячейку
+    /// Функция конфигурации ячейки перед использованием
     func configure(name: String, image: UIImage) {
         friendName.text = name
         friendImage.image = image
+		
+		contentView.addSubview(friendName)
+		contentView.addSubview(friendImage)
+		
+		setupConstaints()
         animate()
     }
     
-    // запускаем анимацию ячейки при появлении
+    /// Запуск анимации ячейки
     func animate() {
         self.friendImage.alpha = 0
         self.frame.origin.x += 200
@@ -51,5 +59,17 @@ class FriendsTableViewCell: UITableViewCell {
             self.frame.origin.x = 0
         })
     }
-
+	
+	private func setupConstaints() {
+		NSLayoutConstraint.activate([
+			friendName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+			friendName.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+			
+			friendImage.leadingAnchor.constraint(equalTo: friendName.trailingAnchor, constant: 20),
+			friendImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+			friendImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+			friendImage.widthAnchor.constraint(equalToConstant: 60),
+			friendImage.heightAnchor.constraint(equalTo: friendImage.widthAnchor, multiplier: 1.0),
+		])
+	}
 }

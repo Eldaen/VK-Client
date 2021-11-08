@@ -1,6 +1,6 @@
 //
 //  MyGroupsController.swift
-//  test-gu
+//  VK client
 //
 //  Created by Денис Сизов on 13.10.2021.
 //
@@ -11,13 +11,10 @@ import UIKit
 final class MyGroupsController: UIViewController {
     
 	/// Список групп, в которых состоит пользователь
-    var myGroups = [GroupModel(name: "В душе пираты", image: "pepe-pirate"),
-					GroupModel(name: "Дворник это призвание", image: "pepe-yard-keeper"),
-	 GroupModel(name: "Лайфхаки из Тиктока", image: "pepe-dunno"),
-	 GroupModel(name: "Годнота", image: "pepe-like"),
-]
+    var myGroups = [GroupModel]()
 	
-	private let tableView: UITableView = {
+	/// Таблица с ячейками групп, в которых состоит пользователь
+	let tableView: UITableView = {
 		let tableView = UITableView()
 		tableView.backgroundColor = .orange
 		return tableView
@@ -28,14 +25,7 @@ final class MyGroupsController: UIViewController {
 		configureNavigation()
 		setupTableView()
 		setupConstraints()
-		
-		// Регистрируем ячейку и обозначаем MyGroupsController как dataSource и delegate для нашей таблицы
-
-		
     }
-	
-
-
     // Это метод, который принимает unwind seague из SearchGroups при клике на группу
 //    @IBAction func addGroup(segue: UIStoryboardSegue) {
 //        // Проверяем идентификатор, чтобы убедиться, что это нужный переход
