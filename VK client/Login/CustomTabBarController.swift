@@ -1,6 +1,6 @@
 //
 //  CustomTabBarController.swift
-//  VK client
+//  VK-Client
 //
 //  Created by Денис Сизов on 05.11.2021.
 //

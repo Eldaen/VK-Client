@@ -1,6 +1,6 @@
 //
 //  LoadingView.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 26.10.2021.
 //

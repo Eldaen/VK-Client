@@ -1,6 +1,6 @@
 //
 //  GradientView.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 21.10.2021.
 //
@@ -18,6 +18,4 @@ class GradientView: UIView {
     var gradientLayer: CAGradientLayer {
         return self.layer as! CAGradientLayer
     }
-    
-    
 }

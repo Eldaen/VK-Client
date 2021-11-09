@@ -1,6 +1,6 @@
 //
 //  NewsLoader.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 23.10.2021.
 //

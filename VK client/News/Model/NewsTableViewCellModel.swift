@@ -1,6 +1,6 @@
 //
 //  NewsTableViewCellModel.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 25.10.2021.
 //

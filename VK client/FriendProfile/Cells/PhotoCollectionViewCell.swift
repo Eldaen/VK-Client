@@ -1,6 +1,6 @@
 //
 //  PhotoCollectionViewCell.swift
-//  VK Client
+//  VK-Client
 //
 //  Created by Денис Сизов on 29.10.2021.
 //

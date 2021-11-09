@@ -1,6 +1,6 @@
 //
 //  FriendCollectionController.swift
-//  VK Client
+//  VK-Client
 //
 //  Created by Денис Сизов on 13.10.2021.
 //
@@ -112,6 +112,7 @@ final class FriendProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		self.title = "Профиль"
 		setupView()
 		setupCollectionView()
 		setupConstaints()
@@ -121,7 +122,6 @@ final class FriendProfileViewController: UIViewController {
         photosCount.text = String(friend.storedImages.count)
 		friendName.text = friend.name
     }
-    
 }
 
 // MARK: UICollectionViewDataSource, UICollectionViewDelegate

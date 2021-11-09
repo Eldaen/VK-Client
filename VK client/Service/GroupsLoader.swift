@@ -1,6 +1,6 @@
 //
 //  GroupsLoader.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 13.10.2021.
 //

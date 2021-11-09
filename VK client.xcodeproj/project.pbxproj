@@ -32,8 +32,6 @@
 		D0615C78273125300098F5D7 /* PopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0615C74273125300098F5D7 /* PopAnimator.swift */; };
 		D0615C79273125300098F5D7 /* PushAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0615C75273125300098F5D7 /* PushAnimator.swift */; };
 		D0615C7A273125300098F5D7 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0615C76273125300098F5D7 /* CustomNavigationController.swift */; };
-		D0615C7D273152830098F5D7 /* OpenGalleryAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0615C7C273152830098F5D7 /* OpenGalleryAnimator.swift */; };
-		D0615C7F2731528E0098F5D7 /* CloseGalleryAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0615C7E2731528E0098F5D7 /* CloseGalleryAnimator.swift */; };
 		D0615C812732DE850098F5D7 /* GalleryInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0615C802732DE850098F5D7 /* GalleryInteractiveTransition.swift */; };
 		D0615C9027352C540098F5D7 /* CloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0615C8F27352C540098F5D7 /* CloudView.swift */; };
 		D06313C4270B147E00D0E12C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06313C3270B147E00D0E12C /* AppDelegate.swift */; };
@@ -75,8 +73,6 @@
 		D0615C74273125300098F5D7 /* PopAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopAnimator.swift; sourceTree = "<group>"; };
 		D0615C75273125300098F5D7 /* PushAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushAnimator.swift; sourceTree = "<group>"; };
 		D0615C76273125300098F5D7 /* CustomNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
-		D0615C7C273152830098F5D7 /* OpenGalleryAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGalleryAnimator.swift; sourceTree = "<group>"; };
-		D0615C7E2731528E0098F5D7 /* CloseGalleryAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseGalleryAnimator.swift; sourceTree = "<group>"; };
 		D0615C802732DE850098F5D7 /* GalleryInteractiveTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryInteractiveTransition.swift; sourceTree = "<group>"; };
 		D0615C8F27352C540098F5D7 /* CloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudView.swift; sourceTree = "<group>"; };
 		D06313C0270B147E00D0E12C /* VK client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VK client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,7 +114,6 @@
 		D050CCFE2716DDFF0076D78E /* FriendProfile */ = {
 			isa = PBXGroup;
 			children = (
-				D0615C7B2731526D0098F5D7 /* Animators */,
 				D0800D1D272BF08300347AB7 /* Cells */,
 				D050CCFF2716DE2A0076D78E /* FriendProfileViewController.swift */,
 				D050CD1B271A07BA0076D78E /* LikeControl.swift */,
@@ -194,15 +189,6 @@
 			children = (
 				D0615C74273125300098F5D7 /* PopAnimator.swift */,
 				D0615C75273125300098F5D7 /* PushAnimator.swift */,
-			);
-			path = Animators;
-			sourceTree = "<group>";
-		};
-		D0615C7B2731526D0098F5D7 /* Animators */ = {
-			isa = PBXGroup;
-			children = (
-				D0615C7C273152830098F5D7 /* OpenGalleryAnimator.swift */,
-				D0615C7E2731528E0098F5D7 /* CloseGalleryAnimator.swift */,
 			);
 			path = Animators;
 			sourceTree = "<group>";
@@ -386,7 +372,6 @@
 				D050CD052716DF890076D78E /* MyGroupsController.swift in Sources */,
 				D0800D20272BF0A200347AB7 /* PhotoCollectionViewCell.swift in Sources */,
 				D0800D15272698DA00347AB7 /* NewsCollectionViewCellModel.swift in Sources */,
-				D0615C7F2731528E0098F5D7 /* CloseGalleryAnimator.swift in Sources */,
 				D050CD162716E2A50076D78E /* GroupsLoader.swift in Sources */,
 				D050CD0A2716E12B0076D78E /* SearchGroupsController.swift in Sources */,
 				D050CD0F2716E1C50076D78E /* UserModel.swift in Sources */,
@@ -396,7 +381,6 @@
 				D050CD1C271A07BA0076D78E /* LikeControl.swift in Sources */,
 				D050CCFD2716D8AE0076D78E /* FriendsTableViewCell.swift in Sources */,
 				D050CD6C27258ED10076D78E /* NewsCollectionViewLayout.swift in Sources */,
-				D0615C7D273152830098F5D7 /* OpenGalleryAnimator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,6 +513,7 @@
 				DEVELOPMENT_TEAM = LSA8V5M5Q4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "VK client/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "VK-Client";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -557,6 +542,7 @@
 				DEVELOPMENT_TEAM = LSA8V5M5Q4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "VK client/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "VK-Client";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

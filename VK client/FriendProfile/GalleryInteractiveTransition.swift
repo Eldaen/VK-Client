@@ -1,6 +1,6 @@
 //
 //  GalleryInteractiveTransition.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 03.11.2021.
 //

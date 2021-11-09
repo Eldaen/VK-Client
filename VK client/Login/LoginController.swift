@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 04.10.2021.
 //

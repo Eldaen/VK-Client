@@ -1,6 +1,6 @@
 //
 //  FriendsSection.swift
-//  test-gu
+//  VK-Client
 //
 //  Created by Денис Сизов on 16.10.2021.
 //

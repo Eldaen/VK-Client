@@ -1,6 +1,6 @@
 //
 //  SearchGroupsCell.swift
-//  VK client
+//  VK-Client
 //
 //  Created by Денис Сизов on 13.10.2021.
 //
