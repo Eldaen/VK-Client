@@ -125,15 +125,27 @@ private extension MyGroupsController {
 		])
 	}
 	
-
-	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
-		navigationController?.pushViewController(SearchGroupsController(), animated: true)
+		let searchGroupsController = SearchGroupsController()
+		searchGroupsController.delegate = self
+		navigationController?.pushViewController(searchGroupsController, animated: true)
 	}
 	
 	// Делаем pop контроллера
 	@objc func logout() {
 		navigationController?.pushViewController(LoginController(), animated: true)
+	}
+}
+
+// MARK: - Delegate for SearchGroupsController
+extension MyGroupsController {
+	
+	/// Принимает выбранную группу в контроллере моих групп и добавляет её в список
+	func groupDidSelect (_ group: GroupModel) {
+		if !myGroups.contains(group) {
+			myGroups.append(group)
+			tableView.reloadData()
+		}
 	}
 }

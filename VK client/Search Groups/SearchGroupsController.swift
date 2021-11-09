@@ -26,6 +26,9 @@ final class SearchGroupsController: UIViewController {
     
     private var groups = GroupsLoader.iNeedGroups()
     lazy private var filteredGroups = groups
+	
+	/// Делегат для добавления групп в список моих групп
+	weak var delegate: MyGroupsController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,20 +63,24 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 	
 	/// По нажатию на ячейку группы, делает переход назад на список моих групп, если выбранной группы ещё нет в списке моих групп
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		if let viewControllers = navigationController?.viewControllers {
-			for viewController in viewControllers {
-				if viewController.isKind(of: MyGroupsController.self) {
-					let group = filteredGroups[indexPath.row]
-					let myGroupsController = viewController as! MyGroupsController
-					
-					if !myGroupsController.myGroups.contains(group) {
-						myGroupsController.myGroups.append(filteredGroups[indexPath.row])
-						myGroupsController.tableView.reloadData()
-						navigationController?.popViewController(animated: true)
-					}
-				}
-			}
-		}
+//		if let viewControllers = navigationController?.viewControllers {
+//			for viewController in viewControllers {
+//				if viewController.isKind(of: MyGroupsController.self) {
+//					let group = filteredGroups[indexPath.row]
+//					let myGroupsController = viewController as! MyGroupsController
+//
+//					if !myGroupsController.myGroups.contains(group) {
+//						myGroupsController.myGroups.append(filteredGroups[indexPath.row])
+//						myGroupsController.tableView.reloadData()
+//						navigationController?.popViewController(animated: true)
+//					}
+//				}
+//			}
+//		}
+		
+		let group = filteredGroups[indexPath.row]
+		delegate?.groupDidSelect(group)
+		navigationController?.popViewController(animated: true)
 	}
 }
 
