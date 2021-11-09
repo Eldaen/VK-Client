@@ -11,14 +11,14 @@ import UIKit
 class SearchGroupsCell: UITableViewCell {
 	
 	/// Название группы
-	lazy var groupName: UILabel = {
+	private let groupName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}()
 	
 	/// Логотип группы
-	lazy var groupImage: UIImageView = {
+	private let groupImage: UIImageView = {
 		let image = UIImageView()
 		image.translatesAutoresizingMaskIntoConstraints = false
 		image.contentMode = .scaleAspectFit

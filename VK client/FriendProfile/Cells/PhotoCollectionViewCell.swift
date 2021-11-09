@@ -11,7 +11,7 @@ import UIKit
 class PhotoCollectionViewCell: UICollectionViewCell {
 	
 	/// Основная вью с картинкой
-	var photoView: UIImageView = {
+	private let photoView: UIImageView = {
 		let image = UIImageView()
 		image.translatesAutoresizingMaskIntoConstraints = false
 		image.contentMode = .scaleAspectFit
@@ -25,7 +25,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
 		setupConstraints()
 	}
 	
-	func setupConstraints() {
+	private func setupConstraints() {
 		NSLayoutConstraint.activate([
 			photoView.topAnchor.constraint(equalTo: contentView.topAnchor),
 			photoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),

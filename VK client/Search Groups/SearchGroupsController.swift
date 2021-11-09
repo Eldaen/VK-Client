@@ -61,23 +61,8 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 		return cell
 	}
 	
-	/// По нажатию на ячейку группы, делает переход назад на список моих групп, если выбранной группы ещё нет в списке моих групп
+	/// По нажатию на ячейку группы, делает переход назад на список моих групп и через делегат передаёт выбранную группу
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//		if let viewControllers = navigationController?.viewControllers {
-//			for viewController in viewControllers {
-//				if viewController.isKind(of: MyGroupsController.self) {
-//					let group = filteredGroups[indexPath.row]
-//					let myGroupsController = viewController as! MyGroupsController
-//
-//					if !myGroupsController.myGroups.contains(group) {
-//						myGroupsController.myGroups.append(filteredGroups[indexPath.row])
-//						myGroupsController.tableView.reloadData()
-//						navigationController?.popViewController(animated: true)
-//					}
-//				}
-//			}
-//		}
-		
 		let group = filteredGroups[indexPath.row]
 		delegate?.groupDidSelect(group)
 		navigationController?.popViewController(animated: true)

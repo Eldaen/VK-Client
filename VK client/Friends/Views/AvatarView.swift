@@ -17,13 +17,13 @@ import UIKit
         }
     }
 	
-    private var imageView: UIImageView = {
+    private let imageView: UIImageView = {
 		let image = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
 		image.translatesAutoresizingMaskIntoConstraints = false
 		return image
 	}()
 	
-    private var containerView: UIView = {
+    private let containerView: UIView = {
 		let view = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view

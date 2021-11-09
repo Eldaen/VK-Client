@@ -10,7 +10,7 @@ import UIKit
 class FriendsTableViewCell: UITableViewCell {
 	
 	/// Имя друга
-	lazy var friendName: UILabel = {
+	private let friendName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 17)

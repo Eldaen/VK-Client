@@ -10,13 +10,13 @@ import UIKit
 /// Ячейка для отображения новостей пользователя в контроллере NewsController
 final class NewsTableViewCell: UITableViewCell {
 
-	private var userImage: UIImageView = {
+	private let userImage: UIImageView = {
 		let image = UIImageView()
 		image.translatesAutoresizingMaskIntoConstraints = false
 		return image
 	}()
 	
-	private var userName: UILabel = {
+	private let userName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 17)
@@ -24,7 +24,7 @@ final class NewsTableViewCell: UITableViewCell {
 		return label
 	}()
 	
-	private var postDate: UILabel = {
+	private let postDate: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 14)
@@ -32,7 +32,7 @@ final class NewsTableViewCell: UITableViewCell {
 		return label
 	}()
 	
-	private var postText: UITextView = {
+	private let postText: UITextView = {
 		let text = UITextView()
 		text.translatesAutoresizingMaskIntoConstraints = false
 		text.isScrollEnabled = false
@@ -42,7 +42,7 @@ final class NewsTableViewCell: UITableViewCell {
 		return text
 	}()
 	
-	private var collectionView: UICollectionView = {
+	private let collectionView: UICollectionView = {
 		let layout = NewsCollectionViewLayout()
 		let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collection.translatesAutoresizingMaskIntoConstraints = false

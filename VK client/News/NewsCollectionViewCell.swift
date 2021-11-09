@@ -11,7 +11,7 @@ import UIKit
 final class NewsCollectionViewCell: UICollectionViewCell {
     
 	/// Основная вью с картинкой
-	var newsImage: UIImageView = {
+	private let newsImage: UIImageView = {
 		let image = UIImageView()
 		image.translatesAutoresizingMaskIntoConstraints = false
 		image.clipsToBounds = true

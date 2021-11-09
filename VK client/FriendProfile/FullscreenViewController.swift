@@ -10,20 +10,20 @@ import UIKit
 /// Класс для отображения карусели полноэкранного просмотра фотографий
 final class FullscreenViewController: UIViewController {
 	
-	private var galleryView: UIView = {
+	private let galleryView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 	
-	private var progressView: UIProgressView = {
+	private let progressView: UIProgressView = {
 		let progressView = UIProgressView()
 		progressView.translatesAutoresizingMaskIntoConstraints = false
 		progressView.tintColor = .black
 		return progressView
 	}()
 	
-	lazy var progress = Progress(totalUnitCount: Int64(photoViews.count))
+	lazy private var progress = Progress(totalUnitCount: Int64(photoViews.count))
 	
 	/// Массив картинок, которые нужно отобразить в галерее
 	var photos: [UIImage] = []

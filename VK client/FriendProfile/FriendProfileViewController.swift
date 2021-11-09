@@ -10,13 +10,13 @@ import UIKit
 /// Контроллер профиля пользователя
 final class FriendProfileViewController: UIViewController {
     
-	private var userAvatar: UIImageView = {
+	private let userAvatar: UIImageView = {
 		let avatar = UIImageView()
 		avatar.translatesAutoresizingMaskIntoConstraints = false
 		return avatar
 	}()
 	
-	private var friendName: UILabel = {
+	private let friendName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 17)
@@ -24,7 +24,7 @@ final class FriendProfileViewController: UIViewController {
 		return label
 	}()
 	
-	private var friendsCount: UILabel = {
+	private let friendsCount: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 15)
@@ -33,7 +33,7 @@ final class FriendProfileViewController: UIViewController {
 		return label
 	}()
 	
-	private var friendsText: UILabel = {
+	private let friendsText: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 15)
@@ -42,7 +42,7 @@ final class FriendProfileViewController: UIViewController {
 		return label
 	}()
 	
-	private var photosText: UILabel = {
+	private let photosText: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 15)
@@ -51,7 +51,7 @@ final class FriendProfileViewController: UIViewController {
 		return label
 	}()
 	
-	private var photosCount: UILabel = {
+	private let photosCount: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 15)
@@ -59,7 +59,7 @@ final class FriendProfileViewController: UIViewController {
 		return label
 	}()
 	
-	private var leftStack: UIStackView = {
+	private let leftStack: UIStackView = {
 		let stack = UIStackView()
 		stack.axis = .vertical
 		stack.distribution = .fillEqually
@@ -70,7 +70,7 @@ final class FriendProfileViewController: UIViewController {
 		return stack
 	}()
 	
-	private var rightStack: UIStackView = {
+	private let rightStack: UIStackView = {
 		let stack = UIStackView()
 		stack.axis = .vertical
 		stack.distribution = .fillEqually
@@ -81,7 +81,7 @@ final class FriendProfileViewController: UIViewController {
 		return stack
 	}()
 	
-	private var horizontalStack: UIStackView = {
+	private let horizontalStack: UIStackView = {
 		let stack = UIStackView()
 		stack.axis = .horizontal
 		stack.distribution = .fillEqually
@@ -92,7 +92,7 @@ final class FriendProfileViewController: UIViewController {
 		return stack
 	}()
 	
-	private var collectionView: UICollectionView = {
+	private let collectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 		let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -101,14 +101,16 @@ final class FriendProfileViewController: UIViewController {
 		return collection
 	}()
     
+	/// Модель друга, чей профиль открыт
     var friend: UserModel!
-    let identifier = "PhotoCollectionViewCell"
+	
+    private let identifier = "PhotoCollectionViewCell"
     
     /// Количество колонок
-    let cellsCount: CGFloat = 3.0
+    private let cellsCount: CGFloat = 3.0
 	
 	/// Отступы между фото
-    let cellsOffset: CGFloat = 10.0
+    private let cellsOffset: CGFloat = 10.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -169,7 +171,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
 }
 
 // MARK: - Private methods
-extension FriendProfileViewController {
+private extension FriendProfileViewController {
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {

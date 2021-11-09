@@ -11,10 +11,10 @@ import UIKit
 final class MyGroupsController: UIViewController {
     
 	/// Список групп, в которых состоит пользователь
-    var myGroups = [GroupModel]()
+    private var myGroups = [GroupModel]()
 	
 	/// Таблица с ячейками групп, в которых состоит пользователь
-	let tableView: UITableView = {
+	private let tableView: UITableView = {
 		let tableView = UITableView()
 		tableView.backgroundColor = .orange
 		return tableView
