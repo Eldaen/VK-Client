@@ -22,7 +22,7 @@ final class CustomTabBarController: UITabBarController {
 		viewControllers = [
 			createNavController(for: MyGroupsController(), title: "Мои группы", image: UIImage(systemName: "person.3")!),
 			createNavController(for: FriendsViewController(), title: "Друзья", image: UIImage(systemName: "person")!),
-			createNavController(for: MyGroupsController(), title: "Новости", image: UIImage(systemName: "newspaper")!),
+			createNavController(for: NewsController(), title: "Новости", image: UIImage(systemName: "newspaper")!),
 		]
 	}
 	
@@ -35,5 +35,4 @@ final class CustomTabBarController: UITabBarController {
 		rootViewController.navigationItem.title = title
 		return navController
 	}
-
 }
