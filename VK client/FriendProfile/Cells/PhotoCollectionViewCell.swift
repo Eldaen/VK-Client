@@ -8,7 +8,7 @@
 import UIKit
 
 /// Ячейка для коллекции профиля пользователя
-class PhotoCollectionViewCell: UICollectionViewCell {
+final class PhotoCollectionViewCell: UICollectionViewCell {
 	
 	/// Основная вью с картинкой
 	private let photoView: UIImageView = {

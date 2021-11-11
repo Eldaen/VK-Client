@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol MyGroupsDelegate: AnyObject {
+	func groupDidSelect (_ group: GroupModel)
+}
+
 /// Контроллер списка групп, в которых состоит пользователь
 final class MyGroupsController: UIViewController {
     
@@ -139,7 +143,7 @@ private extension MyGroupsController {
 }
 
 // MARK: - Delegate for SearchGroupsController
-extension MyGroupsController {
+extension MyGroupsController: MyGroupsDelegate {
 	
 	/// Принимает выбранную группу в контроллере моих групп и добавляет её в список
 	func groupDidSelect (_ group: GroupModel) {

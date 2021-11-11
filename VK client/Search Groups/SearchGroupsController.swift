@@ -28,7 +28,7 @@ final class SearchGroupsController: UIViewController {
     lazy private var filteredGroups = groups
 	
 	/// Делегат для добавления групп в список моих групп
-	weak var delegate: MyGroupsController?
+	weak var delegate: MyGroupsDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
