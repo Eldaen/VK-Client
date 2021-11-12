@@ -40,6 +40,7 @@
 		D0800D20272BF0A200347AB7 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D1E272BF0A200347AB7 /* PhotoCollectionViewCell.swift */; };
 		D0800D23272BF6DF00347AB7 /* FullscreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D22272BF6DF00347AB7 /* FullscreenViewController.swift */; };
 		D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D080897C2735500000A6394B /* CustomTabBarController.swift */; };
+		D0CB563A273E65FD00AE85DF /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB5639273E65FD00AE85DF /* Session.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		D0800D1E272BF0A200347AB7 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		D0800D22272BF6DF00347AB7 /* FullscreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenViewController.swift; sourceTree = "<group>"; };
 		D080897C2735500000A6394B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		D0CB5639273E65FD00AE85DF /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +193,7 @@
 		D06313C2270B147E00D0E12C /* VK client */ = {
 			isa = PBXGroup;
 			children = (
+				D0CB5638273E65EF00AE85DF /* Session */,
 				D06313C5270B147E00D0E12C /* SceneDelegate.swift */,
 				D06313C3270B147E00D0E12C /* AppDelegate.swift */,
 				D050CD5A27241BAA0076D78E /* News */,
@@ -242,6 +245,14 @@
 				D06313C7270B147E00D0E12C /* LoginController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		D0CB5638273E65EF00AE85DF /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				D0CB5639273E65FD00AE85DF /* Session.swift */,
+			);
+			path = Session;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -326,6 +337,7 @@
 				D0800D192727F73900347AB7 /* LoadingView.swift in Sources */,
 				D050CD1827197EB30076D78E /* AvatarView.swift in Sources */,
 				D0800D23272BF6DF00347AB7 /* FullscreenViewController.swift in Sources */,
+				D0CB563A273E65FD00AE85DF /* Session.swift in Sources */,
 				D06313C4270B147E00D0E12C /* AppDelegate.swift in Sources */,
 				D050CD5C27241BC60076D78E /* NewsController.swift in Sources */,
 				D050CD072716DFA10076D78E /* MyGroupsCell.swift in Sources */,

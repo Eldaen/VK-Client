@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Протокол Делегат для добавления группы в список моих групп
 protocol MyGroupsDelegate: AnyObject {
 	func groupDidSelect (_ group: GroupModel)
 }
@@ -146,7 +147,7 @@ private extension MyGroupsController {
 extension MyGroupsController: MyGroupsDelegate {
 	
 	/// Принимает выбранную группу в контроллере моих групп и добавляет её в список
-	func groupDidSelect (_ group: GroupModel) {
+	func groupDidSelect(_ group: GroupModel) {
 		if !myGroups.contains(group) {
 			myGroups.append(group)
 			tableView.reloadData()
