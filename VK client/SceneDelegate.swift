@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		let navigationController = UINavigationController()
 		window?.rootViewController = navigationController
 
-		let loginController = LoginController()
+		let loginController = VKLoginController()
 		navigationController.pushViewController(loginController, animated: true)
 
 		window?.makeKeyAndVisible()

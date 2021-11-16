@@ -10,10 +10,6 @@ import UIKit
 /// Entry point controller, responsible for the user Authorization
 final class LoginController: UIViewController {
     
-//    @IBAction func logginButtonAction(_ sender: Any) {
-//
-//    }
-	
 	private let scrollView: UIScrollView = {
 		let scrollView = UIScrollView(frame: .zero)
 		scrollView.backgroundColor = UIColor.systemTeal

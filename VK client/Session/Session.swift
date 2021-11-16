@@ -18,4 +18,10 @@ final class Session {
 	static let instance = Session()
 	
 	private init() {}
+	
+	/// Сохраняет данные авторизации пользователя
+	func loginUser(with token: String, userId: Int) {
+		self.token = token
+		self.userID = userId
+	}
 }
