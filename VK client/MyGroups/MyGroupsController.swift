@@ -25,33 +25,18 @@ final class MyGroupsController: UIViewController {
 		return tableView
 	}()
 
+	
+// MARK: - View controller life cycle
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		configureNavigation()
 		setupTableView()
 		setupConstraints()
+		
+		let loader = GroupsService()
+		loader.loadUserGroups()
     }
-    // Это метод, который принимает unwind seague из SearchGroups при клике на группу
-//    @IBAction func addGroup(segue: UIStoryboardSegue) {
-//        // Проверяем идентификатор, чтобы убедиться, что это нужный переход
-//        if segue.identifier == "addGroup" {
-//            // Получаем ссылку на контроллер, с которого осуществлен переход
-//            guard let searchGroupsController = segue.source as? SearchGroupsController else {
-//                return
-//            }
-//
-//            // Получаем название группы + Картинку и кладём в myGroups для последующей отрисовки
-//            if let indexPath = searchGroupsController.tableView.indexPathForSelectedRow {
-//                let group = searchGroupsController.groups[indexPath.row]
-//
-//                // Если такой группы ещё нет, то добавляем
-//                if !myGroups.contains(group) {
-//                    myGroups.append(group)
-//                    tableView.reloadData()
-//                }
-//            }
-//        }
-//    }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate

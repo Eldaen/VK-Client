@@ -16,13 +16,19 @@ final class VKLoginController: UIViewController {
 		return view
 	}()
 	
+	/// Контроллер, на который перекинет при успешной авторизации
+	private let nextController: UITabBarController = CustomTabBarController()
+	
 	// заменяем стандартную вьюху
 	override func loadView() {
 		self.view = vkWebView
 	}
 	
 	override func viewDidLoad() {
+		navigationController?.isNavigationBarHidden = true
 		configureWebView()
+		
+		// TODO: вынести в отдельный сервис
 		var urlComponents = URLComponents()
 		urlComponents.scheme = "https"
 		urlComponents.host = "oauth.vk.com"
@@ -37,6 +43,7 @@ final class VKLoginController: UIViewController {
 		]
 		
 		let request = URLRequest(url: urlComponents.url!)
+		//
 		
 		vkWebView.load(request)
 	}
@@ -76,6 +83,7 @@ extension VKLoginController: WKNavigationDelegate {
 		// Сохраняем данные авторизации, если она успешна и всё нужное есть
 		if let token = params["access_token"], let userId = params["user_id"], let id = Int(userId) {
 			Session.instance.loginUser(with: token, userId: id)
+			self.navigationController?.pushViewController(nextController, animated: true)
 		}
 		
 		decisionHandler(.cancel)

@@ -17,7 +17,7 @@ final class NewsController: UIViewController {
 		return tableView
 	}()
 	
-    private let news = NewsLoader.iNeedNews()
+    private let news = NewsService.iNeedNews()
     
     override func viewDidLoad() {
         super.viewDidLoad()

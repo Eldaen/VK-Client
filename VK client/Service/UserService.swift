@@ -6,7 +6,10 @@
 //
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
-class FriendsLoader {
+class UserService {
+	
+	/// Класс для отправки запросов к API
+	let networkManager = NetworkManager()
     
     // Можно было бы сразу отсортировать тестовые данные как надо, но я что-то решил сделать сотировалки, чтобы потом не переделывать, если будет подгрузка
     static var friends = [UserModel(name: "Vasia", image: "vasia", storedImages: ["vasia", "petia", "misha", "dima", "pepe-dunno", "pepe-like", "pepe-pirate", "pepe-yard-keeper"]),
@@ -68,4 +71,22 @@ class FriendsLoader {
         
         return sectionsArray
     }
+	
+	
+	/// Загружает список друзей
+	func loadFriends() {
+		let params = [
+			"order" : "name",
+			"fields" : "photo_50",
+		]
+		networkManager.request(method: .friendsGet, httpMethod: .get, params: params)
+	}
+	
+	/// Загружает все фото пользователя
+	func loadUserPhotos(for id: String) {
+		let params = [
+			"owner_id" : id,
+		]
+		networkManager.request(method: .photosGetAll, httpMethod: .get, params: params)
+	}
 }
