@@ -10,10 +10,6 @@ import UIKit
 /// Entry point controller, responsible for the user Authorization
 final class LoginController: UIViewController {
     
-//    @IBAction func logginButtonAction(_ sender: Any) {
-//
-//    }
-	
 	private let scrollView: UIScrollView = {
 		let scrollView = UIScrollView(frame: .zero)
 		scrollView.backgroundColor = UIColor.systemTeal
@@ -90,66 +86,8 @@ final class LoginController: UIViewController {
 	/// Контроллер, на который перекинет при успешной авторизации
 	private let nextController: UITabBarController = CustomTabBarController()
 	
-	
-	// MARK: - Setting Views
-	private func setupViews() {
-		
-		// если не задать frame, то не отрисовывается О_о
-		scrollView.frame = self.view.bounds
-		loginButton.addTarget(self, action: #selector(checkLogin), for: .touchUpInside)
-		
-		view.addSubview(scrollView)
-		scrollView.addSubview(cloudView)
-		scrollView.addSubview(appName)
-		scrollView.addSubview(loginLabel)
-		scrollView.addSubview(passwordLabel)
-		scrollView.addSubview(loginInput)
-		scrollView.addSubview(passwordInput)
-		scrollView.addSubview(loginButton)
-	}
-	
-	// MARK: - Setting Constraints
-	private func setupConstraints() {
-		NSLayoutConstraint.activate([
-		  scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-		  scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-		  scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-		  scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-		  
-		  cloudView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-		  cloudView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 60),
-		  cloudView.widthAnchor.constraint(equalToConstant: 120),
-		  cloudView.heightAnchor.constraint(equalToConstant: 70),
-
-		  appName.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 140),
-		  appName.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 87),
-		  appName.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-
-		  loginLabel.topAnchor.constraint(equalTo: appName.bottomAnchor, constant: 80),
-		  loginLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-
-		  loginInput.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 15),
-		  loginInput.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-		  loginInput.widthAnchor.constraint(equalToConstant: 120),
-		  loginInput.heightAnchor.constraint(equalToConstant: 30),
-
-		  passwordLabel.topAnchor.constraint(equalTo: loginInput.bottomAnchor, constant: 40),
-		  passwordLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-
-		  passwordInput.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 15),
-		  passwordInput.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-		  passwordInput.widthAnchor.constraint(equalToConstant: 120),
-		  passwordInput.heightAnchor.constraint(equalToConstant: 30),
-
-		  loginButton.topAnchor.constraint(equalTo: passwordInput.bottomAnchor, constant: 50),
-		  loginButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 200),
-		  loginButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-		  loginButton.widthAnchor.constraint(equalToConstant: 65),
-		])
-	}
-    
-    
     // MARK: - ViewController life cycle
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -261,5 +199,64 @@ extension LoginController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0.0
     }
+}
+
+// MARK: - Private setup methods
+private extension LoginController {
+	
+	func setupViews() {
+		
+		// если не задать frame, то не отрисовывается О_о
+		scrollView.frame = self.view.bounds
+		loginButton.addTarget(self, action: #selector(checkLogin), for: .touchUpInside)
+		
+		view.addSubview(scrollView)
+		scrollView.addSubview(cloudView)
+		scrollView.addSubview(appName)
+		scrollView.addSubview(loginLabel)
+		scrollView.addSubview(passwordLabel)
+		scrollView.addSubview(loginInput)
+		scrollView.addSubview(passwordInput)
+		scrollView.addSubview(loginButton)
+	}
+	
+	func setupConstraints() {
+		NSLayoutConstraint.activate([
+		  scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+		  scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+		  scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+		  scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+		  
+		  cloudView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  cloudView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 60),
+		  cloudView.widthAnchor.constraint(equalToConstant: 120),
+		  cloudView.heightAnchor.constraint(equalToConstant: 70),
+
+		  appName.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 140),
+		  appName.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 87),
+		  appName.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+
+		  loginLabel.topAnchor.constraint(equalTo: appName.bottomAnchor, constant: 80),
+		  loginLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+
+		  loginInput.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 15),
+		  loginInput.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  loginInput.widthAnchor.constraint(equalToConstant: 120),
+		  loginInput.heightAnchor.constraint(equalToConstant: 30),
+
+		  passwordLabel.topAnchor.constraint(equalTo: loginInput.bottomAnchor, constant: 40),
+		  passwordLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+
+		  passwordInput.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 15),
+		  passwordInput.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  passwordInput.widthAnchor.constraint(equalToConstant: 120),
+		  passwordInput.heightAnchor.constraint(equalToConstant: 30),
+
+		  loginButton.topAnchor.constraint(equalTo: passwordInput.bottomAnchor, constant: 50),
+		  loginButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 200),
+		  loginButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+		  loginButton.widthAnchor.constraint(equalToConstant: 65),
+		])
+	}
 }
 

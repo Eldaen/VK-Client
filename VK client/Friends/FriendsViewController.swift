@@ -30,7 +30,7 @@ final class FriendsViewController: UIViewController {
 	private var cellsForAnimate: [FriendsTableViewCell] = []
 	
 	/// Список друзей
-	var friends = FriendsLoader.iNeedFriends()
+	var friends = UserService.iNeedFriends()
 	
 	/// Список букв для заголовков секций
 	private var lettersOfNames = [String]()
@@ -61,6 +61,9 @@ final class FriendsViewController: UIViewController {
 		super.viewDidLoad()
 		setupTableView()
 		setupConstraints()
+		
+		let loader = UserService()
+		loader.loadFriends()
 		
 		// наполянем имена заголовков секций
 		loadLetters()

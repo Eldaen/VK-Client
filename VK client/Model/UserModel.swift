@@ -7,12 +7,18 @@
 
 import UIKit
 
-// Делаем самые простые модели, т.к. они нам чисто показать данные, а потом можно их и переделать.
+/// Модель пользователя
 struct UserModel {
     let name: String
     let image: String
-    let uiImage: UIImage
+	let uiImage: UIImage
     var storedImages: [UIImage] = []
+	
+	/// Перечисление соответствия полям в АПИ к полям в нашей модели
+	enum CodingKeys: String, CodingKey {
+		case name = "first_name"
+		case image = "photo_50"
+	}
     
     init(name: String, image: String, storedImages: [String]) {
         self.name = name

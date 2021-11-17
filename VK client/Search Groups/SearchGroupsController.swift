@@ -24,7 +24,7 @@ final class SearchGroupsController: UIViewController {
 		return tableView
 	}()
     
-    private var groups = GroupsLoader.iNeedGroups()
+    private var groups = GroupsService.iNeedGroups()
     lazy private var filteredGroups = groups
 	
 	/// Делегат для добавления групп в список моих групп
