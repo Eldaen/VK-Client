@@ -120,8 +120,8 @@ final class FriendProfileViewController: UIViewController {
 		setupConstaints()
 		
         // заполняем статичные данные
-        userAvatar.image = friend.uiImage
-        photosCount.text = String(friend.storedImages.count)
+        userAvatar.image = UIImage(named: friend.image)
+        photosCount.text = "0" //"String(friend.storedImages.count)
 		friendName.text = friend.name
     }
 }
@@ -135,7 +135,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
 
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return friend.storedImages.count
+        return 0 //friend.storedImages.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -143,7 +143,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
             return UICollectionViewCell()
         }
         
-        cell.configure(with: friend.storedImages[indexPath.item])
+        //cell.configure(with: friend.storedImages[indexPath.item])
         return cell
     }
     
@@ -162,7 +162,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = FullscreenViewController()
         
-        vc.photos = friend.storedImages
+        vc.photos = [UIImage]() //friend.storedImages
         vc.selectedPhoto = indexPath.item
         
         // переход на подробный просмотр

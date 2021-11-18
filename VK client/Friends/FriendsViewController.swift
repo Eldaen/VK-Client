@@ -65,8 +65,17 @@ final class FriendsViewController: UIViewController {
 		setupTableView()
 		setupConstraints()
 		
-		// наполянем имена заголовков секций
-		loadLetters()
+		// Вызываем загрузку друзей, получаем её через блок и обновляем данные
+		loader.loadFriends() { [weak self] friends in
+			self?.friends = friends
+			self?.filteredData = friends
+			
+			// наполянем имена заголовков секций
+			self?.loadLetters()
+			
+			// Обновляем таблицу свежими данными
+			self?.tableView.reloadData()
+		}
 	}
 	
 	
@@ -239,7 +248,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		let name = section.data[indexPath.row].name
 		let image = section.data[indexPath.row].image
 		// конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(named: image)!)
+		cell.configure(name: name, image: UIImage(named: image) ?? UIImage())
 		
 		cellsForAnimate.append(cell)
 		return cell

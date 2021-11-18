@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D01D8C3E27469330002CDC5E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D8C3D27469330002CDC5E /* Response.swift */; };
 		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
 		D050CCFD2716D8AE0076D78E /* FriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFC2716D8AE0076D78E /* FriendsTableViewCell.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D01D8C3D27469330002CDC5E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		D050CCFC2716D8AE0076D78E /* FriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewCell.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				D050CD0E2716E1C50076D78E /* UserModel.swift */,
 				D050CD102716E1CF0076D78E /* GroupModel.swift */,
 				D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */,
+				D01D8C3D27469330002CDC5E /* Response.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */,
 				D050CD592721BD9E0076D78E /* GradientView.swift in Sources */,
 				D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */,
+				D01D8C3E27469330002CDC5E /* Response.swift in Sources */,
 				D0615C9027352C540098F5D7 /* CloudView.swift in Sources */,
 				D050CD6627247A010076D78E /* NewsService.swift in Sources */,
 				D050CD142716E2990076D78E /* UserService.swift in Sources */,

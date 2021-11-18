@@ -33,9 +33,6 @@ final class MyGroupsController: UIViewController {
 		configureNavigation()
 		setupTableView()
 		setupConstraints()
-		
-		let loader = GroupsService()
-		loader.loadUserGroups()
     }
 }
 

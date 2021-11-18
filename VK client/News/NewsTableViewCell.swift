@@ -165,7 +165,7 @@ extension NewsTableViewCell {
 	
 	// обновляет данные ячейки
 	func updateCellData(with model: NewsTableViewCellModel) {
-		userImage.image = model.user.uiImage
+		userImage.image = UIImage(named: model.user.image)
 		userName.text = model.user.name
 		self.postDate.text = model.postDate
 		postText.text = model.postText

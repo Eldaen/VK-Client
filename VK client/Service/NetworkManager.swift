@@ -74,10 +74,13 @@ class NetworkManager {
 			guard let strongSelf = self else { return }
 			guard let data = data else { return }
 			
+//			let decodedData = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+//			print(decodedData)
 			do {
 				let decodedData = try strongSelf.decoder.decode(T.self, from: data)
 				return completionOnMain(.success(decodedData))
 			} catch {
+				print(error)
 				completionOnMain(.failure(error))
 			}
 			

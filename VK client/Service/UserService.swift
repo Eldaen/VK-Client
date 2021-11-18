@@ -11,14 +11,8 @@ class UserService {
 	/// Класс для отправки запросов к API
 	let networkManager = NetworkManager()
     
-//    static func iNeedFriends() -> [FriendsSection] {
-//        let sortedArray = sortFriends(friends)
-//        let sectionsArray = formFriendsSections(sortedArray)
-//        return sectionsArray
-//    }
-	
 	var friendsArray: [UserModel]?
-//
+	
     /// Раскидываем друзей по ключам, в зависимости от первой буквы имени
     func sortFriends(_ array: [UserModel]) -> [Character: [UserModel]] {
 
@@ -65,7 +59,7 @@ class UserService {
 	
 	
 	/// Загружает список друзей
-	func loadFriends() -> [FriendsSection] {
+	func loadFriends(completion: @escaping ([FriendsSection]) -> Void) {
 		let params = [
 			"order" : "name",
 			"fields" : "photo_50",
@@ -73,16 +67,17 @@ class UserService {
 		
 		networkManager.request(method: .friendsGet,
 							   httpMethod: .get,
-							   params: params) { [weak self] (result: Result<VkFriendsResponse, Error>) in
+							   params: params) { [weak self] (result: Result<Response, Error>) in
 			switch result {
 			case .success(let friendsResponse):
-				self?.friendsArray = friendsResponse.items
+				guard let sections = self?.formFriendsArray(from: friendsResponse.response.items) else {
+					return
+				}
+				completion(sections)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
 			}
 		}
-
-		return formFriendsArray(from: friendsArray)
 	}
 	
 //	/// Загружает все фото пользователя

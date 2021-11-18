@@ -20,20 +20,20 @@ class GroupsService {
         ]
     }
 	
-	/// Загружает список текущих групп пользователя
-	func loadUserGroups() {
-		let params = [
-			"order" : "name",
-			"extended" : "1",
-		]
-		networkManager.request(method: .groupsGet, httpMethod: .get, params: params)
-	}
-	
-	/// Загружает группы, содержащие в имени строку query
-	func searchForGroups(by query: String) {
-		let params = [
-			"q" : query,
-		]
-		networkManager.request(method: .groupsGet, httpMethod: .get, params: params)
-	}
+//	/// Загружает список текущих групп пользователя
+//	func loadUserGroups() {
+//		let params = [
+//			"order" : "name",
+//			"extended" : "1",
+//		]
+//		networkManager.request(method: .groupsGet, httpMethod: .get, params: params)
+//	}
+//	
+//	/// Загружает группы, содержащие в имени строку query
+//	func searchForGroups(by query: String) {
+//		let params = [
+//			"q" : query,
+//		]
+//		networkManager.request(method: .groupsGet, httpMethod: .get, params: params)
+//	}
 }
