@@ -17,9 +17,16 @@ enum apiMethods: String {
 	case groupsSearch = "/method/groups.search"
 }
 
+/// Возможные http методы
 enum httpMethods: String {
 	case get = "GET"
 	case post = "POST"
+}
+
+/// Возможные ошибки
+enum ManagerErrors: Error {
+	case invalidResponse
+	case invalidStatusCode(Int)
 }
 
 /// Класс, управляющий запросами в сеть
@@ -37,12 +44,51 @@ class NetworkManager {
 	// Cтандартные данные
 	private let scheme = "https"
 	private let host = "api.vk.com"
-
-	func request(method: apiMethods, httpMethod: httpMethods, params: [String: String]) {
+	
+	/// Запрашивает данные по заданным параметрам. Возвращает либо результат Generic типа, либо ошибку
+	func request<T: Decodable>(method: apiMethods,
+							   httpMethod: httpMethods,
+							   params: [String: String],
+							   completion: @escaping (Result<T, Error>) -> Void
+	){
+		
+		/// Возвращаем разультат через клоужер в основую очередь
+		let completionOnMain: (Result<T, Error>) -> Void = { result in
+			DispatchQueue.main.async {
+				completion(result)
+			}
+		}
 		
 		guard let token = Session.instance.token else {
 			return
 		}
+		
+		// Конфигурируем URL
+		let url = configureUrl(token: token, method: method, httpMethod: httpMethod, params: params)
+		
+		var request = URLRequest(url: url)
+		request.httpMethod = httpMethod.rawValue
+		
+		session.dataTask(with: url) { [weak self] (data, response, error) in
+			
+			guard let strongSelf = self else { return }
+			guard let data = data else { return }
+			
+			do {
+				let decodedData = try strongSelf.decoder.decode(T.self, from: data)
+				return completionOnMain(.success(decodedData))
+			} catch {
+				completionOnMain(.failure(error))
+			}
+			
+		}.resume()
+	}
+	
+	func configureUrl(token: String,
+					  method: apiMethods,
+					  httpMethod: httpMethods,
+					  params: [String: String]) -> URL {
+	
 		
 		var queryItems = [URLQueryItem]()
 		
@@ -61,23 +107,9 @@ class NetworkManager {
 		urlComponents.queryItems = queryItems
 		
 		guard let url = urlComponents.url else {
-			return
+			fatalError("URL is invalid")
 		}
 		
-		var request = URLRequest(url: url)
-		request.httpMethod = httpMethod.rawValue
-		
-		session.dataTask(with: url) { (data, response, error) in
-			
-			if error == nil, let parseData = data {
-				let json = try? JSONSerialization.jsonObject(with: parseData,
-															 options: JSONSerialization.ReadingOptions.allowFragments
-				)
-				print(json)
-			} else {
-				
-			}
-			
-		}.resume()
+		return url
 	}
 }

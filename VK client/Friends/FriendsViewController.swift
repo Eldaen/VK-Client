@@ -29,8 +29,11 @@ final class FriendsViewController: UIViewController {
 	/// Ячейки, которые нужно анимировать при появлении
 	private var cellsForAnimate: [FriendsTableViewCell] = []
 	
+	/// Сервис по загрузке данных
+	let loader = UserService()
+	
 	/// Список друзей
-	var friends = UserService.iNeedFriends()
+	var friends: [FriendsSection] = []
 	
 	/// Список букв для заголовков секций
 	private var lettersOfNames = [String]()
@@ -61,9 +64,6 @@ final class FriendsViewController: UIViewController {
 		super.viewDidLoad()
 		setupTableView()
 		setupConstraints()
-		
-		let loader = UserService()
-		loader.loadFriends()
 		
 		// наполянем имена заголовков секций
 		loadLetters()

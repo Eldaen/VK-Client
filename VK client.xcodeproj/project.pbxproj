@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
 		D050CCFD2716D8AE0076D78E /* FriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFC2716D8AE0076D78E /* FriendsTableViewCell.swift */; };
 		D050CD002716DE2A0076D78E /* FriendProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFF2716DE2A0076D78E /* FriendProfileViewController.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		D050CCFC2716D8AE0076D78E /* FriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewCell.swift; sourceTree = "<group>"; };
 		D050CCFF2716DE2A0076D78E /* FriendProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileViewController.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				D050CD1D271A2DD60076D78E /* FriendsSection.swift */,
 				D050CD0E2716E1C50076D78E /* UserModel.swift */,
 				D050CD102716E1CF0076D78E /* GroupModel.swift */,
+				D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 				D050CD0A2716E12B0076D78E /* SearchGroupsController.swift in Sources */,
 				D050CD0F2716E1C50076D78E /* UserModel.swift in Sources */,
 				D050CD68272488910076D78E /* NewsCollectionViewCell.swift in Sources */,
+				D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */,
 				D050CD0C2716E13A0076D78E /* SearchGroupsCell.swift in Sources */,
 				D06313C6270B147E00D0E12C /* SceneDelegate.swift in Sources */,
 				D050CD1C271A07BA0076D78E /* LikeControl.swift in Sources */,
