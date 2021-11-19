@@ -62,7 +62,7 @@ class UserService: Loader {
 	func loadFriends(completion: @escaping ([FriendsSection]) -> Void) {
 		let params = [
 			"order" : "name",
-			"fields" : "photo_50",
+			"fields" : "photo_100",
 		]
 		
 		networkManager.request(method: .friendsGet,
@@ -84,14 +84,16 @@ class UserService: Loader {
 	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void) {
 		let params = [
 			"owner_id" : id,
+			"count": "40",
 		]
 		networkManager.request(method: .photosGetAll,
 							   httpMethod: .get,
 							   params: params) { (result: Result<UserImagesMainResponse, Error>) in
 			switch result {
 			case .success(let imagesResponse):
-				break
-			case .failure(let error):
+				let imagesModels = imagesResponse.response.items
+				completion(imagesModels)
+			case .failure(_):
 				break
 			}
 		}

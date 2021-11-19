@@ -35,6 +35,9 @@ final class FriendsViewController: UIViewController {
 	/// Список друзей
 	var friends: [FriendsSection] = []
 	
+	/// Фото профиля
+	var profileImage: UIImage?
+	
 	/// Список букв для заголовков секций
 	private var lettersOfNames = [String]()
 	
@@ -252,7 +255,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		cell.configure(name: name, image: UIImage(named: image) ?? UIImage())
 		
 		// Ставим картинку на загрузку
-		loader.loadImage(url: image) { image in
+		loader.loadImage(url: image) { [weak self] image in
 			DispatchQueue.main.async {
 				cell.updateImage(with: image)
 			}
@@ -268,9 +271,14 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		guard let cell = tableView.cellForRow(at: indexPath) as? FriendsTableViewCell else {
+			return
+		}
+		
 		let profileController = FriendProfileViewController()
 		let section = filteredData[indexPath.section]
 		profileController.friend = section.data[indexPath.row]
+		profileController.profileImage = cell.getImage()
 		
 		self.navigationController?.pushViewController(profileController, animated: true)
 	}

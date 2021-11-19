@@ -18,7 +18,7 @@ struct UserModel: Codable {
 	/// Перечисление соответствия полям в АПИ к полям в нашей модели
 	enum CodingKeys: String, CodingKey {
 		case name = "first_name"
-		case image = "photo_50"
+		case image = "photo_100"
 		case id
 	}
     

@@ -37,6 +37,11 @@ class FriendsTableViewCell: UITableViewCell {
         animate()
     }
 	
+	/// Возвращает аватарку профиля
+	func getImage() -> UIImage {
+		return self.friendImage.image
+	}
+	
 	/// Меняет картинку, используется для замены после подгрузки из сети
 	func updateImage(with image: UIImage) {
 		friendImage.image = image
