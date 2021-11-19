@@ -36,6 +36,12 @@ class FriendsTableViewCell: UITableViewCell {
 		setupConstaints()
         animate()
     }
+	
+	/// Меняет картинку, используется для замены после подгрузки из сети
+	func updateImage(with image: UIImage) {
+		friendImage.image = image
+		self.layoutIfNeeded()
+	}
     
     /// Запуск анимации ячейки
     func animate() {

@@ -247,8 +247,16 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		let section = filteredData[indexPath.section]
 		let name = section.data[indexPath.row].name
 		let image = section.data[indexPath.row].image
+		
 		// конфигурируем и возвращаем готовую ячейку
 		cell.configure(name: name, image: UIImage(named: image) ?? UIImage())
+		
+		// Ставим картинку на загрузку
+		loader.loadImage(url: image) { image in
+			DispatchQueue.main.async {
+				cell.updateImage(with: image)
+			}
+		}
 		
 		cellsForAnimate.append(cell)
 		return cell

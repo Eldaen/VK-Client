@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// Перечисление используемых нами методов из АПИ
 // TODO: - вынести такие методы отдельно в классы, из которых будут запросы
@@ -74,8 +75,6 @@ class NetworkManager {
 			guard let strongSelf = self else { return }
 			guard let data = data else { return }
 			
-//			let decodedData = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-//			print(decodedData)
 			do {
 				let decodedData = try strongSelf.decoder.decode(T.self, from: data)
 				return completionOnMain(.success(decodedData))
@@ -114,5 +113,18 @@ class NetworkManager {
 		}
 		
 		return url
+	}
+	
+	/// Загружает данные для картинки и возвращает их, если получилось
+	func loadImage(url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
+		session.dataTask(with: url, completionHandler: { (data, response, error) in
+			guard let responseData = data, error == nil else {
+				if let error = error {
+					completion(.failure(error))
+				}
+				return
+			}
+			completion(.success(responseData))
+		}).resume()
 	}
 }

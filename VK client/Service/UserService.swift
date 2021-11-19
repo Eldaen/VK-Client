@@ -6,10 +6,7 @@
 //
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
-class UserService {
-	
-	/// Класс для отправки запросов к API
-	let networkManager = NetworkManager()
+class UserService: Loader {
     
 	var friendsArray: [UserModel]?
 	
