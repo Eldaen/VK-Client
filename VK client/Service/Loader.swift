@@ -29,4 +29,19 @@ class Loader {
 			}
 		}
 	}
+	
+	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
+	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String] {
+		var imageLinks: [String] = []
+		
+		// выбираем из вариантов картинок картинки типа X
+		for model in array {
+			for size in model.sizes {
+				if size.type == sizeType {
+					imageLinks.append(size.url)
+				}
+			}
+		}
+		return imageLinks
+	}
 }

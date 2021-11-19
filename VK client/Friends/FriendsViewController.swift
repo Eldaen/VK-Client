@@ -255,7 +255,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		cell.configure(name: name, image: UIImage(named: image) ?? UIImage())
 		
 		// Ставим картинку на загрузку
-		loader.loadImage(url: image) { [weak self] image in
+		loader.loadImage(url: image) { image in
 			DispatchQueue.main.async {
 				cell.updateImage(with: image)
 			}

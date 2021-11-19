@@ -110,6 +110,9 @@ final class FriendProfileViewController: UIViewController {
 	/// Массив картинок пользователя
 	var storedImages: [String] = []
 	
+	// Массив моделей картинок в галерее
+	var storedModels: [UserImages] = []
+	
 	/// Сервис по загрузке данных
 	let loader = UserService()
 	
@@ -131,8 +134,9 @@ final class FriendProfileViewController: UIViewController {
 		// Вызываем загрузку картинок, которые есть у пользователя
 		loader.loadUserPhotos(for: String(friend.id)) { [weak self] images in
 			self?.photosCount.text = String(images.count)
+			self?.storedModels = images
 			
-			if let imagesLinks = self?.chooseImages(using: images) {
+			if let imagesLinks = self?.loader.sortImage(by: .m, from: images) {
 				self?.storedImages = imagesLinks
 				self?.photosCount.text = String(imagesLinks.count)
 			}
@@ -192,7 +196,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = FullscreenViewController()
         
-        vc.photos = [UIImage]() //friend.storedImages
+        vc.photoModels = storedModels
         vc.selectedPhoto = indexPath.item
         
         // переход на подробный просмотр
@@ -254,21 +258,6 @@ private extension FriendProfileViewController {
 			collectionView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
 		])
-	}
-	
-	/// Выбирает из массива моделей картинок нужные нам размеры и загружает их
-	func chooseImages(using array: [UserImages]) -> [String] {
-		var imageLinks: [String] = []
-		
-		// выбираем из вариантов картинок картинки типа X
-		for model in array {
-			for size in model.sizes {
-				if size.type == .x {
-					imageLinks.append(size.url)
-				}
-			}
-		}
-		return imageLinks
 	}
 }
 
