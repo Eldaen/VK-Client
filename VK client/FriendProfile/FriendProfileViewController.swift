@@ -104,6 +104,12 @@ final class FriendProfileViewController: UIViewController {
 	/// Модель друга, чей профиль открыт
     var friend: UserModel!
 	
+	/// Массив картинок пользователя
+	var storedImages: [UIImage] = []
+	
+	/// Сервис по загрузке данных
+	let loader = UserService()
+	
     private let identifier = "PhotoCollectionViewCell"
     
     /// Количество колонок
@@ -119,9 +125,18 @@ final class FriendProfileViewController: UIViewController {
 		setupCollectionView()
 		setupConstaints()
 		
+		// Вызываем загрузку картинок, которые есть у пользователя
+		loader.loadUserPhotos(for: String(friend.id)) { [weak self] images in
+			self?.storedImages = []
+			self?.photosCount.text = String(images.count)
+			
+			// Обновляем таблицу свежими данными
+			self?.collectionView.reloadData()
+		}
+		
         // заполняем статичные данные
         userAvatar.image = UIImage(named: friend.image)
-        photosCount.text = "0" //"String(friend.storedImages.count)
+        photosCount.text = "0"
 		friendName.text = friend.name
     }
 }

@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct Response: Codable {
+struct VkFriendsMainResponse: Codable {
 	var response: VkFriendsResponse
 }

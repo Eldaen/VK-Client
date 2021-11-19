@@ -11,6 +11,7 @@ import UIKit
 struct UserModel: Codable {
     let name: String
     let image: String
+	let id: Int
 	//let uiImage: UIImage
     //var storedImages: [UIImage] = []
 	
@@ -18,6 +19,7 @@ struct UserModel: Codable {
 	enum CodingKeys: String, CodingKey {
 		case name = "first_name"
 		case image = "photo_50"
+		case id
 	}
     
 //    init(name: String, image: String, storedImages: [String]) {
