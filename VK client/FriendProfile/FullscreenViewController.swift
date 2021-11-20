@@ -7,6 +7,8 @@
 
 import UIKit
 
+// TODO: - Надо бы галерею в отдельный модуль вынести, а то что-то она в контроллере...
+
 /// Класс для отображения карусели полноэкранного просмотра фотографий
 final class FullscreenViewController: UIViewController {
 	

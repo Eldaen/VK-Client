@@ -120,6 +120,7 @@ class NetworkManager {
 		session.dataTask(with: url, completionHandler: { (data, response, error) in
 			guard let responseData = data, error == nil else {
 				if let error = error {
+					print(error)
 					completion(.failure(error))
 				}
 				return

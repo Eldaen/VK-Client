@@ -26,9 +26,6 @@ final class SearchGroupsController: UIViewController {
     
     private var groups = GroupsService.iNeedGroups()
     lazy private var filteredGroups = groups
-	
-	/// Делегат для добавления групп в список моих групп
-	weak var delegate: MyGroupsDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,8 +60,6 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 	
 	/// По нажатию на ячейку группы, делает переход назад на список моих групп и через делегат передаёт выбранную группу
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let group = filteredGroups[indexPath.row]
-		delegate?.groupDidSelect(group)
 		navigationController?.popViewController(animated: true)
 	}
 }

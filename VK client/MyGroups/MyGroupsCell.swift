@@ -24,6 +24,12 @@ class MyGroupsCell: UITableViewCell {
 		image.contentMode = .scaleAspectFit
 		return image
 	}()
+	
+	/// Меняет картинку, используется для замены после подгрузки из сети
+	func updateImage(with image: UIImage) {
+		groupImage.image = image
+		self.layoutIfNeeded()
+	}
     
 	/// Конфигурируем ячейку для отображения группы
     func configure(name: String, image: UIImage?) {

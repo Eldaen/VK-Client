@@ -7,16 +7,14 @@
 
 import UIKit
 
-/// Протокол Делегат для добавления группы в список моих групп
-protocol MyGroupsDelegate: AnyObject {
-	func groupDidSelect (_ group: GroupModel)
-}
-
 /// Контроллер списка групп, в которых состоит пользователь
 final class MyGroupsController: UIViewController {
     
 	/// Список групп, в которых состоит пользователь
     private var myGroups = [GroupModel]()
+	
+	/// Сервис по загрузке данных группv
+	private let loader = GroupsService()
 	
 	/// Таблица с ячейками групп, в которых состоит пользователь
 	private let tableView: UITableView = {
@@ -33,6 +31,13 @@ final class MyGroupsController: UIViewController {
 		configureNavigation()
 		setupTableView()
 		setupConstraints()
+		
+		loader.loadGroups() { [weak self] groups in
+			DispatchQueue.main.async {
+				self?.myGroups = groups
+				self?.tableView.reloadData()
+			}
+		}
     }
 }
 
@@ -53,7 +58,14 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 		let image = myGroups[indexPath.row].image
 		
 		//Конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(named: image))
+		cell.configure(name: name, image: UIImage())
+		
+		// Ставим картинку на загрузку
+		loader.loadImage(url: image) { image in
+			DispatchQueue.main.async {
+				cell.updateImage(with: image)
+			}
+		}
 
 		return cell
 	}
@@ -115,24 +127,11 @@ private extension MyGroupsController {
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
 		let searchGroupsController = SearchGroupsController()
-		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: true)
 	}
 	
 	// Делаем pop контроллера
 	@objc func logout() {
 		navigationController?.pushViewController(LoginController(), animated: true)
-	}
-}
-
-// MARK: - Delegate for SearchGroupsController
-extension MyGroupsController: MyGroupsDelegate {
-	
-	/// Принимает выбранную группу в контроллере моих групп и добавляет её в список
-	func groupDidSelect(_ group: GroupModel) {
-		if !myGroups.contains(group) {
-			myGroups.append(group)
-			tableView.reloadData()
-		}
 	}
 }

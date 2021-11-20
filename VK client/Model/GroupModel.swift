@@ -5,8 +5,15 @@
 //  Created by Денис Сизов on 13.10.2021.
 //
 
-// Делаем самые простые модели, т.к. они нам чисто показать данные, а потом можно их и переделать.
-struct GroupModel: Hashable {
+import Foundation
+
+/// Модель группы Вконтакте
+struct GroupModel: Codable {
     let name: String
     let image: String
+	
+	enum CodingKeys: String, CodingKey {
+		case name
+		case image = "photo_50"
+	}
 }

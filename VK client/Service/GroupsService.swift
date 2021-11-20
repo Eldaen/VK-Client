@@ -7,10 +7,7 @@
 
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
-class GroupsService {
-	
-	/// Класс для отправки запросов к API
-	let networkManager = NetworkManager()
+class GroupsService: Loader {
 	
     static func iNeedGroups() -> [GroupModel] {
         return [GroupModel(name: "В душе пираты", image: "pepe-pirate"),
@@ -36,4 +33,44 @@ class GroupsService {
 //		]
 //		networkManager.request(method: .groupsGet, httpMethod: .get, params: params)
 //	}
+	
+	/// Загружает список групп пользователя
+	func loadGroups(completion: @escaping ([GroupModel]) -> Void) {
+		let params = [
+			"order" : "name",
+			"extended" : "1",
+		]
+		
+		networkManager.request(method: .groupsGet,
+							   httpMethod: .get,
+							   params: params) { (result: Result<GroupsMyMainResponse, Error>) in
+			switch result {
+			case .success(let groupsResponse):
+				completion(groupsResponse.response.items)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/// Ищет группы, подходящие под текстовый запрос
+	func searchGroups(with query: String, completion: @escaping ([GroupModel]) -> Void) {
+		let params = [
+			"order" : "name",
+			"extended" : "1",
+			"q" : "\(query)",
+			"count" : "40"
+		]
+		
+		networkManager.request(method: .groupsGet,
+							   httpMethod: .get,
+							   params: params) { (result: Result<GroupsMyMainResponse, Error>) in
+			switch result {
+			case .success(let groupsResponse):
+				completion(groupsResponse.response.items)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
 }
