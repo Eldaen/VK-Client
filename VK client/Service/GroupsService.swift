@@ -9,31 +9,6 @@
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
 class GroupsService: Loader {
 	
-    static func iNeedGroups() -> [GroupModel] {
-        return [GroupModel(name: "В душе пираты", image: "pepe-pirate"),
-                GroupModel(name: "Дворник это призвание", image: "pepe-yard-keeper"),
-                GroupModel(name: "Лайфхаки из Тиктока", image: "pepe-dunno"),
-                GroupModel(name: "Годнота", image: "pepe-like"),
-        ]
-    }
-	
-//	/// Загружает список текущих групп пользователя
-//	func loadUserGroups() {
-//		let params = [
-//			"order" : "name",
-//			"extended" : "1",
-//		]
-//		networkManager.request(method: .groupsGet, httpMethod: .get, params: params)
-//	}
-//	
-//	/// Загружает группы, содержащие в имени строку query
-//	func searchForGroups(by query: String) {
-//		let params = [
-//			"q" : query,
-//		]
-//		networkManager.request(method: .groupsGet, httpMethod: .get, params: params)
-//	}
-	
 	/// Загружает список групп пользователя
 	func loadGroups(completion: @escaping ([GroupModel]) -> Void) {
 		let params = [
@@ -62,12 +37,50 @@ class GroupsService: Loader {
 			"count" : "40"
 		]
 		
-		networkManager.request(method: .groupsGet,
+		networkManager.request(method: .groupsSearch,
 							   httpMethod: .get,
 							   params: params) { (result: Result<GroupsMyMainResponse, Error>) in
 			switch result {
 			case .success(let groupsResponse):
 				completion(groupsResponse.response.items)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/// Запрос на вступление в группу по id
+	func joinGroup(id: Int, completion: @escaping (Int) -> Void) {
+		let params = [
+			"group_id" : "\(id)",
+			"extended" : "1",
+		]
+		
+		networkManager.request(method: .groupsJoin,
+							   httpMethod: .get,
+							   params: params) { (result: Result<BoolResponse, Error>) in
+			switch result {
+			case .success(let response):
+				completion(response.response)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/// Запрос на вступление в группу по id
+	func leaveGroup(id: Int, completion: @escaping (Int) -> Void) {
+		let params = [
+			"group_id" : "\(id)",
+			"extended" : "1",
+		]
+		
+		networkManager.request(method: .groupsLeave,
+							   httpMethod: .get,
+							   params: params) { (result: Result<BoolResponse, Error>) in
+			switch result {
+			case .success(let response):
+				completion(response.response)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
 			}

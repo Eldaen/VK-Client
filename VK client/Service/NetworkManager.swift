@@ -16,6 +16,8 @@ enum apiMethods: String {
 	case photosGetAll = "/method/photos.getAll"
 	case groupsGet = "/method/groups.get"
 	case groupsSearch = "/method/groups.search"
+	case groupsJoin = "/method/groups.join"
+	case groupsLeave = "/method/groups.leave"
 }
 
 /// Возможные http методы

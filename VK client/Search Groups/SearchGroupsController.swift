@@ -23,8 +23,14 @@ final class SearchGroupsController: UIViewController {
 		tableView.backgroundColor = .orange
 		return tableView
 	}()
+	
+	/// Делегат для добавления групп в список моих групп
+	weak var delegate: MyGroupsDelegate?
+	
+	/// Загрузчик данных и обработчик запросов
+	private var loader = GroupsService()
     
-    private var groups = GroupsService.iNeedGroups()
+	private var groups: [GroupModel] = []
     lazy private var filteredGroups = groups
 
     override func viewDidLoad() {
@@ -32,6 +38,7 @@ final class SearchGroupsController: UIViewController {
         searchBar.delegate = self
 		setupTableView()
 		setupConstraints()
+		loadGroups()
     }
 }
 
@@ -51,16 +58,42 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 		
 		let name = filteredGroups[indexPath.row].name
 		let image = filteredGroups[indexPath.row].image
+		let id = filteredGroups[indexPath.row].id
+		let isMember = filteredGroups[indexPath.row].isMember
 		
 		//Конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(named: image))
+		cell.configure(name: name, image: UIImage(), id: id, isMember: isMember)
+		
+		// Ставим картинку на загрузку
+		loader.loadImage(url: image) { image in
+			DispatchQueue.main.async {
+				cell.updateImage(with: image)
+			}
+		}
 		
 		return cell
 	}
 	
 	/// По нажатию на ячейку группы, делает переход назад на список моих групп и через делегат передаёт выбранную группу
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		navigationController?.popViewController(animated: true)
+		guard let cell = tableView.cellForRow(at: indexPath) as? SearchGroupsCell,
+			  let id = cell.id,
+			  let isMember = cell.isMember else {
+			return
+		}
+		
+		// Если уже член группы, то вступать по клику не нужно
+		if isMember == 1 {
+			navigationController?.popViewController(animated: true)
+			return
+		}
+	
+		loader.joinGroup(id: id) { [weak self] result in
+			if result == 1 {
+				self?.delegate?.groupDidSelect()
+				self?.navigationController?.popViewController(animated: true)
+			}
+		}
 	}
 }
 
@@ -73,18 +106,13 @@ extension SearchGroupsController: UISearchBarDelegate {
         // не случай повторных поисков
         filteredGroups = []
         
-        // Если строка поиска пустая, то показываем все группы
-        if searchText == "" {
-            filteredGroups = groups
-        } else {
-			
-            //По сравнению с друзьями, тут вообще всё просто. Если в именни группы есть нужный текст, то добавляем в фильтр
-            for group in groups {
-                if group.name.lowercased().contains(searchText.lowercased()) {
-                    filteredGroups.append(group)
-                }
-            }
-        }
+		loader.searchGroups(with: searchText) { [weak self] groups in
+			DispatchQueue.main.async {
+				self?.groups = groups
+				self?.filteredGroups = groups
+				self?.tableView.reloadData()
+			}
+		}
 		
         // Перезагружаем данные
         self.tableView.reloadData()
@@ -92,10 +120,10 @@ extension SearchGroupsController: UISearchBarDelegate {
 }
 
 // MARK: - Private methods
-extension SearchGroupsController {
+private extension SearchGroupsController {
 	
 	/// Задаём констрейнты таблице
-	private func setupConstraints() {
+	func setupConstraints() {
 		NSLayoutConstraint.activate([
 			tableView.topAnchor.constraint(equalTo: view.topAnchor),
 			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -105,7 +133,7 @@ extension SearchGroupsController {
 	}
 	
 	/// Конфигурируем ячейку
-	private func setupTableView() {
+	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 80
 		tableView.register(SearchGroupsCell.self, forCellReuseIdentifier: "SearchGroupsCell")
@@ -114,5 +142,16 @@ extension SearchGroupsController {
 		
 		self.view.addSubview(tableView)
 		tableView.tableHeaderView = searchBar
+	}
+	
+	// загружает текущий список групп
+	func loadGroups() {
+		loader.searchGroups(with: " ") { [weak self] groups in
+			DispatchQueue.main.async {
+				self?.groups = groups
+				self?.filteredGroups = groups
+				self?.tableView.reloadData()
+			}
+		}
 	}
 }

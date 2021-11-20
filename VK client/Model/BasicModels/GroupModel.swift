@@ -11,9 +11,13 @@ import Foundation
 struct GroupModel: Codable {
     let name: String
     let image: String
+	let id: Int
+	let isMember: Int
 	
 	enum CodingKeys: String, CodingKey {
 		case name
+		case id
 		case image = "photo_50"
+		case isMember = "is_member"
 	}
 }

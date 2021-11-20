@@ -9,6 +9,9 @@ import UIKit
 
 /// Ячейка группы для контроллера MyGroupsController
 class MyGroupsCell: UITableViewCell {
+	
+	/// ID группы, которую сейчас отображает ячейка
+	var id: Int?
     
 	/// Название группы
 	private let groupName: UILabel = {
@@ -32,9 +35,10 @@ class MyGroupsCell: UITableViewCell {
 	}
     
 	/// Конфигурируем ячейку для отображения группы
-    func configure(name: String, image: UIImage?) {
+	func configure(name: String, image: UIImage?, id: Int) {
         groupName.text = name
         groupImage.image = image
+		self.id = id
 		
 		contentView.addSubview(groupName)
 		contentView.addSubview(groupImage)

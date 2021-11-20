@@ -10,6 +10,12 @@ import UIKit
 /// Ячейка группы для контроллера SearchGroupsController
 class SearchGroupsCell: UITableViewCell {
 	
+	/// ID группы, которую ячейка отображает сейчас
+	var id: Int?
+	
+	/// Является ли членом этой группы
+	var isMember: Int?
+	
 	/// Название группы
 	private let groupName: UILabel = {
 		let label = UILabel()
@@ -25,10 +31,18 @@ class SearchGroupsCell: UITableViewCell {
 		return image
 	}()
 	
+	/// Меняет картинку, используется для замены после подгрузки из сети
+	func updateImage(with image: UIImage) {
+		groupImage.image = image
+		self.layoutIfNeeded()
+	}
+	
 	/// Конфигурируем ячейку для отображения группы
-	func configure(name: String, image: UIImage?) {
+	func configure(name: String, image: UIImage?, id: Int, isMember: Int) {
 		groupName.text = name
 		groupImage.image = image
+		self.id = id
+		self.isMember = isMember
 		
 		self.contentView.addSubview(groupName)
 		self.contentView.addSubview(groupImage)
