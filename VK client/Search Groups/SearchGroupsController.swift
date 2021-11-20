@@ -20,7 +20,7 @@ final class SearchGroupsController: UIViewController {
 	
 	private let tableView: UITableView = {
 		let tableView = UITableView()
-		tableView.backgroundColor = .orange
+		tableView.backgroundColor = .white
 		return tableView
 	}()
 	
@@ -36,9 +36,9 @@ final class SearchGroupsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+		loadGroups()
 		setupTableView()
 		setupConstraints()
-		loadGroups()
     }
 }
 
@@ -120,9 +120,6 @@ extension SearchGroupsController: UISearchBarDelegate {
 				self?.tableView.reloadData()
 			}
 		}
-		
-        // Перезагружаем данные
-        self.tableView.reloadData()
     }
 }
 

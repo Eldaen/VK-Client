@@ -44,6 +44,7 @@ class MyGroupsCell: UITableViewCell {
 		contentView.addSubview(groupImage)
 		
 		setupConstaints()
+		animate()
     }
 	
 	private func setupConstaints() {
@@ -57,5 +58,25 @@ class MyGroupsCell: UITableViewCell {
 			groupImage.widthAnchor.constraint(equalToConstant: 58),
 			groupImage.heightAnchor.constraint(equalTo: groupImage.widthAnchor, multiplier: 1.0),
 		])
+	}
+	
+	/// Запуск анимацию ячейки
+	func animate() {
+		self.groupImage.alpha = 0
+		self.groupName.alpha = 0
+		
+		UIView.animate(withDuration: 0.3,
+					   delay: 0,
+					   options: [],
+					   animations: {
+			self.groupImage.alpha = 1
+		})
+		
+		UIView.animate(withDuration: 0.3,
+					   delay: 0,
+					   options: [],
+					   animations: {
+			self.groupName.alpha = 1
+		})
 	}
 }

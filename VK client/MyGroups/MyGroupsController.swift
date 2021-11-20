@@ -26,7 +26,7 @@ final class MyGroupsController: UIViewController {
 	/// Таблица с ячейками групп, в которых состоит пользователь
 	private let tableView: UITableView = {
 		let tableView = UITableView()
-		tableView.backgroundColor = .orange
+		tableView.backgroundColor = .white
 		return tableView
 	}()
 	
@@ -164,7 +164,7 @@ private extension MyGroupsController {
 	@objc func addGroup() {
 		let searchGroupsController = SearchGroupsController()
 		searchGroupsController.delegate = self
-		navigationController?.pushViewController(searchGroupsController, animated: true)
+		navigationController?.pushViewController(searchGroupsController, animated: false)
 	}
 	
 	// Делаем pop контроллера

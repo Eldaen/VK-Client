@@ -11,10 +11,10 @@ import UIKit
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
 class UserService: Loader {
 	
-	var friendsArray: [UserModel]?
+	private var friendsArray: [UserModel]?
 	
 	/// Раскидываем друзей по ключам, в зависимости от первой буквы имени
-	func sortFriends(_ array: [UserModel]) -> [Character: [UserModel]] {
+	private func sortFriends(_ array: [UserModel]) -> [Character: [UserModel]] {
 		
 		var newArray: [Character: [UserModel]] = [:]
 		for user in array {
@@ -37,7 +37,7 @@ class UserService: Loader {
 		return newArray
 	}
 	
-	func formFriendsSections(_ array: [Character: [UserModel]]) -> [FriendsSection] {
+	private func formFriendsSections(_ array: [Character: [UserModel]]) -> [FriendsSection] {
 		var sectionsArray: [FriendsSection] = []
 		for (key, array) in array {
 			sectionsArray.append(FriendsSection(key: key, data: array))
@@ -49,7 +49,7 @@ class UserService: Loader {
 		return sectionsArray
 	}
 	
-	func formFriendsArray(from array: [UserModel]?) -> [FriendsSection] {
+	private func formFriendsArray(from array: [UserModel]?) -> [FriendsSection] {
 		guard let array = array else {
 			return []
 		}
