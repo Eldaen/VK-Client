@@ -107,7 +107,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 private extension MyGroupsController {
 	
 	// Конфигурируем Нав Бар
-	private func configureNavigation() {
+	func configureNavigation() {
 		self.title = "Мои группы"
 		
 		let add = UIBarButtonItem(
@@ -129,7 +129,7 @@ private extension MyGroupsController {
 	}
 	
 	// Конфигурируем ячейку
-	private func setupTableView() {
+	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 80
 		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: "MyGroupsCell")

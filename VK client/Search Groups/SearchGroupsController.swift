@@ -84,7 +84,7 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 		
 		// Если уже член группы, то вступать по клику не нужно
 		if isMember == 1 {
-			navigationController?.popViewController(animated: true)
+			showJoiningError()
 			return
 		}
 	
@@ -153,5 +153,21 @@ private extension SearchGroupsController {
 				self?.tableView.reloadData()
 			}
 		}
+	}
+	
+	/// Отображение ошибки о том, что уже состоит в группе
+	private func showJoiningError() {
+		// Создаём контроллер
+		let alter = UIAlertController(title: "Ошибка",
+									  message: "Вы уже состоите в этой группе", preferredStyle: .alert)
+		
+		// Создаем кнопку для UIAlertController
+		let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+		
+		// Добавляем кнопку на UIAlertController
+		alter.addAction(action)
+		
+		// Показываем UIAlertController
+		present(alter, animated: true, completion: nil)
 	}
 }
