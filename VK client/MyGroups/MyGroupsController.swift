@@ -9,7 +9,7 @@ import UIKit
 
 /// Протокол Делегат для добавления группы в список моих групп
 protocol MyGroupsDelegate: AnyObject {
-	func groupDidSelect (_ group: GroupModel)
+	func groupDidSelect ()
 }
 
 /// Контроллер списка групп, в которых состоит пользователь
@@ -18,11 +18,25 @@ final class MyGroupsController: UIViewController {
 	/// Список групп, в которых состоит пользователь
     private var myGroups = [GroupModel]()
 	
+	lazy private var filteredGroups = myGroups
+	
+	/// Сервис по загрузке данных группv
+	private let loader = GroupsService()
+	
 	/// Таблица с ячейками групп, в которых состоит пользователь
 	private let tableView: UITableView = {
 		let tableView = UITableView()
-		tableView.backgroundColor = .orange
+		tableView.backgroundColor = .white
 		return tableView
+	}()
+	
+	private let searchBar: UISearchBar = {
+		let searchBar = UISearchBar()
+		searchBar.frame = .zero
+		searchBar.searchBarStyle = UISearchBar.Style.default
+		searchBar.isTranslucent = false
+		searchBar.sizeToFit()
+		return searchBar
 	}()
 
 	
@@ -30,12 +44,12 @@ final class MyGroupsController: UIViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+		searchBar.delegate = self
+		
 		configureNavigation()
 		setupTableView()
 		setupConstraints()
-		
-		let loader = GroupsService()
-		loader.loadUserGroups()
+		loadGroups()
     }
 }
 
@@ -44,7 +58,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// #warning Incomplete implementation, return the number of rows
-		return myGroups.count
+		return filteredGroups.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,19 +66,39 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 			return UITableViewCell()
 		}
 
-		let name = myGroups[indexPath.row].name
-		let image = myGroups[indexPath.row].image
+		let name = filteredGroups[indexPath.row].name
+		let image = filteredGroups[indexPath.row].image
+		let id = filteredGroups[indexPath.row].id
 		
 		//Конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(named: image))
+		cell.configure(name: name, image: UIImage(), id: id)
+		
+		// Ставим картинку на загрузку
+		loader.loadImage(url: image) { image in
+			DispatchQueue.main.async {
+				cell.updateImage(with: image)
+			}
+		}
 
 		return cell
 	}
 
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
-			myGroups.remove(at: indexPath.row)
-			tableView.deleteRows(at: [indexPath], with: .fade)
+			guard let cell = tableView.cellForRow(at: indexPath) as? MyGroupsCell,
+				  let id = cell.id else {
+				return
+			}
+			
+			loader.leaveGroup(id: id) { [weak self] result in
+				if result == 1 {
+					DispatchQueue.main.async {
+						self?.myGroups.remove(at: indexPath.row)
+						self?.filteredGroups.remove(at: indexPath.row)
+						self?.tableView.deleteRows(at: [indexPath], with: .fade)
+					}
+				}
+			}
 		}
 	}
 }
@@ -73,7 +107,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 private extension MyGroupsController {
 	
 	// Конфигурируем Нав Бар
-	private func configureNavigation() {
+	func configureNavigation() {
 		self.title = "Мои группы"
 		
 		let add = UIBarButtonItem(
@@ -81,7 +115,7 @@ private extension MyGroupsController {
 			target: self,
 			action: #selector(addGroup)
 		)
-		add.tintColor = .white
+		add.tintColor = .black
 		navigationItem.rightBarButtonItem = add
 		
 		let logout = UIBarButtonItem(
@@ -90,19 +124,21 @@ private extension MyGroupsController {
 			target: self,
 			action: #selector(logout)
 		)
-		logout.tintColor = .white
+		logout.tintColor = .black
 		navigationItem.leftBarButtonItem = logout
 	}
 	
 	// Конфигурируем ячейку
-	private func setupTableView() {
+	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 80
 		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: "MyGroupsCell")
 		tableView.dataSource = self
 		tableView.delegate = self
+		tableView.tableHeaderView = searchBar
 		
 		self.view.addSubview(tableView)
+		
 	}
 	
 	// Задаём констрейнты таблице
@@ -115,11 +151,20 @@ private extension MyGroupsController {
 		])
 	}
 	
+	// Загружает текущий список групп
+	func loadGroups() {
+		loader.loadGroups() { [weak self] groups in
+			self?.myGroups = groups
+			self?.filteredGroups = groups
+			self?.tableView.reloadData()
+		}
+	}
+	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
 		let searchGroupsController = SearchGroupsController()
 		searchGroupsController.delegate = self
-		navigationController?.pushViewController(searchGroupsController, animated: true)
+		navigationController?.pushViewController(searchGroupsController, animated: false)
 	}
 	
 	// Делаем pop контроллера
@@ -130,12 +175,38 @@ private extension MyGroupsController {
 
 // MARK: - Delegate for SearchGroupsController
 extension MyGroupsController: MyGroupsDelegate {
-	
+
 	/// Принимает выбранную группу в контроллере моих групп и добавляет её в список
-	func groupDidSelect(_ group: GroupModel) {
-		if !myGroups.contains(group) {
-			myGroups.append(group)
-			tableView.reloadData()
+	func groupDidSelect() {
+		DispatchQueue.main.async { [weak self] in
+			self?.loadGroups()
 		}
+	}
+}
+
+// MARK: - UISearchBarDelegate
+extension MyGroupsController: UISearchBarDelegate {
+	
+	/// Основной метод, который осуществляет поиск
+	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		
+		// не случай повторных поисков
+		filteredGroups = []
+		
+		// Если строка поиска пустая, то показываем все группы
+		if searchText == "" {
+			filteredGroups = myGroups
+		} else {
+			
+			//По сравнению с друзьями, тут вообще всё просто. Если в именни группы есть нужный текст, то добавляем в фильтр
+			for group in myGroups {
+				if group.name.lowercased().contains(searchText.lowercased()) {
+					filteredGroups.append(group)
+				}
+			}
+		}
+		
+		// Перезагружаем данные
+		self.tableView.reloadData()
 	}
 }

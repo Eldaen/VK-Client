@@ -9,6 +9,9 @@ import UIKit
 
 /// Ячейка группы для контроллера MyGroupsController
 class MyGroupsCell: UITableViewCell {
+	
+	/// ID группы, которую сейчас отображает ячейка
+	var id: Int?
     
 	/// Название группы
 	private let groupName: UILabel = {
@@ -24,16 +27,24 @@ class MyGroupsCell: UITableViewCell {
 		image.contentMode = .scaleAspectFit
 		return image
 	}()
+	
+	/// Меняет картинку, используется для замены после подгрузки из сети
+	func updateImage(with image: UIImage) {
+		groupImage.image = image
+		self.layoutIfNeeded()
+	}
     
 	/// Конфигурируем ячейку для отображения группы
-    func configure(name: String, image: UIImage?) {
+	func configure(name: String, image: UIImage?, id: Int) {
         groupName.text = name
         groupImage.image = image
+		self.id = id
 		
 		contentView.addSubview(groupName)
 		contentView.addSubview(groupImage)
 		
 		setupConstaints()
+		animate()
     }
 	
 	private func setupConstaints() {
@@ -47,5 +58,25 @@ class MyGroupsCell: UITableViewCell {
 			groupImage.widthAnchor.constraint(equalToConstant: 58),
 			groupImage.heightAnchor.constraint(equalTo: groupImage.widthAnchor, multiplier: 1.0),
 		])
+	}
+	
+	/// Запуск анимацию ячейки
+	func animate() {
+		self.groupImage.alpha = 0
+		self.groupName.alpha = 0
+		
+		UIView.animate(withDuration: 0.3,
+					   delay: 0,
+					   options: [],
+					   animations: {
+			self.groupImage.alpha = 1
+		})
+		
+		UIView.animate(withDuration: 0.3,
+					   delay: 0,
+					   options: [],
+					   animations: {
+			self.groupName.alpha = 1
+		})
 	}
 }

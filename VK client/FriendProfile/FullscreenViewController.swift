@@ -7,6 +7,8 @@
 
 import UIKit
 
+// TODO: - Надо бы галерею в отдельный модуль вынести, а то что-то она в контроллере...
+
 /// Класс для отображения карусели полноэкранного просмотра фотографий
 final class FullscreenViewController: UIViewController {
 	
@@ -25,8 +27,17 @@ final class FullscreenViewController: UIViewController {
 	
 	lazy private var progress = Progress(totalUnitCount: Int64(photoViews.count))
 	
-	/// Массив картинок, которые нужно отобразить в галерее
-	var photos: [UIImage] = []
+	/// Сервис по загрузке данных
+	private var loader = UserService()
+	
+	/// Массив картинок пользователя
+	private var storedImages: [String] = []
+	
+	/// загруженные картинки
+	private var loadedImages: [Int: UIImage] = [:]
+	
+	/// Массив моделей картинок, которые нужно отобразить в галерее
+	var photoModels: [UserImages] = []
 	
 	/// Массив вью для картинок
 	private var photoViews: [UIImageView] = []
@@ -47,6 +58,9 @@ final class FullscreenViewController: UIViewController {
 		super.viewDidLoad()
 		view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 		self.title = "Галерея"
+		
+		// Получаем ссылки на изображения нужного размера
+		storedImages = loader.sortImage(by: .x, from: photoModels)
 		
 		// создаём вьюхи с картинками
 		createImageViews()
@@ -87,12 +101,15 @@ extension FullscreenViewController {
 		
 		// делаем круговую прокрутку, чтобы если левый индекс меньше 0, то его ставит последним
 		if indexPhotoLeft < 0 {
-			indexPhotoLeft = photoViews.count - 1
+			indexPhotoLeft = storedImages.count - 1
 			
 		}
-		if indexPhotoRight > photoViews.count - 1 {
+		if indexPhotoRight > storedImages.count - 1 {
 			indexPhotoRight = 0
 		}
+		
+		// запускаем загрузку картинок
+		loadImages(array: [indexPhotoLeft, indexPhotoMid, indexPhotoRight])
 		
 		// чистим вьюхи, т.к. мы постоянно добавляем новые
 		galleryView.subviews.forEach({ $0.removeFromSuperview() })
@@ -160,17 +177,16 @@ extension FullscreenViewController {
 			})
 	}
 	
+	/// Обработчик жестов смахивания и перелистывания
 	@objc func onPan(_ recognizer: UIPanGestureRecognizer) {
 		switch recognizer.state {
 		case .began:
 			swipeToRight = UIViewPropertyAnimator(
-				duration: 0.3,
+				duration: 0.5,
 				curve: .easeInOut,
 				animations: {
 					UIView.animate(
 						withDuration: 0.01,
-						delay: 0,
-						options: [],
 						animations: { [unowned self] in
 							let scale = CGAffineTransform(scaleX: 0.8, y: 0.8) // уменьшаем
 							let translation = CGAffineTransform(translationX: self.galleryView.bounds.maxX - 30, y: 0) // направо до края экрана - 30, у нас так констрэйнты заданы
@@ -179,6 +195,13 @@ extension FullscreenViewController {
 							self.middleImageView.transform = transform
 							self.rightImageView.transform = transform
 							self.leftImageView.transform = transform
+						}, completion: { [unowned self] _ in
+							self.selectedPhoto -= 1
+							if self.selectedPhoto < 0 {
+								self.selectedPhoto = self.storedImages.count - 1
+							}
+							self.updateProgress()
+							self.startAnimate()
 						})
 				})
 			swipeToLeft = UIViewPropertyAnimator(
@@ -187,8 +210,6 @@ extension FullscreenViewController {
 				animations: {
 					UIView.animate(
 						withDuration: 0.01,
-						delay: 0,
-						options: [],
 						animations: { [unowned self] in
 							let scale = CGAffineTransform(scaleX: 0.8, y: 0.8)
 							let translation = CGAffineTransform(translationX: -self.galleryView.bounds.maxX + 30, y: 0)
@@ -197,6 +218,13 @@ extension FullscreenViewController {
 							self.middleImageView.transform = transform
 							self.rightImageView.transform = transform
 							self.leftImageView.transform = transform
+						}, completion: { [unowned self] _ in
+							self.selectedPhoto += 1
+							if self.selectedPhoto > self.storedImages.count - 1 {
+								self.selectedPhoto = 0
+							}
+							self.updateProgress()
+							self.startAnimate()
 						})
 				})
 		case .changed:
@@ -206,65 +234,10 @@ extension FullscreenViewController {
 			} else {
 				swipeToLeft.fractionComplete = abs(translationX)/100
 			}
-			
+
 		case .ended:
-			
-			let translationX = recognizer.translation(in: self.view).x
-			if translationX > 0 { // если жест это свайп направо
-				swipeToRight.fractionComplete = abs(translationX)/100
-				if swipeToRight.fractionComplete < 0.5 { // Если анимация не закончена на половину
-					swipeToRight.pauseAnimation() // тормозим анимацию
-					
-					swipeToRight.addAnimations { // возвращаем картинку на место
-						self.middleImageView.transform = .identity
-						self.rightImageView.transform = .identity
-						self.leftImageView.transform = .identity
-					}
-					
-					swipeToRight.continueAnimation(withTimingParameters: nil, durationFactor: 0) // запускаем анимацию
-					return
-				}
-				
-				// по завершению, обновляем индекс выбранной фотки
-				self.selectedPhoto -= 1
-				self.progress.completedUnitCount -= 1
-				if self.selectedPhoto < 0 {
-					self.selectedPhoto = self.photos.count - 1
-					self.progress.completedUnitCount = Int64(self.photos.count)
-				}
-				
-				swipeToRight.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-				
-			} else { // если налево, то тут тоже самое, но наоборот
-				swipeToLeft.fractionComplete = abs(translationX)/100
-				if swipeToLeft.fractionComplete < 0.5 {
-					swipeToLeft.pauseAnimation()
-					
-					swipeToLeft.addAnimations {
-						self.middleImageView.transform = .identity
-						self.rightImageView.transform = .identity
-						self.leftImageView.transform = .identity
-					}
-					
-					swipeToLeft.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-					
-					return
-				}
-				
-				// меняем картинку как выбранную, только если жест окончен
-				self.selectedPhoto += 1
-				self.progress.completedUnitCount += 1
-				if self.selectedPhoto > self.photos.count - 1 {
-					self.selectedPhoto = 0
-					self.progress.completedUnitCount = 1
-				}
-				swipeToLeft.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-			}
-			
-			// запускаем анимацию + выставление картинок по концу жеста в любом случае
-			self.updateProgress()
-			self.startAnimate()
-			
+			swipeToRight.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+			swipeToLeft.continueAnimation(withTimingParameters: nil, durationFactor: 0)
 		default:
 			return
 		}
@@ -272,9 +245,8 @@ extension FullscreenViewController {
 	
 	//  создаём массив вьюх с картинками для галлереи
 	private func createImageViews() {
-		for photo in photos {
+		for _ in storedImages {
 			let view = UIImageView()
-			view.image = photo
 			view.contentMode = .scaleAspectFit
 			
 			photoViews.append(view)
@@ -308,5 +280,22 @@ extension FullscreenViewController {
 		
 		view.addSubview(galleryView)
 		view.addSubview(progressView)
+	}
+	
+	/// Если картинка ещё не загружена, то загружаем её
+	private func loadImages(array: [Int]) {
+		for index in array {
+			if let _ = loadedImages[index] {
+				continue
+			} else {
+				loader.loadImage(url: storedImages[index]) { [weak self] image in
+					DispatchQueue.main.async {
+						self?.loadedImages.updateValue(image, forKey: index)
+						self?.photoViews[index].image = image
+						self?.photoViews[index].layoutIfNeeded()
+					}
+				}
+			}
+		}
 	}
 }

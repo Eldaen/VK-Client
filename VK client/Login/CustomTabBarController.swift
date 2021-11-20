@@ -33,6 +33,7 @@ final class CustomTabBarController: UITabBarController {
 		navController.tabBarItem.title = title
 		navController.tabBarItem.image = image
 		rootViewController.navigationItem.title = title
+		navController.navigationBar.tintColor = .black
 		return navController
 	}
 }

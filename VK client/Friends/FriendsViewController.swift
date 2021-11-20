@@ -29,8 +29,14 @@ final class FriendsViewController: UIViewController {
 	/// Ячейки, которые нужно анимировать при появлении
 	private var cellsForAnimate: [FriendsTableViewCell] = []
 	
+	/// Сервис по загрузке данных
+	let loader = UserService()
+	
 	/// Список друзей
-	var friends = UserService.iNeedFriends()
+	var friends: [FriendsSection] = []
+	
+	/// Фото профиля
+	var profileImage: UIImage?
 	
 	/// Список букв для заголовков секций
 	private var lettersOfNames = [String]()
@@ -61,12 +67,7 @@ final class FriendsViewController: UIViewController {
 		super.viewDidLoad()
 		setupTableView()
 		setupConstraints()
-		
-		let loader = UserService()
-		loader.loadFriends()
-		
-		// наполянем имена заголовков секций
-		loadLetters()
+		loadFriends()
 	}
 	
 	
@@ -238,8 +239,16 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		let section = filteredData[indexPath.section]
 		let name = section.data[indexPath.row].name
 		let image = section.data[indexPath.row].image
+		
 		// конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(named: image)!)
+		cell.configure(name: name, image: UIImage(named: image) ?? UIImage())
+		
+		// Ставим картинку на загрузку
+		loader.loadImage(url: image) { image in
+			DispatchQueue.main.async {
+				cell.updateImage(with: image)
+			}
+		}
 		
 		cellsForAnimate.append(cell)
 		return cell
@@ -251,26 +260,31 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		guard let cell = tableView.cellForRow(at: indexPath) as? FriendsTableViewCell else {
+			return
+		}
+		
 		let profileController = FriendProfileViewController()
 		let section = filteredData[indexPath.section]
 		profileController.friend = section.data[indexPath.row]
+		profileController.profileImage = cell.getImage()
 		
 		self.navigationController?.pushViewController(profileController, animated: true)
 	}
 }
 
 // MARK: - Private methods
-extension FriendsViewController {
+private extension FriendsViewController {
 	
 	/// Cоздаёт массив  букв для заголовков секций
-	private func loadLetters() {
+	func loadLetters() {
 		for user in friends {
 			lettersOfNames.append(String(user.key))
 		}
 	}
 	
 	/// Конфигурируем TableView
-	private func setupTableView() {
+	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 70
 		tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: "FriendsTableViewCell")
@@ -286,12 +300,26 @@ extension FriendsViewController {
 	}
 	
 	/// Задаём констрейнты таблице
-	private func setupConstraints() {
+	func setupConstraints() {
 		NSLayoutConstraint.activate([
 			tableView.topAnchor.constraint(equalTo: view.topAnchor),
 			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
 			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 		])
+	}
+	
+	/// Загружает друзей из АПИ через loader
+	func loadFriends() {
+		loader.loadFriends() { [weak self] friends in
+			self?.friends = friends
+			self?.filteredData = friends
+			
+			// наполянем имена заголовков секций
+			self?.loadLetters()
+			
+			// Обновляем таблицу свежими данными
+			self?.tableView.reloadData()
+		}
 	}
 }
