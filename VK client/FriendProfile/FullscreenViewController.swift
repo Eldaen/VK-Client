@@ -61,7 +61,6 @@ final class FullscreenViewController: UIViewController {
 		
 		// Получаем ссылки на изображения нужного размера
 		storedImages = loader.sortImage(by: .x, from: photoModels)
-		print(storedImages)
 		
 		// создаём вьюхи с картинками
 		createImageViews()

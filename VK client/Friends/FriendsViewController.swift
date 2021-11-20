@@ -67,18 +67,7 @@ final class FriendsViewController: UIViewController {
 		super.viewDidLoad()
 		setupTableView()
 		setupConstraints()
-		
-		// Вызываем загрузку друзей, получаем её через блок и обновляем данные
-		loader.loadFriends() { [weak self] friends in
-			self?.friends = friends
-			self?.filteredData = friends
-			
-			// наполянем имена заголовков секций
-			self?.loadLetters()
-			
-			// Обновляем таблицу свежими данными
-			self?.tableView.reloadData()
-		}
+		loadFriends()
 	}
 	
 	
@@ -285,17 +274,17 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 // MARK: - Private methods
-extension FriendsViewController {
+private extension FriendsViewController {
 	
 	/// Cоздаёт массив  букв для заголовков секций
-	private func loadLetters() {
+	func loadLetters() {
 		for user in friends {
 			lettersOfNames.append(String(user.key))
 		}
 	}
 	
 	/// Конфигурируем TableView
-	private func setupTableView() {
+	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 70
 		tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: "FriendsTableViewCell")
@@ -311,12 +300,26 @@ extension FriendsViewController {
 	}
 	
 	/// Задаём констрейнты таблице
-	private func setupConstraints() {
+	func setupConstraints() {
 		NSLayoutConstraint.activate([
 			tableView.topAnchor.constraint(equalTo: view.topAnchor),
 			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
 			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 		])
+	}
+	
+	/// Загружает друзей из АПИ через loader
+	func loadFriends() {
+		loader.loadFriends() { [weak self] friends in
+			self?.friends = friends
+			self?.filteredData = friends
+			
+			// наполянем имена заголовков секций
+			self?.loadLetters()
+			
+			// Обновляем таблицу свежими данными
+			self?.tableView.reloadData()
+		}
 	}
 }

@@ -130,20 +130,7 @@ final class FriendProfileViewController: UIViewController {
 		setupView()
 		setupCollectionView()
 		setupConstaints()
-		
-		// Вызываем загрузку картинок, которые есть у пользователя
-		loader.loadUserPhotos(for: String(friend.id)) { [weak self] images in
-			self?.photosCount.text = String(images.count)
-			self?.storedModels = images
-			
-			if let imagesLinks = self?.loader.sortImage(by: .m, from: images) {
-				self?.storedImages = imagesLinks
-				self?.photosCount.text = String(imagesLinks.count)
-			}
-			
-			// Обновляем таблицу свежими данными
-			self?.collectionView.reloadData()
-		}
+		loadFriends()
 		
         // заполняем статичные данные
 		if let image = profileImage {
@@ -258,6 +245,22 @@ private extension FriendProfileViewController {
 			collectionView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
 		])
+	}
+	
+	/// Вызываем загрузку картинок, которые есть у пользователя
+	func loadFriends() {
+		loader.loadUserPhotos(for: String(friend.id)) { [weak self] images in
+			self?.photosCount.text = String(images.count)
+			self?.storedModels = images
+			
+			if let imagesLinks = self?.loader.sortImage(by: .m, from: images) {
+				self?.storedImages = imagesLinks
+				self?.photosCount.text = String(imagesLinks.count)
+			}
+			
+			// Обновляем таблицу свежими данными
+			self?.collectionView.reloadData()
+		}
 	}
 }
 

@@ -154,11 +154,9 @@ private extension MyGroupsController {
 	// Загружает текущий список групп
 	func loadGroups() {
 		loader.loadGroups() { [weak self] groups in
-			DispatchQueue.main.async {
-				self?.myGroups = groups
-				self?.filteredGroups = groups
-				self?.tableView.reloadData()
-			}
+			self?.myGroups = groups
+			self?.filteredGroups = groups
+			self?.tableView.reloadData()
 		}
 	}
 	

@@ -154,11 +154,9 @@ private extension SearchGroupsController {
 	// загружает текущий список групп
 	func loadGroups() {
 		loader.searchGroups(with: " ") { [weak self] groups in
-			DispatchQueue.main.async {
-				self?.groups = groups
-				self?.filteredGroups = groups
-				self?.tableView.reloadData()
-			}
+			self?.groups = groups
+			self?.filteredGroups = groups
+			self?.tableView.reloadData()
 		}
 	}
 	
