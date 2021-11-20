@@ -105,8 +105,15 @@ extension SearchGroupsController: UISearchBarDelegate {
 		
         // не случай повторных поисков
         filteredGroups = []
+		
+		var query = searchText
+		
+		// Если отправить запрос с пустой строкой поиска, то оно не будет искать, так что ищем с пробелом
+		if query == "" {
+			query = " "
+		}
         
-		loader.searchGroups(with: searchText) { [weak self] groups in
+		loader.searchGroups(with: query) { [weak self] groups in
 			DispatchQueue.main.async {
 				self?.groups = groups
 				self?.filteredGroups = groups
