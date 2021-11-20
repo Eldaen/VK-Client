@@ -115,7 +115,7 @@ private extension MyGroupsController {
 			target: self,
 			action: #selector(addGroup)
 		)
-		add.tintColor = .white
+		add.tintColor = .black
 		navigationItem.rightBarButtonItem = add
 		
 		let logout = UIBarButtonItem(
@@ -124,7 +124,7 @@ private extension MyGroupsController {
 			target: self,
 			action: #selector(logout)
 		)
-		logout.tintColor = .white
+		logout.tintColor = .black
 		navigationItem.leftBarButtonItem = logout
 	}
 	
