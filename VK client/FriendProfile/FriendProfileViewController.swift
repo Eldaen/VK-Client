@@ -171,9 +171,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
         
 		// загружаем картинки
 		loader.loadImage(url: storedImages[indexPath.item]) { image in
-			DispatchQueue.main.async {
-				cell.configure(with: image)
-			}
+			cell.configure(with: image)
 		}
 		
         return cell

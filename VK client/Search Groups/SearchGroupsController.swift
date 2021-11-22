@@ -77,9 +77,7 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 		
 		// Ставим картинку на загрузку
 		loader.loadImage(url: image) { image in
-			DispatchQueue.main.async {
-				cell.setImage(with: image)
-			}
+			cell.setImage(with: image)
 		}
 		
 		return cell

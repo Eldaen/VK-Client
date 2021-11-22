@@ -300,11 +300,9 @@ extension FullscreenViewController {
 				continue
 			} else {
 				loader.loadImage(url: storedImages[index]) { [weak self] image in
-					DispatchQueue.main.async {
-						self?.loadedImages.updateValue(image, forKey: index)
-						self?.photoViews[index].image = image
-						self?.photoViews[index].layoutIfNeeded()
-					}
+					self?.loadedImages.updateValue(image, forKey: index)
+					self?.photoViews[index].image = image
+					self?.photoViews[index].layoutIfNeeded()
 				}
 			}
 		}
