@@ -57,7 +57,12 @@ final class FriendsViewController: UIViewController {
 										 y: scopeView.frame.origin.y,
 										 width: scopeView.frame.width,
 										 height: scopeView.frame.height)
-				placeholderLabel.frame.origin.x -= 20
+				
+				let xPosition = placeholderLabel.frame.origin.x
+				
+				if xPosition > 20 {
+					placeholderLabel.frame.origin.x -= 20
+				}
 				self.searchBar.layoutSubviews()
 			})
 		}
@@ -68,17 +73,6 @@ final class FriendsViewController: UIViewController {
 		setupTableView()
 		setupConstraints()
 		loadFriends()
-	}
-	
-	
-	override func viewDidAppear(_ animated: Bool) {
-		
-		// первоначальная настройка searchBar-а
-		UIView.animate(withDuration: 0.2,
-					   animations: {
-			UIView.animate(withDuration: 0,
-						   animations: self.searchBarAnimationClosure() )
-		})
 	}
 }
 
