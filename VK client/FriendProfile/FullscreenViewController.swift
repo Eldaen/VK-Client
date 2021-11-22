@@ -28,7 +28,7 @@ final class FullscreenViewController: UIViewController {
 	lazy private var progress = Progress(totalUnitCount: Int64(photoViews.count))
 	
 	/// Сервис по загрузке данных
-	private var loader = UserService()
+	private var loader: UserLoader
 	
 	/// Массив картинок пользователя
 	private var storedImages: [String] = []
@@ -54,6 +54,17 @@ final class FullscreenViewController: UIViewController {
 	private var swipeToRight: UIViewPropertyAnimator!
 	private var swipeToLeft: UIViewPropertyAnimator!
 	
+	// MARK: - Init
+	init(loader: UserLoader) {
+		self.loader = loader
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	// MARK: - View controller life cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -94,7 +105,7 @@ final class FullscreenViewController: UIViewController {
 extension FullscreenViewController {
 	
 	// конфигурируем отображение
-	private func setImage(){
+	func setImage(){
 		var indexPhotoLeft = selectedPhoto - 1
 		let indexPhotoMid = selectedPhoto
 		var indexPhotoRight = selectedPhoto + 1
@@ -164,7 +175,7 @@ extension FullscreenViewController {
 	}
 	
 	// тут мы сначала ставим нужные картинки и потом включаем анимацию увеличения до оригинала
-	private func startAnimate(){
+	func startAnimate(){
 		setImage()
 		UIView.animate(
 			withDuration: 1,
@@ -244,7 +255,7 @@ extension FullscreenViewController {
 	}
 	
 	//  создаём массив вьюх с картинками для галлереи
-	private func createImageViews() {
+	func createImageViews() {
 		for _ in storedImages {
 			let view = UIImageView()
 			view.contentMode = .scaleAspectFit
@@ -253,12 +264,12 @@ extension FullscreenViewController {
 		}
 	}
 	
-	private func updateProgress() {
+	func updateProgress() {
 		self.progress.completedUnitCount = Int64(selectedPhoto + 1)
 		self.progressView.setProgress(Float(self.progress.fractionCompleted), animated: true)
 	}
 	
-	private func setupConstraints() {
+	func setupConstraints() {
 		NSLayoutConstraint.activate([
 			galleryView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
 			galleryView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
@@ -271,7 +282,7 @@ extension FullscreenViewController {
 		])
 	}
 	
-	private func setupViews() {
+	func setupViews() {
 		
 		// создадим вьюхи для отображения
 		leftImageView = UIImageView()
@@ -283,17 +294,15 @@ extension FullscreenViewController {
 	}
 	
 	/// Если картинка ещё не загружена, то загружаем её
-	private func loadImages(array: [Int]) {
+	func loadImages(array: [Int]) {
 		for index in array {
 			if let _ = loadedImages[index] {
 				continue
 			} else {
 				loader.loadImage(url: storedImages[index]) { [weak self] image in
-					DispatchQueue.main.async {
-						self?.loadedImages.updateValue(image, forKey: index)
-						self?.photoViews[index].image = image
-						self?.photoViews[index].layoutIfNeeded()
-					}
+					self?.loadedImages.updateValue(image, forKey: index)
+					self?.photoViews[index].image = image
+					self?.photoViews[index].layoutIfNeeded()
 				}
 			}
 		}

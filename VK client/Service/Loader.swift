@@ -7,11 +7,17 @@
 
 import UIKit
 
-/// Базовый класс для всех лоадеров
-class Loader {
+/// Протокол лоадера данных
+protocol Loader {
 	
-	/// Класс для загрузки данных из сети
-	let networkManager = NetworkManager()
+	/// Переменная, хранящая в себе Networkmanager, он у нас один и других не будет, так что без протокола
+	var networkManager: NetworkManager {get set}
+	
+	init(networkManager: NetworkManager)
+}
+
+/// Базовый класс для всех лоадеров
+extension Loader {
 	
 	/// Загружает картинку и возвращает её, если получилось
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {

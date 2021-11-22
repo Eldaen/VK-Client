@@ -28,11 +28,22 @@ final class SearchGroupsController: UIViewController {
 	weak var delegate: MyGroupsDelegate?
 	
 	/// Загрузчик данных и обработчик запросов
-	private var loader = GroupsService()
+	private var loader: GroupsLoader
     
 	private var groups: [GroupModel] = []
     lazy private var filteredGroups = groups
+	
+	// MARK: - Init
+	init(loader: GroupsLoader) {
+		self.loader = loader
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 
+	// MARK: - View controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
@@ -66,9 +77,7 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 		
 		// Ставим картинку на загрузку
 		loader.loadImage(url: image) { image in
-			DispatchQueue.main.async {
-				cell.updateImage(with: image)
-			}
+			cell.setImage(with: image)
 		}
 		
 		return cell
@@ -158,7 +167,7 @@ private extension SearchGroupsController {
 	}
 	
 	/// Отображение ошибки о том, что уже состоит в группе
-	private func showJoiningError() {
+	func showJoiningError() {
 		// Создаём контроллер
 		let alter = UIAlertController(title: "Ошибка",
 									  message: "Вы уже состоите в этой группе", preferredStyle: .alert)

@@ -117,9 +117,9 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 }
 
 // MARK: - Private methods
-extension NewsTableViewCell {
+private extension NewsTableViewCell {
 	
-	private func setupConstraints() {
+	func setupConstraints() {
 		NSLayoutConstraint.activate([
 			userImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
 			userImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
@@ -145,7 +145,7 @@ extension NewsTableViewCell {
 		])
 	}
 	
-	private func setupCell() {
+	func setupCell() {
 		contentView.addSubview(userImage)
 		contentView.addSubview(userName)
 		contentView.addSubview(postDate)
@@ -153,7 +153,7 @@ extension NewsTableViewCell {
 		contentView.addSubview(collectionView)
 	}
 	
-	/// Конфигурируем нашу collectionView и добавляем в основную view
+	// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
 		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
 		collectionView.backgroundColor = .white

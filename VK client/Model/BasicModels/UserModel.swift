@@ -5,7 +5,6 @@
 //  Created by Денис Сизов on 13.10.2021.
 //
 
-import UIKit
 
 /// Модель пользователя
 struct UserModel: Codable {

@@ -20,8 +20,8 @@ final class CustomTabBarController: UITabBarController {
 	/// Cоздаём и конфигурируем Navigation Контроллеры, которые будут отображены в табах
 	private func setupVCs() {
 		viewControllers = [
-			createNavController(for: MyGroupsController(), title: "Мои группы", image: UIImage(systemName: "person.3")!),
-			createNavController(for: FriendsViewController(), title: "Друзья", image: UIImage(systemName: "person")!),
+			createNavController(for: MyGroupsController(loader: GroupsService(networkManager: NetworkManager())), title: "Мои группы", image: UIImage(systemName: "person.3")!),
+			createNavController(for: FriendsViewController(loader: UserService(networkManager: NetworkManager())), title: "Друзья", image: UIImage(systemName: "person")!),
 			createNavController(for: NewsController(), title: "Новости", image: UIImage(systemName: "newspaper")!),
 		]
 	}

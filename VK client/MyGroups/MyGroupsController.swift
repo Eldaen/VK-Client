@@ -21,7 +21,7 @@ final class MyGroupsController: UIViewController {
 	lazy private var filteredGroups = myGroups
 	
 	/// Сервис по загрузке данных группv
-	private let loader = GroupsService()
+	private let loader: GroupsLoader
 	
 	/// Таблица с ячейками групп, в которых состоит пользователь
 	private let tableView: UITableView = {
@@ -38,7 +38,16 @@ final class MyGroupsController: UIViewController {
 		searchBar.sizeToFit()
 		return searchBar
 	}()
-
+	
+	// MARK: - Init
+	init(loader: GroupsLoader) {
+		self.loader = loader
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 	
 // MARK: - View controller life cycle
 	
@@ -75,9 +84,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 		
 		// Ставим картинку на загрузку
 		loader.loadImage(url: image) { image in
-			DispatchQueue.main.async {
-				cell.updateImage(with: image)
-			}
+			cell.setImage(with: image)
 		}
 
 		return cell
@@ -117,15 +124,6 @@ private extension MyGroupsController {
 		)
 		add.tintColor = .black
 		navigationItem.rightBarButtonItem = add
-		
-		let logout = UIBarButtonItem(
-			title: "Logout",
-			style: .plain,
-			target: self,
-			action: #selector(logout)
-		)
-		logout.tintColor = .black
-		navigationItem.leftBarButtonItem = logout
 	}
 	
 	// Конфигурируем ячейку
@@ -162,14 +160,9 @@ private extension MyGroupsController {
 	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
-		let searchGroupsController = SearchGroupsController()
+		let searchGroupsController = SearchGroupsController(loader: loader)
 		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: false)
-	}
-	
-	// Делаем pop контроллера
-	@objc func logout() {
-		navigationController?.pushViewController(LoginController(), animated: true)
 	}
 }
 

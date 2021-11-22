@@ -5,7 +5,6 @@
 //  Created by Денис Сизов on 16.11.2021.
 //
 
-import Foundation
 import UIKit
 
 /// Перечисление используемых нами методов из АПИ
@@ -26,14 +25,8 @@ enum httpMethods: String {
 	case post = "POST"
 }
 
-/// Возможные ошибки
-enum ManagerErrors: Error {
-	case invalidResponse
-	case invalidStatusCode(Int)
-}
-
 /// Класс, управляющий запросами в сеть
-class NetworkManager {
+final class NetworkManager {
 	
 	private let session: URLSession = {
 		let config = URLSessionConfiguration.default
@@ -68,9 +61,6 @@ class NetworkManager {
 		
 		// Конфигурируем URL
 		let url = configureUrl(token: token, method: method, httpMethod: httpMethod, params: params)
-		
-		var request = URLRequest(url: url)
-		request.httpMethod = httpMethod.rawValue
 		
 		session.dataTask(with: url) { [weak self] (data, response, error) in
 			
@@ -119,14 +109,22 @@ class NetworkManager {
 	
 	/// Загружает данные для картинки и возвращает их, если получилось
 	func loadImage(url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
+		
+		/// Возвращаем разультат через клоужер в основую очередь
+		let completionOnMain: (Result<Data, Error>) -> Void = { result in
+			DispatchQueue.main.async {
+				completion(result)
+			}
+		}
+		
 		session.dataTask(with: url, completionHandler: { (data, response, error) in
 			guard let responseData = data, error == nil else {
 				if let error = error {
-					completion(.failure(error))
+					completionOnMain(.failure(error))
 				}
 				return
 			}
-			completion(.success(responseData))
+			completionOnMain(.success(responseData))
 		}).resume()
 	}
 }

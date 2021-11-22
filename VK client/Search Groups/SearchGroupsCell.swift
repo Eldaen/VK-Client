@@ -8,7 +8,7 @@
 import UIKit
 
 /// Ячейка группы для контроллера SearchGroupsController
-class SearchGroupsCell: UITableViewCell {
+final class SearchGroupsCell: UITableViewCell {
 	
 	/// ID группы, которую ячейка отображает сейчас
 	var id: Int?
@@ -32,7 +32,7 @@ class SearchGroupsCell: UITableViewCell {
 	}()
 	
 	/// Меняет картинку, используется для замены после подгрузки из сети
-	func updateImage(with image: UIImage) {
+	func setImage(with image: UIImage) {
 		groupImage.image = image
 		self.groupImage.layoutIfNeeded()
 	}
@@ -74,12 +74,6 @@ class SearchGroupsCell: UITableViewCell {
 					   options: [],
 					   animations: {
 			self.groupImage.alpha = 1
-		})
-		
-		UIView.animate(withDuration: 0.3,
-					   delay: 0,
-					   options: [],
-					   animations: {
 			self.groupName.alpha = 1
 		})
 	}

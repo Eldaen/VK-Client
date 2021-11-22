@@ -114,7 +114,7 @@ final class FriendProfileViewController: UIViewController {
 	var storedModels: [UserImages] = []
 	
 	/// Сервис по загрузке данных
-	let loader = UserService()
+	private let loader: UserLoader
 	
     private let identifier = "PhotoCollectionViewCell"
     
@@ -123,7 +123,18 @@ final class FriendProfileViewController: UIViewController {
 	
 	/// Отступы между фото
     private let cellsOffset: CGFloat = 10.0
+	
+	// MARK: - Init
+	init(loader: UserLoader) {
+		self.loader = loader
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 
+	// MARK: - View controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.title = "Профиль"
@@ -160,9 +171,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
         
 		// загружаем картинки
 		loader.loadImage(url: storedImages[indexPath.item]) { image in
-			DispatchQueue.main.async {
-				cell.configure(with: image)
-			}
+			cell.configure(with: image)
 		}
 		
         return cell
@@ -181,7 +190,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = FullscreenViewController()
+        let vc = FullscreenViewController(loader: loader)
         
         vc.photoModels = storedModels
         vc.selectedPhoto = indexPath.item

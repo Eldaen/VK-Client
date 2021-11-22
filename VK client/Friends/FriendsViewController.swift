@@ -30,7 +30,7 @@ final class FriendsViewController: UIViewController {
 	private var cellsForAnimate: [FriendsTableViewCell] = []
 	
 	/// Сервис по загрузке данных
-	let loader = UserService()
+	private let loader: UserLoader
 	
 	/// Список друзей
 	var friends: [FriendsSection] = []
@@ -57,28 +57,34 @@ final class FriendsViewController: UIViewController {
 										 y: scopeView.frame.origin.y,
 										 width: scopeView.frame.width,
 										 height: scopeView.frame.height)
-				placeholderLabel.frame.origin.x -= 20
+				
+				let xPosition = placeholderLabel.frame.origin.x
+				
+				if xPosition > 20 {
+					placeholderLabel.frame.origin.x -= 20
+				}
 				self.searchBar.layoutSubviews()
 			})
 		}
 	}
 	
+	// MARK: - Init
+	
+	init(loader: UserLoader) {
+		self.loader = loader
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	// MARK: - View controller life cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupTableView()
 		setupConstraints()
 		loadFriends()
-	}
-	
-	
-	override func viewDidAppear(_ animated: Bool) {
-		
-		// первоначальная настройка searchBar-а
-		UIView.animate(withDuration: 0.2,
-					   animations: {
-			UIView.animate(withDuration: 0,
-						   animations: self.searchBarAnimationClosure() )
-		})
 	}
 }
 
@@ -245,9 +251,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		
 		// Ставим картинку на загрузку
 		loader.loadImage(url: image) { image in
-			DispatchQueue.main.async {
-				cell.updateImage(with: image)
-			}
+			cell.updateImage(with: image)
 		}
 		
 		cellsForAnimate.append(cell)
@@ -264,7 +268,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 			return
 		}
 		
-		let profileController = FriendProfileViewController()
+		let profileController = FriendProfileViewController(loader: loader)
 		let section = filteredData[indexPath.section]
 		profileController.friend = section.data[indexPath.row]
 		profileController.profileImage = cell.getImage()
