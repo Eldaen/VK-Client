@@ -74,12 +74,6 @@ class SearchGroupsCell: UITableViewCell {
 					   options: [],
 					   animations: {
 			self.groupImage.alpha = 1
-		})
-		
-		UIView.animate(withDuration: 0.3,
-					   delay: 0,
-					   options: [],
-					   animations: {
 			self.groupName.alpha = 1
 		})
 	}

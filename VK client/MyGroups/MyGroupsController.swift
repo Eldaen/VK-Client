@@ -117,15 +117,6 @@ private extension MyGroupsController {
 		)
 		add.tintColor = .black
 		navigationItem.rightBarButtonItem = add
-		
-		let logout = UIBarButtonItem(
-			title: "Logout",
-			style: .plain,
-			target: self,
-			action: #selector(logout)
-		)
-		logout.tintColor = .black
-		navigationItem.leftBarButtonItem = logout
 	}
 	
 	// Конфигурируем ячейку
@@ -165,11 +156,6 @@ private extension MyGroupsController {
 		let searchGroupsController = SearchGroupsController()
 		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: false)
-	}
-	
-	// Делаем pop контроллера
-	@objc func logout() {
-		navigationController?.pushViewController(LoginController(), animated: true)
 	}
 }
 
