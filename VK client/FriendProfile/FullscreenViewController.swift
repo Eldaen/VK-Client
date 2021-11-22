@@ -105,7 +105,7 @@ final class FullscreenViewController: UIViewController {
 extension FullscreenViewController {
 	
 	// конфигурируем отображение
-	private func setImage(){
+	func setImage(){
 		var indexPhotoLeft = selectedPhoto - 1
 		let indexPhotoMid = selectedPhoto
 		var indexPhotoRight = selectedPhoto + 1
@@ -175,7 +175,7 @@ extension FullscreenViewController {
 	}
 	
 	// тут мы сначала ставим нужные картинки и потом включаем анимацию увеличения до оригинала
-	private func startAnimate(){
+	func startAnimate(){
 		setImage()
 		UIView.animate(
 			withDuration: 1,
@@ -255,7 +255,7 @@ extension FullscreenViewController {
 	}
 	
 	//  создаём массив вьюх с картинками для галлереи
-	private func createImageViews() {
+	func createImageViews() {
 		for _ in storedImages {
 			let view = UIImageView()
 			view.contentMode = .scaleAspectFit
@@ -264,12 +264,12 @@ extension FullscreenViewController {
 		}
 	}
 	
-	private func updateProgress() {
+	func updateProgress() {
 		self.progress.completedUnitCount = Int64(selectedPhoto + 1)
 		self.progressView.setProgress(Float(self.progress.fractionCompleted), animated: true)
 	}
 	
-	private func setupConstraints() {
+	func setupConstraints() {
 		NSLayoutConstraint.activate([
 			galleryView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
 			galleryView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
@@ -282,7 +282,7 @@ extension FullscreenViewController {
 		])
 	}
 	
-	private func setupViews() {
+	func setupViews() {
 		
 		// создадим вьюхи для отображения
 		leftImageView = UIImageView()
@@ -294,7 +294,7 @@ extension FullscreenViewController {
 	}
 	
 	/// Если картинка ещё не загружена, то загружаем её
-	private func loadImages(array: [Int]) {
+	func loadImages(array: [Int]) {
 		for index in array {
 			if let _ = loadedImages[index] {
 				continue

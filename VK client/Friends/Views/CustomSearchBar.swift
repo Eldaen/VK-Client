@@ -1,3 +1,7 @@
+// Скопировано из сети
+// Нужно было для кастомизации и анимации SearchBar на экране Друзья
+// Источник - https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419
+
 import UIKit
 
 extension UISearchBar {

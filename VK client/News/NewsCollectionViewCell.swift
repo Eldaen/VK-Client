@@ -26,7 +26,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 		setupConstraints()
 	}
 	
-	func setupConstraints() {
+	private func setupConstraints() {
 		NSLayoutConstraint.activate([
 			newsImage.topAnchor.constraint(equalTo: contentView.topAnchor),
 			newsImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),

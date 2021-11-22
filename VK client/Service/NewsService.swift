@@ -8,7 +8,7 @@
 import UIKit
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
-class NewsService {
+final class NewsService {
     static func iNeedNews() -> [NewsTableViewCellModel] {
 		return [NewsTableViewCellModel(user: UserModel(name: "Vasia", image: "vasia", id: 0),
                                        postDate: "1.1.1970",

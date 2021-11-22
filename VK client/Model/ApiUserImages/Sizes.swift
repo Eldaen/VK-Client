@@ -5,8 +5,6 @@
 //  Created by Денис Сизов on 19.11.2021.
 //
 
-import Foundation
-
 /// Возможные варианты размеров картинки пользователя
 struct Sizes: Codable {
 	let url: String

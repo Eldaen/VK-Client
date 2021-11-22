@@ -13,7 +13,7 @@ protocol GroupsLoader: Loader {
 }
 
 
-// Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
+// Сервис загрузки данных для групп из сети
 class GroupsService: GroupsLoader {
 	
 	internal var networkManager: NetworkManager

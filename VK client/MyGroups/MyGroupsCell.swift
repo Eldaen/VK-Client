@@ -8,7 +8,7 @@
 import UIKit
 
 /// Ячейка группы для контроллера MyGroupsController
-class MyGroupsCell: UITableViewCell {
+final class MyGroupsCell: UITableViewCell {
 	
 	/// ID группы, которую сейчас отображает ячейка
 	var id: Int?

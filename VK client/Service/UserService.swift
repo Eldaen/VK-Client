@@ -11,7 +11,7 @@ protocol UserLoader: Loader {
 }
 
 
-// Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
+// Серивс для загрузки данных пользователей из сети
 class UserService: UserLoader {
 	
 	internal var networkManager: NetworkManager

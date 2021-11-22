@@ -19,6 +19,7 @@ final class VKLoginController: UIViewController {
 	/// Контроллер, на который перекинет при успешной авторизации
 	private let nextController: UITabBarController = CustomTabBarController()
 	
+	// MARK: - View controller life cycle
 	// заменяем стандартную вьюху
 	override func loadView() {
 		self.view = vkWebView
@@ -50,7 +51,6 @@ final class VKLoginController: UIViewController {
 }
 
 // MARK: - WKNavigationDelegate
-
 extension VKLoginController: WKNavigationDelegate {
 	func configureWebView() {
 		vkWebView.navigationDelegate = self

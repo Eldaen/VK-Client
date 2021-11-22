@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewsCollectionViewLayout: UICollectionViewLayout {
+final class NewsCollectionViewLayout: UICollectionViewLayout {
 
     // Хранит атрибуты для заданных индексов
     var cacheAttributes = [IndexPath: UICollectionViewLayoutAttributes]()

@@ -5,8 +5,6 @@
 //  Created by Денис Сизов on 13.10.2021.
 //
 
-import Foundation
-
 /// Модель группы Вконтакте
 struct GroupModel: Codable {
     let name: String

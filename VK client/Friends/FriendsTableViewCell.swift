@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FriendsTableViewCell: UITableViewCell {
+final class FriendsTableViewCell: UITableViewCell {
 	
 	/// Имя друга
 	private let friendName: UILabel = {

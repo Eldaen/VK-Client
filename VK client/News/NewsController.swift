@@ -89,10 +89,10 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 }
 
 // MARK: - Private methods
-extension NewsController {
+private extension NewsController {
 	
 	/// Конфигурируем TableView
-	private func setupTableView() {
+	func setupTableView() {
 		tableView.frame = self.view.bounds
 		
 		tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsCell")

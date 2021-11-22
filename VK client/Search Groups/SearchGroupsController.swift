@@ -167,7 +167,7 @@ private extension SearchGroupsController {
 	}
 	
 	/// Отображение ошибки о том, что уже состоит в группе
-	private func showJoiningError() {
+	func showJoiningError() {
 		// Создаём контроллер
 		let alter = UIAlertController(title: "Ошибка",
 									  message: "Вы уже состоите в этой группе", preferredStyle: .alert)
