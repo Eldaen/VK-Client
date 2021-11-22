@@ -70,7 +70,7 @@ class GroupsService: GroupsLoader {
 		]
 		
 		networkManager.request(method: .groupsJoin,
-							   httpMethod: .get,
+							   httpMethod: .post,
 							   params: params) { (result: Result<BoolResponse, Error>) in
 			switch result {
 			case .success(let response):
@@ -89,7 +89,7 @@ class GroupsService: GroupsLoader {
 		]
 		
 		networkManager.request(method: .groupsLeave,
-							   httpMethod: .get,
+							   httpMethod: .post,
 							   params: params) { (result: Result<BoolResponse, Error>) in
 			switch result {
 			case .success(let response):
