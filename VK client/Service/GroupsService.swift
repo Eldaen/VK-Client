@@ -5,9 +5,22 @@
 //  Created by Денис Сизов on 13.10.2021.
 //
 
+protocol GroupsLoader: Loader {
+	func loadGroups(completion: @escaping ([GroupModel]) -> Void)
+	func searchGroups(with query: String, completion: @escaping ([GroupModel]) -> Void)
+	func joinGroup(id: Int, completion: @escaping (Int) -> Void)
+	func leaveGroup(id: Int, completion: @escaping (Int) -> Void)
+}
+
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
-class GroupsService: Loader {
+class GroupsService: GroupsLoader {
+	
+	internal var networkManager: NetworkManager
+	
+	required init(networkManager: NetworkManager) {
+		self.networkManager = networkManager
+	}
 	
 	/// Загружает список групп пользователя
 	func loadGroups(completion: @escaping ([GroupModel]) -> Void) {

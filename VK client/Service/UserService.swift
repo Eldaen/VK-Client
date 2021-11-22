@@ -5,11 +5,21 @@
 //  Created by Денис Сизов on 13.10.2021.
 //
 
-import Foundation
-import UIKit
+protocol UserLoader: Loader {
+	func loadFriends(completion: @escaping ([FriendsSection]) -> Void)
+	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void)
+}
+
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
-class UserService: Loader {
+class UserService: UserLoader {
+	
+	internal var networkManager: NetworkManager
+	
+	required init(networkManager: NetworkManager) {
+		self.networkManager = networkManager
+	}
+	
 	
 	private var friendsArray: [UserModel]?
 	

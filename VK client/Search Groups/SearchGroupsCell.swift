@@ -32,7 +32,7 @@ class SearchGroupsCell: UITableViewCell {
 	}()
 	
 	/// Меняет картинку, используется для замены после подгрузки из сети
-	func updateImage(with image: UIImage) {
+	func setImage(with image: UIImage) {
 		groupImage.image = image
 		self.groupImage.layoutIfNeeded()
 	}

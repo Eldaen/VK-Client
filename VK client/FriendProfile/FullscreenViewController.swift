@@ -28,7 +28,7 @@ final class FullscreenViewController: UIViewController {
 	lazy private var progress = Progress(totalUnitCount: Int64(photoViews.count))
 	
 	/// Сервис по загрузке данных
-	private var loader = UserService()
+	private var loader: UserLoader
 	
 	/// Массив картинок пользователя
 	private var storedImages: [String] = []
@@ -54,6 +54,17 @@ final class FullscreenViewController: UIViewController {
 	private var swipeToRight: UIViewPropertyAnimator!
 	private var swipeToLeft: UIViewPropertyAnimator!
 	
+	// MARK: - Init
+	init(loader: UserLoader) {
+		self.loader = loader
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	// MARK: - View controller life cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
