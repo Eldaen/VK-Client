@@ -5,12 +5,14 @@
 //  Created by Денис Сизов on 13.10.2021.
 //
 
+import RealmSwift
+
 /// Модель группы Вконтакте
-struct GroupModel: Codable {
-    let name: String
-    let image: String
-	let id: Int
-	let isMember: Int
+class GroupModel: Codable {
+	@objc dynamic let name: String
+	@objc dynamic let image: String
+	@objc dynamic let id: Int
+	@objc dynamic let isMember: Int
 	
 	enum CodingKeys: String, CodingKey {
 		case name
