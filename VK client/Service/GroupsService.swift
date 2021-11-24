@@ -17,9 +17,11 @@ protocol GroupsLoader: Loader {
 class GroupsService: GroupsLoader {
 	
 	internal var networkManager: NetworkManager
+	internal var cache: ImageCache
 	
-	required init(networkManager: NetworkManager) {
+	required init(networkManager: NetworkManager, cache: ImageCache) {
 		self.networkManager = networkManager
+		self.cache = cache
 	}
 	
 	/// Загружает список групп пользователя

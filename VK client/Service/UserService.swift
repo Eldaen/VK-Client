@@ -15,9 +15,11 @@ protocol UserLoader: Loader {
 class UserService: UserLoader {
 	
 	internal var networkManager: NetworkManager
+	internal var cache: ImageCache
 	
-	required init(networkManager: NetworkManager) {
+	required init(networkManager: NetworkManager, cache: ImageCache) {
 		self.networkManager = networkManager
+		self.cache = cache
 	}
 	
 	

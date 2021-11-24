@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C85E6A9DEC55DF5F8FEC9276 /* Pods_VK_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818C9549F4475EAAA12766A /* Pods_VK_client.framework */; };
 		D01D8C3E27469330002CDC5E /* VkFriendsMainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D8C3D27469330002CDC5E /* VkFriendsMainResponse.swift */; };
+		D03B1872274E2F4700C483B3 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B1871274E2F4700C483B3 /* ImageCache.swift */; };
 		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D05028E72749077F00F912EE /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05028E62749077F00F912EE /* BoolResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
@@ -59,6 +60,7 @@
 		80880C205E27032CDC91A24E /* Pods-VK client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VK client.release.xcconfig"; path = "Target Support Files/Pods-VK client/Pods-VK client.release.xcconfig"; sourceTree = "<group>"; };
 		BD6499039BF00C6BA478A95E /* Pods-VK client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VK client.debug.xcconfig"; path = "Target Support Files/Pods-VK client/Pods-VK client.debug.xcconfig"; sourceTree = "<group>"; };
 		D01D8C3D27469330002CDC5E /* VkFriendsMainResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsMainResponse.swift; sourceTree = "<group>"; };
+		D03B1871274E2F4700C483B3 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D05028E62749077F00F912EE /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
@@ -124,7 +126,6 @@
 				BD6499039BF00C6BA478A95E /* Pods-VK client.debug.xcconfig */,
 				80880C205E27032CDC91A24E /* Pods-VK client.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -205,6 +206,7 @@
 				D050CD6527247A010076D78E /* NewsService.swift */,
 				D0CB563D2743F58300AE85DF /* NetworkManager.swift */,
 				D0D2F0AA27478C53008E9AB4 /* Loader.swift */,
+				D03B1871274E2F4700C483B3 /* ImageCache.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -477,6 +479,7 @@
 				D0D2F0B92748EB7A008E9AB4 /* GroupsMyResponse.swift.swift in Sources */,
 				D050CD072716DFA10076D78E /* MyGroupsCell.swift in Sources */,
 				D050CD6227241E6D0076D78E /* NewsTableViewCell.swift in Sources */,
+				D03B1872274E2F4700C483B3 /* ImageCache.swift in Sources */,
 				D0800D1B27283B0800347AB7 /* CustomSearchBar.swift in Sources */,
 				D050CD112716E1CF0076D78E /* GroupModel.swift in Sources */,
 				D050CD1E271A2DD60076D78E /* FriendsSection.swift in Sources */,

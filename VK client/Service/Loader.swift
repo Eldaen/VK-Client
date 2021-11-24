@@ -12,8 +12,9 @@ protocol Loader {
 	
 	/// Переменная, хранящая в себе Networkmanager, он у нас один и других не будет, так что без протокола
 	var networkManager: NetworkManager {get set}
+	var cache: ImageCache {get set}
 	
-	init(networkManager: NetworkManager)
+	init(networkManager: NetworkManager, cache: ImageCache)
 }
 
 /// Базовый класс для всех лоадеров
@@ -23,12 +24,18 @@ extension Loader {
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
 		guard let url = URL(string: url) else { return }
 		
+		// если есть в кэше, то грузить не нужно
+		if let image = cache[url] {
+			completion(image)
+		}
+		
 		networkManager.loadImage(url: url) { result in
 			switch result {
 			case .success(let data):
 				guard let image = UIImage(data: data) else {
 					return
 				}
+				cache[url] = image
 				completion(image)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
