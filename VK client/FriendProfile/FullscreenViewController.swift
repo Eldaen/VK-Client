@@ -33,9 +33,6 @@ final class FullscreenViewController: UIViewController {
 	/// Массив картинок пользователя
 	private var storedImages: [String] = []
 	
-	/// загруженные картинки
-	private var loadedImages: [Int: UIImage] = [:]
-	
 	/// Массив моделей картинок, которые нужно отобразить в галерее
 	var photoModels: [UserImages] = []
 	
@@ -293,17 +290,12 @@ extension FullscreenViewController {
 		view.addSubview(progressView)
 	}
 	
-	/// Если картинка ещё не загружена, то загружаем её
+	/// Загружаем картинки
 	func loadImages(array: [Int]) {
 		for index in array {
-			if let _ = loadedImages[index] {
-				continue
-			} else {
-				loader.loadImage(url: storedImages[index]) { [weak self] image in
-					self?.loadedImages.updateValue(image, forKey: index)
-					self?.photoViews[index].image = image
-					self?.photoViews[index].layoutIfNeeded()
-				}
+			loader.loadImage(url: storedImages[index]) { [weak self] image in
+				self?.photoViews[index].image = image
+				self?.photoViews[index].layoutIfNeeded()
 			}
 		}
 	}
