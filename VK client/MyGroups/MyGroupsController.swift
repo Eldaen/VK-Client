@@ -89,15 +89,13 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 				return
 			}
 			
-//			loader.leaveGroup(id: id) { [weak self] result in
-//				if result == 1 {
-//					DispatchQueue.main.async {
-//						self?.myGroups.remove(at: indexPath.row)
-//						self?.filteredGroups.remove(at: indexPath.row)
-//						self?.tableView.deleteRows(at: [indexPath], with: .fade)
-//					}
-//				}
-//			}
+			viewModel.leaveGroup(id: id, index: indexPath.row) { [weak self] result in
+				if result == true {
+					self?.tableView.deleteRows(at: [indexPath], with: .fade)
+				} else {
+					self?.showLeavingError()
+				}
+			}
 		}
 	}
 }
@@ -141,20 +139,27 @@ private extension MyGroupsController {
 		])
 	}
 	
-	// Загружает текущий список групп
-//	func loadGroups() {
-//		loader.loadGroups() { [weak self] groups in
-//			self?.myGroups = groups
-//			self?.filteredGroups = groups
-//			self?.tableView.reloadData()
-//		}
-//	}
-	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
-//		let searchGroupsController = SearchGroupsController(loader: loader)
-//		searchGroupsController.delegate = self
-//		navigationController?.pushViewController(searchGroupsController, animated: false)
+		let searchGroupsController = SearchGroupsController(loader: viewModel.loader)
+		searchGroupsController.delegate = self
+		navigationController?.pushViewController(searchGroupsController, animated: false)
+	}
+	
+	/// Отображение ошибки о том, что не удалось выйти из группы
+	func showLeavingError() {
+		// Создаём контроллер
+		let alter = UIAlertController(title: "Ошибка",
+									  message: "Не получилось выйти из группы", preferredStyle: .alert)
+		
+		// Создаем кнопку для UIAlertController
+		let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+		
+		// Добавляем кнопку на UIAlertController
+		alter.addAction(action)
+		
+		// Показываем UIAlertController
+		present(alter, animated: true, completion: nil)
 	}
 }
 
@@ -175,23 +180,8 @@ extension MyGroupsController: UISearchBarDelegate {
 	/// Основной метод, который осуществляет поиск
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		
-		// не случай повторных поисков
-//		filteredGroups = []
-//
-//		// Если строка поиска пустая, то показываем все группы
-//		if searchText == "" {
-//			filteredGroups = myGroups
-//		} else {
-//
-//			//По сравнению с друзьями, тут вообще всё просто. Если в именни группы есть нужный текст, то добавляем в фильтр
-//			for group in myGroups {
-//				if group.name.lowercased().contains(searchText.lowercased()) {
-//					filteredGroups.append(group)
-//				}
-//			}
-//		}
-		
-		// Перезагружаем данные
-		self.tableView.reloadData()
+		viewModel.search(searchText) {
+			self.tableView.reloadData()
+		}
 	}
 }

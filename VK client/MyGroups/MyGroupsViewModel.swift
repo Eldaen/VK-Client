@@ -24,6 +24,12 @@ protocol MyGroupsViewModelType {
 	
 	/// Скачиваем из сети список групп пользователя
 	func fetchGroups(completion: @escaping () -> Void)
+	
+	/// Отправляет запрос на выход из группы и если успех, то удаляет её из списка для отображения
+	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void)
+	
+	/// Осуществляет поиск групп среди списка групп пользователя по введённому тексту
+	func search(_ text: String, completion: @escaping () -> Void)
 }
 
 class MyGroupsViewModel: MyGroupsViewModelType {
@@ -51,6 +57,36 @@ class MyGroupsViewModel: MyGroupsViewModelType {
 		loader.loadGroups() { [weak self] groups in
 			self?.groups = groups
 			self?.filteredGroups = groups
+			completion()
+		}
+	}
+	
+	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void) {
+		loader.leaveGroup(id: id) { [weak self] result in
+			DispatchQueue.main.async {
+				if result == 1 {
+					self?.groups.remove(at: index)
+					self?.filteredGroups.remove(at: index)
+					completion(true)
+				} else {
+					completion(false)
+				}
+			}
+		}
+	}
+	
+	func search(_ text: String, completion: @escaping () -> Void) {
+		filteredGroups = []
+
+		// Если строка поиска пустая, то показываем все группы
+		if text == "" {
+			filteredGroups = groups
+		} else {
+			for group in groups {
+				if group.name.lowercased().contains(text.lowercased()) {
+					filteredGroups.append(group)
+				}
+			}
 			completion()
 		}
 	}
