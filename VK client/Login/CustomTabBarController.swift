@@ -34,7 +34,9 @@ final class CustomTabBarController: UITabBarController {
 				cache: cacheService
 			)),
 								   title: "Друзья", image: UIImage(systemName: "person")!),
-			createNavController(for: NewsController(), title: "Новости", image: UIImage(systemName: "newspaper")!),
+			createNavController(for: NewsController(model: NewsViewModel()),
+								   title: "Новости",
+								   image: UIImage(systemName: "newspaper")!),
 		]
 	}
 	

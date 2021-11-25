@@ -19,7 +19,7 @@ protocol Loader {
 	init(networkManager: NetworkManager, cache: ImageCache)
 }
 
-/// Базовый класс для всех лоадеров
+/// `Расширяем протокол Loader некоторыми полезными методами, общими для всех лоадеров`
 extension Loader {
 	
 	/// Загружает картинку и возвращает её, если получилось
