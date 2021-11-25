@@ -24,10 +24,11 @@ final class CustomTabBarController: UITabBarController {
 		let cacheService = ImageCacheService()
 		
 		viewControllers = [
-			createNavController(for: MyGroupsController(loader: GroupsService(
-				networkManager: networkManager,
-				cache: cacheService
-			)),
+			createNavController(for: MyGroupsController(model: MyGroupsViewModel(
+				loader: GroupsService(
+					networkManager: networkManager,
+					cache: cacheService
+				))),
 								   title: "Мои группы", image: UIImage(systemName: "person.3")!),
 			createNavController(for: FriendsViewController(loader: UserService(
 				networkManager: networkManager,
@@ -35,8 +36,7 @@ final class CustomTabBarController: UITabBarController {
 			)),
 								   title: "Друзья", image: UIImage(systemName: "person")!),
 			createNavController(for: NewsController(model: NewsViewModel()),
-								   title: "Новости",
-								   image: UIImage(systemName: "newspaper")!),
+								   title: "Новости", image: UIImage(systemName: "newspaper")!),
 		]
 	}
 	
