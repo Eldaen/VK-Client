@@ -30,9 +30,13 @@ protocol MyGroupsViewModelType {
 	
 	/// Осуществляет поиск групп среди списка групп пользователя по введённому тексту
 	func search(_ text: String, completion: @escaping () -> Void)
+	
+	/// Осуществляет действия после нажатия кнопки отмены поиска
+	func cancelSearch(completion: @escaping() -> Void)
 }
 
-class MyGroupsViewModel: MyGroupsViewModelType {
+/// Вью модель для контроллера MyGroups
+final class MyGroupsViewModel: MyGroupsViewModelType {
 	var loader: GroupsLoader
 	var groups: [GroupModel] = []
 	var filteredGroups: [GroupModel] = []
@@ -81,6 +85,7 @@ class MyGroupsViewModel: MyGroupsViewModelType {
 		// Если строка поиска пустая, то показываем все группы
 		if text == "" {
 			filteredGroups = groups
+			completion()
 		} else {
 			for group in groups {
 				if group.name.lowercased().contains(text.lowercased()) {
@@ -89,5 +94,10 @@ class MyGroupsViewModel: MyGroupsViewModelType {
 			}
 			completion()
 		}
+	}
+	
+	func cancelSearch(completion: @escaping() -> Void) {
+		filteredGroups = groups
+		completion()
 	}
 }
