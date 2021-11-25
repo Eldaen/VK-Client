@@ -15,11 +15,6 @@ protocol MyGroupsDelegate: AnyObject {
 /// Контроллер списка групп, в которых состоит пользователь
 final class MyGroupsController: UIViewController {
     
-	/// Список групп, в которых состоит пользователь
-    //private var myGroups = [GroupModel]()
-	
-	//lazy private var filteredGroups = myGroups
-	
 	/// Вью модель контроллера MyGroups
 	private var viewModel: MyGroupsViewModelType
 	
@@ -141,7 +136,7 @@ private extension MyGroupsController {
 	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
-		let searchGroupsController = SearchGroupsController(loader: viewModel.loader)
+		let searchGroupsController = SearchGroupsController(model: SearchGroupsViewModel(loader: viewModel.loader))
 		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: false)
 	}
@@ -149,17 +144,17 @@ private extension MyGroupsController {
 	/// Отображение ошибки о том, что не удалось выйти из группы
 	func showLeavingError() {
 		// Создаём контроллер
-		let alter = UIAlertController(title: "Ошибка",
+		let alert = UIAlertController(title: "Ошибка",
 									  message: "Не получилось выйти из группы", preferredStyle: .alert)
 		
 		// Создаем кнопку для UIAlertController
 		let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
 		
 		// Добавляем кнопку на UIAlertController
-		alter.addAction(action)
+		alert.addAction(action)
 		
 		// Показываем UIAlertController
-		present(alter, animated: true, completion: nil)
+		present(alert, animated: true, completion: nil)
 	}
 }
 
@@ -179,8 +174,14 @@ extension MyGroupsController: UISearchBarDelegate {
 	
 	/// Основной метод, который осуществляет поиск
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		
 		viewModel.search(searchText) {
+			self.tableView.reloadData()
+		}
+	}
+	
+	/// Отменяет поиск
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		viewModel.cancelSearch() {
 			self.tableView.reloadData()
 		}
 	}

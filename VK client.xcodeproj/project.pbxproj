@@ -12,6 +12,7 @@
 		D03B1872274E2F4700C483B3 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B1871274E2F4700C483B3 /* ImageCache.swift */; };
 		D03B1874274F850900C483B3 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B1873274F850900C483B3 /* NewsViewModel.swift */; };
 		D03B1876274F94DB00C483B3 /* MyGroupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B1875274F94DB00C483B3 /* MyGroupsViewModel.swift */; };
+		D03B1878274FAABB00C483B3 /* SearchGroupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B1877274FAABB00C483B3 /* SearchGroupsViewModel.swift */; };
 		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D05028E72749077F00F912EE /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05028E62749077F00F912EE /* BoolResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
@@ -65,6 +66,7 @@
 		D03B1871274E2F4700C483B3 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D03B1873274F850900C483B3 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
 		D03B1875274F94DB00C483B3 /* MyGroupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewModel.swift; sourceTree = "<group>"; };
+		D03B1877274FAABB00C483B3 /* SearchGroupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupsViewModel.swift; sourceTree = "<group>"; };
 		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D05028E62749077F00F912EE /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 			children = (
 				D050CD092716E12B0076D78E /* SearchGroupsController.swift */,
 				D050CD0B2716E13A0076D78E /* SearchGroupsCell.swift */,
+				D03B1877274FAABB00C483B3 /* SearchGroupsViewModel.swift */,
 			);
 			path = "Search Groups";
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0800D13272698BF00347AB7 /* NewsTableViewCellModel.swift in Sources */,
+				D03B1878274FAABB00C483B3 /* SearchGroupsViewModel.swift in Sources */,
 				D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */,
 				D0D2F0B52747D658008E9AB4 /* UserImagesMainResponse.swift in Sources */,
 				D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */,
