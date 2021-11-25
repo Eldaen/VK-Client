@@ -19,4 +19,10 @@ class UserModel: Codable {
 		case image = "photo_100"
 		case id
 	}
+	
+	init(name: String, image: String, id: Int) {
+		self.name = name
+		self.image = image
+		self.id = id
+	}
 }
