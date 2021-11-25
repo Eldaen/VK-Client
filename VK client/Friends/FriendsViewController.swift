@@ -49,7 +49,9 @@ final class FriendsViewController: UIViewController {
 		
 		return {
 			guard let scopeView = self.searchBar.searchTextField.leftView else { return }
-			guard let placeholderLabel = self.searchBar.textField?.value(forKey: "placeholderLabel") as? UILabel else { return }
+			guard let placeholderLabel = self.searchBar.textField?.value(forKey: "placeholderLabel") as? UILabel else {
+				return
+			}
 			
 			UIView.animate(withDuration: 0.3,
 						   animations: {
