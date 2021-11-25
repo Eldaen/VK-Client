@@ -28,13 +28,18 @@ final class CustomTabBarController: UITabBarController {
 				loader: GroupsService(
 					networkManager: networkManager,
 					cache: cacheService
-				))),
+				)
+			)),
 								   title: "Мои группы", image: UIImage(systemName: "person.3")!),
-			createNavController(for: FriendsViewController(loader: UserService(
-				networkManager: networkManager,
-				cache: cacheService
+			
+			createNavController(for: FriendsViewController(model: FriendsViewModel(
+				loader: UserService(
+					networkManager: networkManager,
+					cache: cacheService
+				)
 			)),
 								   title: "Друзья", image: UIImage(systemName: "person")!),
+			
 			createNavController(for: NewsController(model: NewsViewModel()),
 								   title: "Новости", image: UIImage(systemName: "newspaper")!),
 		]

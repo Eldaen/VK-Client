@@ -5,7 +5,7 @@
 //  Created by Денис Сизов on 25.11.2021.
 //
 
-import Foundation
+import UIKit.UIImage
 
 /// Протокол вью модели для контроллера Friends
 protocol FriendsViewModelType {
@@ -34,8 +34,6 @@ protocol FriendsViewModelType {
 	/// Осуществляет действия после нажатия кнопки отмены поиска
 	func cancelSearch(completion: @escaping() -> Void)
 }
-
-import UIKit.UIImage
 
 /// Вью модель для контроллера Friends
 final class FriendsViewModel: FriendsViewModelType {
@@ -123,7 +121,6 @@ final class FriendsViewModel: FriendsViewModelType {
 		filteredData = friends
 		completion()
 	}
-	
 }
 
 // MARK: - Private methods

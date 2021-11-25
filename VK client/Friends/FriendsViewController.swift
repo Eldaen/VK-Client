@@ -26,23 +26,14 @@ final class FriendsViewController: UIViewController {
 		return tableView
 	}()
 	
+	/// Вью модель контроллера Friends
+	private var viewModel: FriendsViewModelType
+	
 	/// Ячейки, которые нужно анимировать при появлении
 	private var cellsForAnimate: [FriendsTableViewCell] = []
 	
-	/// Сервис по загрузке данных
-	private let loader: UserLoader
-	
-	/// Список друзей
-	var friends: [FriendsSection] = []
-	
 	/// Фото профиля
 	var profileImage: UIImage?
-	
-	/// Список букв для заголовков секций
-	private var lettersOfNames = [String]()
-	
-	// lazy чтобы можно было так объявить до доступности self
-	private lazy var filteredData = friends
 	
 	// Вынес сюда closure анимации, чтобы 2 раза не повторять код.
 	private func searchBarAnimationClosure () -> () -> Void {
@@ -72,8 +63,8 @@ final class FriendsViewController: UIViewController {
 	
 	// MARK: - Init
 	
-	init(loader: UserLoader) {
-		self.loader = loader
+	init(model: FriendsViewModelType) {
+		self.viewModel = model
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -86,7 +77,10 @@ final class FriendsViewController: UIViewController {
 		super.viewDidLoad()
 		setupTableView()
 		setupConstraints()
-		loadFriends()
+		
+		viewModel.fetchFriends { [weak self] in
+			self?.tableView.reloadData()
+		}
 	}
 }
 
@@ -94,48 +88,9 @@ final class FriendsViewController: UIViewController {
 extension FriendsViewController: UISearchBarDelegate {
 	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		
-		//занулим для повторных поисков
-		filteredData = []
-		
-		// Если поиск пустой, то ничего фильтровать нам не нужно
-		if searchText == "" {
-			filteredData = friends
-		} else {
-			for section in friends { // сначала перебираем массив секций с друзьями
-				for (_, friend) in section.data.enumerated() { // потом перебираем массивы друзей в секциях
-					if friend.name.lowercased().contains(searchText.lowercased()) { // Ищем в имени нужный текст, оба текста сравниваем в нижнем регистре
-						var searchedSection = section
-						
-						// Если фильтр пустой, то можно сразу добавлять
-						if filteredData.isEmpty {
-							searchedSection.data = [friend]
-							filteredData.append(searchedSection)
-							break
-						}
-						
-						// Если в массиве секций уже есть секция с таким ключом, то нужно к имеющемуся массиву друзей добавить друга
-						var found = false
-						for (sectionIndex, filteredSection) in filteredData.enumerated() {
-							if filteredSection.key == section.key {
-								filteredData[sectionIndex].data.append(friend)
-								found = true
-								break
-							}
-						}
-						
-						// Если такого ключа ещё нет, то создаём новый массив с нашим найденным другом
-						if !found {
-							searchedSection.data = [friend]
-							filteredData.append(searchedSection)
-						}
-					}
-				}
-			}
+		viewModel.search(searchText) {
+			self.tableView.reloadData()
 		}
-		
-		//обновляем данные
-		self.tableView.reloadData()
 	}
 	
 	// отмена поиска (через кнопку Cancel)
@@ -169,7 +124,6 @@ extension FriendsViewController: UISearchBarDelegate {
 		
 	}
 	
-	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
 		
 		// Анимацию возвращения в исходное положение после нажатия cancel пришлось положить в completion, а то что-то шло не так
@@ -184,9 +138,9 @@ extension FriendsViewController: UISearchBarDelegate {
 			closure()
 		})
 		
-		// Отменяем поиск, показываем всех друзей и перезагружаем таблицу
-		filteredData = friends
-		tableView.reloadData()
+		viewModel.cancelSearch() {
+			self.tableView.reloadData()
+		}
 	}
 }
 
@@ -201,7 +155,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		
 		let leter: UILabel = UILabel(frame: CGRect(x: 30, y: 5, width: 20, height: 20))
 		leter.textColor = UIColor.black.withAlphaComponent(0.5)  // прозрачность только надписи
-		leter.text = String(filteredData[section].key) // В зависимости от номера секции - даём ей разные названия из массива имён секций
+		leter.text = String(viewModel.filteredData[section].key) // В зависимости от номера секции - даём ей разные названия из массива имён секций
 		leter.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
 		header.addSubview(leter)
 		
@@ -224,16 +178,16 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
 		// Кол-во секций
-		return filteredData.count
+		return viewModel.filteredData.count
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// Кол-во рядов в секции
-		return filteredData[section].data.count
+		return viewModel.filteredData[section].data.count
 	}
 	
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		let section = friends[section]
+		let section = viewModel.friends[section]
 		
 		return String(section.key)
 	}
@@ -244,25 +198,15 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 			return UITableViewCell()
 		}
 		
-		let section = filteredData[indexPath.section]
-		let name = section.data[indexPath.row].name
-		let image = section.data[indexPath.row].image
-		
-		// конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(named: image) ?? UIImage())
-		
-		// Ставим картинку на загрузку
-		loader.loadImage(url: image) { image in
-			cell.updateImage(with: image)
-		}
-		
+		viewModel.configureCell(cell: cell, indexPath: indexPath)
 		cellsForAnimate.append(cell)
+		
 		return cell
 	}
 	
 	/// Создаёт массив заголовков секций, по одной букве, с которой начинаются имена друзей
 	func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-		return lettersOfNames
+		return viewModel.lettersOfNames
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -270,8 +214,8 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 			return
 		}
 		
-		let profileController = FriendProfileViewController(loader: loader)
-		let section = filteredData[indexPath.section]
+		let profileController = FriendProfileViewController(loader: viewModel.loader)
+		let section = viewModel.filteredData[indexPath.section]
 		profileController.friend = section.data[indexPath.row]
 		profileController.profileImage = cell.getImage()
 		
@@ -281,13 +225,6 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - Private methods
 private extension FriendsViewController {
-	
-	/// Cоздаёт массив  букв для заголовков секций
-	func loadLetters() {
-		for user in friends {
-			lettersOfNames.append(String(user.key))
-		}
-	}
 	
 	/// Конфигурируем TableView
 	func setupTableView() {
@@ -313,19 +250,5 @@ private extension FriendsViewController {
 			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
 			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 		])
-	}
-	
-	/// Загружает друзей из АПИ через loader
-	func loadFriends() {
-		loader.loadFriends() { [weak self] friends in
-			self?.friends = friends
-			self?.filteredData = friends
-			
-			// наполянем имена заголовков секций
-			self?.loadLetters()
-			
-			// Обновляем таблицу свежими данными
-			self?.tableView.reloadData()
-		}
 	}
 }
