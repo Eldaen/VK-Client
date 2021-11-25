@@ -15,13 +15,8 @@ protocol MyGroupsDelegate: AnyObject {
 /// Контроллер списка групп, в которых состоит пользователь
 final class MyGroupsController: UIViewController {
     
-	/// Список групп, в которых состоит пользователь
-    private var myGroups = [GroupModel]()
-	
-	lazy private var filteredGroups = myGroups
-	
-	/// Сервис по загрузке данных группv
-	private let loader: GroupsLoader
+	/// Вью модель контроллера MyGroups
+	private var viewModel: MyGroupsViewModelType
 	
 	/// Таблица с ячейками групп, в которых состоит пользователь
 	private let tableView: UITableView = {
@@ -40,8 +35,8 @@ final class MyGroupsController: UIViewController {
 	}()
 	
 	// MARK: - Init
-	init(loader: GroupsLoader) {
-		self.loader = loader
+	init(model: MyGroupsViewModelType) {
+		self.viewModel = model
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -58,7 +53,10 @@ final class MyGroupsController: UIViewController {
 		configureNavigation()
 		setupTableView()
 		setupConstraints()
-		loadGroups()
+		
+		viewModel.fetchGroups { [weak self] in
+			self?.tableView.reloadData()
+		}
     }
 }
 
@@ -67,7 +65,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// #warning Incomplete implementation, return the number of rows
-		return filteredGroups.count
+		return viewModel.filteredGroups.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -75,18 +73,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 			return UITableViewCell()
 		}
 
-		let name = filteredGroups[indexPath.row].name
-		let image = filteredGroups[indexPath.row].image
-		let id = filteredGroups[indexPath.row].id
-		
-		//Конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(), id: id)
-		
-		// Ставим картинку на загрузку
-		loader.loadImage(url: image) { image in
-			cell.setImage(with: image)
-		}
-
+		viewModel.configureCell(cell: cell, index: indexPath.row)
 		return cell
 	}
 
@@ -97,13 +84,11 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 				return
 			}
 			
-			loader.leaveGroup(id: id) { [weak self] result in
-				if result == 1 {
-					DispatchQueue.main.async {
-						self?.myGroups.remove(at: indexPath.row)
-						self?.filteredGroups.remove(at: indexPath.row)
-						self?.tableView.deleteRows(at: [indexPath], with: .fade)
-					}
+			viewModel.leaveGroup(id: id, index: indexPath.row) { [weak self] result in
+				if result == true {
+					self?.tableView.deleteRows(at: [indexPath], with: .fade)
+				} else {
+					self?.showLeavingError()
 				}
 			}
 		}
@@ -149,20 +134,27 @@ private extension MyGroupsController {
 		])
 	}
 	
-	// Загружает текущий список групп
-	func loadGroups() {
-		loader.loadGroups() { [weak self] groups in
-			self?.myGroups = groups
-			self?.filteredGroups = groups
-			self?.tableView.reloadData()
-		}
-	}
-	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
-		let searchGroupsController = SearchGroupsController(loader: loader)
+		let searchGroupsController = SearchGroupsController(model: SearchGroupsViewModel(loader: viewModel.loader))
 		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: false)
+	}
+	
+	/// Отображение ошибки о том, что не удалось выйти из группы
+	func showLeavingError() {
+		// Создаём контроллер
+		let alert = UIAlertController(title: "Ошибка",
+									  message: "Не получилось выйти из группы", preferredStyle: .alert)
+		
+		// Создаем кнопку для UIAlertController
+		let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+		
+		// Добавляем кнопку на UIAlertController
+		alert.addAction(action)
+		
+		// Показываем UIAlertController
+		present(alert, animated: true, completion: nil)
 	}
 }
 
@@ -171,8 +163,8 @@ extension MyGroupsController: MyGroupsDelegate {
 
 	/// Принимает выбранную группу в контроллере моих групп и добавляет её в список
 	func groupDidSelect() {
-		DispatchQueue.main.async { [weak self] in
-			self?.loadGroups()
+		viewModel.fetchGroups() { [weak self] in
+			self?.tableView.reloadData()
 		}
 	}
 }
@@ -182,24 +174,15 @@ extension MyGroupsController: UISearchBarDelegate {
 	
 	/// Основной метод, который осуществляет поиск
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		
-		// не случай повторных поисков
-		filteredGroups = []
-		
-		// Если строка поиска пустая, то показываем все группы
-		if searchText == "" {
-			filteredGroups = myGroups
-		} else {
-			
-			//По сравнению с друзьями, тут вообще всё просто. Если в именни группы есть нужный текст, то добавляем в фильтр
-			for group in myGroups {
-				if group.name.lowercased().contains(searchText.lowercased()) {
-					filteredGroups.append(group)
-				}
-			}
+		viewModel.search(searchText) {
+			self.tableView.reloadData()
 		}
-		
-		// Перезагружаем данные
-		self.tableView.reloadData()
+	}
+	
+	/// Отменяет поиск
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		viewModel.cancelSearch() {
+			self.tableView.reloadData()
+		}
 	}
 }

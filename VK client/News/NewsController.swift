@@ -17,8 +17,19 @@ final class NewsController: UIViewController {
 		return tableView
 	}()
 	
-    private let news = NewsService.iNeedNews()
-    
+	private var viewModel: NewsViewModelType
+	
+	init(model: NewsViewModelType) {
+		viewModel = model
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	
+// MARK: - View controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -26,14 +37,14 @@ final class NewsController: UIViewController {
     }
 }
 
+
+// MARK: - UITableViewDataSource, UITableViewDelegate
 extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	func numberOfSections(in tableView: UITableView) -> Int {
-		// #warning Incomplete implementation, return the number of sections
-		return news.count // одна секция - одна новость
+		return viewModel.news.count // одна секция - одна новость
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		// #warning Incomplete implementation, return the number of rows
 		return 1
 	}
 	
@@ -44,7 +55,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		}
 		
 		// конфигурируем ячейку
-		cell.configure(with: news[indexPath.section])
+		viewModel.configureCell(cell: cell, index: indexPath.section)
 		
 		return cell
 	}
