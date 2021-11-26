@@ -29,6 +29,7 @@ final class Assembly {
 	
 	private init() {}
 	
+	/// геттер для класса переменной friendProfileViewModel
 	func getFriendProfileViewModel(
 		friend: UserModel,
 		loader: UserLoader,
@@ -37,6 +38,7 @@ final class Assembly {
 		return friendProfileViewModel.init(friend: friend, loader: loader, profileImage: profileImage)
 	}
 	
+	/// геттер для класса переменной galleryViewModel
 	func getGalleryViewModel(loader: UserLoader, selectedPhoto: Int, images: [UserImages]) -> GalleryType {
 		return GalleryViewModel(loader: loader, selectedPhoto: selectedPhoto, images: images)
 	}
