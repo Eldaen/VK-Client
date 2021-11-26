@@ -101,20 +101,8 @@ final class FriendProfileViewController: UIViewController {
 		return collection
 	}()
     
-	/// Модель друга, чей профиль открыт
-    var friend: UserModel!
-	
-	/// Фото профиля
-	var profileImage: UIImage?
-	
-	/// Массив картинок пользователя
-	var storedImages: [String] = []
-	
-	// Массив моделей картинок в галерее
-	var storedModels: [UserImages] = []
-	
-	/// Сервис по загрузке данных
-	private let loader: UserLoader
+	/// Вью модель для контроллера профиля пользователя
+	var viewModel: FriendsProfileViewModelType
 	
     private let identifier = "PhotoCollectionViewCell"
     
@@ -125,8 +113,8 @@ final class FriendProfileViewController: UIViewController {
     private let cellsOffset: CGFloat = 10.0
 	
 	// MARK: - Init
-	init(loader: UserLoader) {
-		self.loader = loader
+	init(model: FriendsProfileViewModelType) {
+		self.viewModel = model
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -141,14 +129,19 @@ final class FriendProfileViewController: UIViewController {
 		setupView()
 		setupCollectionView()
 		setupConstaints()
-		loadFriends()
 		
         // заполняем статичные данные
-		if let image = profileImage {
-			userAvatar.image = image
-		}
+		userAvatar.image = viewModel.profileImage
         photosCount.text = "0"
-		friendName.text = friend.name
+		friendName.text = viewModel.friend.name
+		
+		viewModel.fetchPhotos { [weak self] in
+			guard let count = self?.viewModel.storedImages.count else {
+				return
+			}
+			self?.photosCount.text = String(count)
+			self?.collectionView.reloadData()
+		}
     }
 }
 
@@ -161,7 +154,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
 
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return storedImages.count
+		return viewModel.storedImages.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -169,11 +162,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
             return UICollectionViewCell()
         }
         
-		// загружаем картинки
-		loader.loadImage(url: storedImages[indexPath.item]) { image in
-			cell.configure(with: image)
-		}
-		
+		viewModel.configureCell(cell: cell, indexPath: indexPath)
         return cell
     }
     
@@ -190,9 +179,9 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = FullscreenViewController(loader: loader)
+		let vc = FullscreenViewController(loader: viewModel.loader)
         
-        vc.photoModels = storedModels
+		vc.photoModels = viewModel.storedModels
         vc.selectedPhoto = indexPath.item
         
         // переход на подробный просмотр
@@ -254,22 +243,6 @@ private extension FriendProfileViewController {
 			collectionView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
 		])
-	}
-	
-	/// Вызываем загрузку картинок, которые есть у пользователя
-	func loadFriends() {
-		loader.loadUserPhotos(for: String(friend.id)) { [weak self] images in
-			self?.photosCount.text = String(images.count)
-			self?.storedModels = images
-			
-			if let imagesLinks = self?.loader.sortImage(by: .m, from: images) {
-				self?.storedImages = imagesLinks
-				self?.photosCount.text = String(imagesLinks.count)
-			}
-			
-			// Обновляем таблицу свежими данными
-			self?.collectionView.reloadData()
-		}
 	}
 }
 
