@@ -136,7 +136,7 @@ private extension MyGroupsController {
 	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
-		let searchGroupsController = SearchGroupsController(model: SearchGroupsViewModel(loader: viewModel.loader))
+		let searchGroupsController = SearchGroupsController(model: Assembly.instance.searchGroupsViewModel)
 		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: false)
 	}

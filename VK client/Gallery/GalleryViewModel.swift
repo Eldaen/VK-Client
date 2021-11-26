@@ -32,6 +32,8 @@ protocol GalleryType {
 	
 	/// Получает ссылки на картинки нужного размера
 	func getStoredImages(size: Sizes.TypeEnum)
+	
+	init(loader: UserLoader, selectedPhoto: Int, images: [UserImages])
 }
 
 /// Вью модель для Gallery контроллера

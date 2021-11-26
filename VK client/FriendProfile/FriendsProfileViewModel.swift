@@ -30,6 +30,8 @@ protocol FriendsProfileViewModelType {
 	
 	/// Загружает картинки
 	func fetchPhotos(completion: @escaping () -> Void)
+	
+	init(friend: UserModel, loader: UserLoader, profileImage image: UIImage)
 }
 
 final class FriendsProfileViewModel: FriendsProfileViewModelType {
