@@ -113,6 +113,9 @@ class UserService: UserLoader {
 		}
 	}
 	
+	// MARK: - Пришлось устроить дублирование кода из-за Демо режима.
+	// До него всё было в экстеншне протокола Loader, но в демо не получается заменить эти функции, так что так
+	
 	/// Загружает картинку и возвращает её, если получилось
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
 		guard let url = URL(string: url) else { return }
@@ -143,7 +146,6 @@ class UserService: UserLoader {
 	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String] {
 		var imageLinks: [String] = []
 		
-		// выбираем из вариантов картинок картинки типа X
 		for model in array {
 			for size in model.sizes {
 				if size.type == sizeType {

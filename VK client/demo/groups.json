@@ -1,0 +1,37 @@
+[{
+	"id": 31480508,
+	"name": "Пикабу",
+	"screen_name": "pikabu",
+	"is_closed": 0,
+	"type": "page",
+	"is_admin": 0,
+	"is_member": 1,
+	"is_advertiser": 0,
+	"photo_50": "pepe-pirate",
+	"photo_100": "pepe-pirate",
+	"photo_200": "pepe-pirate"
+}, {
+	"id": 67991642,
+	"name": "Лента.ру",
+	"screen_name": "lentaru",
+	"is_closed": 0,
+	"type": "page",
+	"is_admin": 0,
+	"is_member": 1,
+	"is_advertiser": 0,
+	"photo_50": "pepe-dunno",
+	"photo_100": "pepe-dunno",
+	"photo_200": "pepe-dunno"
+}, {
+	"id": 33393308,
+	"name": "Стартапы и бизнес",
+	"screen_name": "vcru",
+	"is_closed": 0,
+	"type": "page",
+	"is_admin": 0,
+	"is_member": 1,
+	"is_advertiser": 0,
+	"photo_50": "pepe-like",
+	"photo_100": "pepe-like",
+	"photo_200": "pepe-like"
+}]

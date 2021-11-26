@@ -19,6 +19,7 @@
 		D03B18832750EDC200C483B3 /* Assembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18822750EDC200C483B3 /* Assembly.swift */; };
 		D03B18892751738D00C483B3 /* demoGroupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18882751738D00C483B3 /* demoGroupService.swift */; };
 		D03B188B275173B600C483B3 /* demoUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B188A275173B600C483B3 /* demoUserService.swift */; };
+		D03B188D275192BA00C483B3 /* groups.json in Resources */ = {isa = PBXBuildFile; fileRef = D03B188C275192BA00C483B3 /* groups.json */; };
 		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D05028E72749077F00F912EE /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05028E62749077F00F912EE /* BoolResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
@@ -79,6 +80,7 @@
 		D03B18822750EDC200C483B3 /* Assembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assembly.swift; sourceTree = "<group>"; };
 		D03B18882751738D00C483B3 /* demoGroupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoGroupService.swift; sourceTree = "<group>"; };
 		D03B188A275173B600C483B3 /* demoUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUserService.swift; sourceTree = "<group>"; };
+		D03B188C275192BA00C483B3 /* groups.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = groups.json; sourceTree = "<group>"; };
 		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D05028E62749077F00F912EE /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			children = (
 				D03B18882751738D00C483B3 /* demoGroupService.swift */,
 				D03B188A275173B600C483B3 /* demoUserService.swift */,
+				D03B188C275192BA00C483B3 /* groups.json */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D06313CD270B148000D0E12C /* Assets.xcassets in Resources */,
+				D03B188D275192BA00C483B3 /* groups.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

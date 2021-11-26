@@ -45,55 +45,55 @@ class demoUserService: UserLoader {
 		let images = [
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 			UserImages(sizes: [
 				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .s)
+				Sizes(url: "vasia", type: .m)
 			]),
 		]
 		completion(images)
@@ -110,7 +110,6 @@ class demoUserService: UserLoader {
 	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String] {
 		var imageLinks: [String] = []
 		
-		// выбираем из вариантов картинок картинки типа X
 		for model in array {
 			for size in model.sizes {
 				if size.type == sizeType {
