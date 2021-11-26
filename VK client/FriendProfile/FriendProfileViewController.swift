@@ -179,13 +179,16 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		let vc = FullscreenViewController(loader: viewModel.loader)
-        
-		vc.photoModels = viewModel.storedModels
-        vc.selectedPhoto = indexPath.item
+		let galleryController = GalleryViewController(
+			model: GalleryViewModel (
+				loader: viewModel.loader,
+				selectedPhoto: indexPath.item,
+				images: viewModel.storedModels
+			)
+		)
         
         // переход на подробный просмотр
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(galleryController, animated: true)
     }
 }
 
