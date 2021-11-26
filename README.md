@@ -12,7 +12,8 @@
 ![изображение](https://user-images.githubusercontent.com/13965776/143597407-a88e535c-7bb0-4f38-bb10-33c80098a5f9.png)
 ![изображение](https://user-images.githubusercontent.com/13965776/143597464-1f039172-ff20-469d-8b4e-ce2235a17568.png)
 ![изображение](https://user-images.githubusercontent.com/13965776/143597527-67403a2d-6f53-460a-b69e-6d7405ff9452.png)
-
+![изображение](https://user-images.githubusercontent.com/13965776/143597655-1b30fda5-b893-474e-ad63-32325aca5572.png)
+![изображение](https://user-images.githubusercontent.com/13965776/143597696-ca1b7503-2514-441a-babb-128990ab2b16.png)
 
 # Возможности
 - Авторизация через Webview вконтакте
