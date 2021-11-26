@@ -217,7 +217,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		let section = viewModel.filteredData[indexPath.section]
 		
 		let profileController = FriendProfileViewController(
-			model: Assembly.instance.friendProfileViewModel.init(
+			model: Assembly.instance.getFriendProfileViewModel(
 				friend: section.data[indexPath.row],
 				loader: viewModel.loader,
 				profileImage: cell.getImage()

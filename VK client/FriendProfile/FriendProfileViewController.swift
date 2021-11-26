@@ -180,7 +180,7 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let galleryController = GalleryViewController(
-			model: Assembly.instance.galleryViewModel.init(
+			model: Assembly.instance.getGalleryViewModel(
 				loader: viewModel.loader,
 				selectedPhoto: indexPath.item,
 				images: viewModel.storedModels
