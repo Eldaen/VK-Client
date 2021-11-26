@@ -10,11 +10,28 @@ import UIKit
 /// Конфиг зависимостей, ничего лучше синглтона не придумал
 /// Можно сделать чтение этого всего из конфига
 final class Assembly {
+	private var demoMode: Bool = false
+	
 	lazy var networkManager: NetworkManager = NetworkManager()
 	lazy var cacheService: ImageCache = ImageCacheService()
 	
-	lazy var userService: UserLoader = UserService(networkManager: networkManager, cache: cacheService)
-	lazy var groupsService: GroupsLoader = GroupsService(networkManager: networkManager, cache: cacheService)
+	// TODO: - Заменить на демо модели в блоке else
+	lazy var userService: UserLoader = {
+		if demoMode == false {
+			return UserService(networkManager: networkManager, cache: cacheService)
+		} else {
+			return UserService(networkManager: networkManager, cache: cacheService)
+		}
+	}()
+	
+	// TODO: - Заменить на демо модели в блоке else
+	lazy var groupsService: GroupsLoader = {
+		if demoMode == false {
+			return GroupsService(networkManager: networkManager, cache: cacheService)
+		} else {
+			return GroupsService(networkManager: networkManager, cache: cacheService)
+		}
+	}()
 	
 	lazy var myGroupsViewModel: MyGroupsViewModelType = MyGroupsViewModel(loader: groupsService)
 	lazy var searchGroupsViewModel: SearchGroupsViewModelType = SearchGroupsViewModel(loader: groupsService)
@@ -28,6 +45,11 @@ final class Assembly {
 	static let instance = Assembly()
 	
 	private init() {}
+	
+	/// Возможность включить Демо режим
+	func setDemoMode(_ state: Bool) {
+		self.demoMode = state
+	}
 	
 	/// геттер для класса переменной friendProfileViewModel
 	func getFriendProfileViewModel(
