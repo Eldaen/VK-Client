@@ -93,6 +93,10 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 			}
 		}
 	}
+	
+	func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+		return "Покинуть"
+	}
 }
 
 // MARK: - Nav bar configuration
