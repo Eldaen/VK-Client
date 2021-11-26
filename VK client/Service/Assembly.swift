@@ -15,21 +15,19 @@ final class Assembly {
 	lazy var networkManager: NetworkManager = NetworkManager()
 	lazy var cacheService: ImageCache = ImageCacheService()
 	
-	// TODO: - Заменить на демо модели в блоке else
 	lazy var userService: UserLoader = {
 		if demoMode == false {
 			return UserService(networkManager: networkManager, cache: cacheService)
 		} else {
-			return UserService(networkManager: networkManager, cache: cacheService)
+			return demoUserService(networkManager: networkManager, cache: cacheService)
 		}
 	}()
 	
-	// TODO: - Заменить на демо модели в блоке else
 	lazy var groupsService: GroupsLoader = {
 		if demoMode == false {
 			return GroupsService(networkManager: networkManager, cache: cacheService)
 		} else {
-			return GroupsService(networkManager: networkManager, cache: cacheService)
+			return demoGroupService(networkManager: networkManager, cache: cacheService)
 		}
 	}()
 	

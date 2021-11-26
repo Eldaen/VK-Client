@@ -17,6 +17,8 @@
 		D03B187D2750D39300C483B3 /* FriendsProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B187C2750D39300C483B3 /* FriendsProfileViewModel.swift */; };
 		D03B18802750DF3D00C483B3 /* GalleryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B187F2750DF3D00C483B3 /* GalleryViewModel.swift */; };
 		D03B18832750EDC200C483B3 /* Assembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18822750EDC200C483B3 /* Assembly.swift */; };
+		D03B18892751738D00C483B3 /* demoGroupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18882751738D00C483B3 /* demoGroupService.swift */; };
+		D03B188B275173B600C483B3 /* demoUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B188A275173B600C483B3 /* demoUserService.swift */; };
 		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D05028E72749077F00F912EE /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05028E62749077F00F912EE /* BoolResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
@@ -75,6 +77,8 @@
 		D03B187C2750D39300C483B3 /* FriendsProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsProfileViewModel.swift; sourceTree = "<group>"; };
 		D03B187F2750DF3D00C483B3 /* GalleryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewModel.swift; sourceTree = "<group>"; };
 		D03B18822750EDC200C483B3 /* Assembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assembly.swift; sourceTree = "<group>"; };
+		D03B18882751738D00C483B3 /* demoGroupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoGroupService.swift; sourceTree = "<group>"; };
+		D03B188A275173B600C483B3 /* demoUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUserService.swift; sourceTree = "<group>"; };
 		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D05028E62749077F00F912EE /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
@@ -167,6 +171,15 @@
 				D06313C5270B147E00D0E12C /* SceneDelegate.swift */,
 			);
 			path = common;
+			sourceTree = "<group>";
+		};
+		D03B18872751737A00C483B3 /* demo */ = {
+			isa = PBXGroup;
+			children = (
+				D03B18882751738D00C483B3 /* demoGroupService.swift */,
+				D03B188A275173B600C483B3 /* demoUserService.swift */,
+			);
+			path = demo;
 			sourceTree = "<group>";
 		};
 		D05028E82749087C00F912EE /* BasicModels */ = {
@@ -289,6 +302,7 @@
 		D06313C2270B147E00D0E12C /* VK client */ = {
 			isa = PBXGroup;
 			children = (
+				D03B18872751737A00C483B3 /* demo */,
 				D03B18812750EDA500C483B3 /* common */,
 				D0CB5638273E65EF00AE85DF /* Session */,
 				D050CD5A27241BAA0076D78E /* News */,
@@ -494,6 +508,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D03B18892751738D00C483B3 /* demoGroupService.swift in Sources */,
 				D0800D13272698BF00347AB7 /* NewsTableViewCellModel.swift in Sources */,
 				D03B1878274FAABB00C483B3 /* SearchGroupsViewModel.swift in Sources */,
 				D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */,
@@ -504,6 +519,7 @@
 				D050CD6627247A010076D78E /* NewsService.swift in Sources */,
 				D03B187A274FC5B200C483B3 /* FriendsViewModel.swift in Sources */,
 				D050CD142716E2990076D78E /* UserService.swift in Sources */,
+				D03B188B275173B600C483B3 /* demoUserService.swift in Sources */,
 				D0CB563C2743A5D200AE85DF /* VKLoginController.swift in Sources */,
 				D03B18802750DF3D00C483B3 /* GalleryViewModel.swift in Sources */,
 				D06313C8270B147E00D0E12C /* LoginController.swift in Sources */,
