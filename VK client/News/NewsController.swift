@@ -8,7 +8,7 @@
 import UIKit
 
 /// Контроллер новостей пользователя
-final class NewsController: UIViewController {
+final class NewsController: MyCustomUIViewController {
     
 	private let tableView: UITableView = {
 		let tableView = UITableView()

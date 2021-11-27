@@ -8,7 +8,7 @@
 import UIKit
 
 /// Отображает список всех пользователей
-final class FriendsViewController: UIViewController {
+final class FriendsViewController: MyCustomUIViewController {
 	
 	private let searchBar: UISearchBar = {
 		let searchBar = UISearchBar()

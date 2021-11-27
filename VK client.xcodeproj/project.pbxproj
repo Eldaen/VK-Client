@@ -20,6 +20,7 @@
 		D03B18892751738D00C483B3 /* demoGroupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18882751738D00C483B3 /* demoGroupService.swift */; };
 		D03B188B275173B600C483B3 /* demoUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B188A275173B600C483B3 /* demoUserService.swift */; };
 		D03B188D275192BA00C483B3 /* groups.json in Resources */ = {isa = PBXBuildFile; fileRef = D03B188C275192BA00C483B3 /* groups.json */; };
+		D03B18912752D7EB00C483B3 /* MyCustomUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18902752D7EB00C483B3 /* MyCustomUIViewController.swift */; };
 		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D05028E72749077F00F912EE /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05028E62749077F00F912EE /* BoolResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
@@ -81,6 +82,7 @@
 		D03B18882751738D00C483B3 /* demoGroupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoGroupService.swift; sourceTree = "<group>"; };
 		D03B188A275173B600C483B3 /* demoUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUserService.swift; sourceTree = "<group>"; };
 		D03B188C275192BA00C483B3 /* groups.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = groups.json; sourceTree = "<group>"; };
+		D03B18902752D7EB00C483B3 /* MyCustomUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomUIViewController.swift; sourceTree = "<group>"; };
 		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D05028E62749077F00F912EE /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +185,14 @@
 				D03B188C275192BA00C483B3 /* groups.json */,
 			);
 			path = demo;
+			sourceTree = "<group>";
+		};
+		D03B188F2752D7D400C483B3 /* CustomControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D03B18902752D7EB00C483B3 /* MyCustomUIViewController.swift */,
+			);
+			path = CustomControllers;
 			sourceTree = "<group>";
 		};
 		D05028E82749087C00F912EE /* BasicModels */ = {
@@ -305,6 +315,7 @@
 		D06313C2270B147E00D0E12C /* VK client */ = {
 			isa = PBXGroup;
 			children = (
+				D03B188F2752D7D400C483B3 /* CustomControllers */,
 				D03B18872751737A00C483B3 /* demo */,
 				D03B18812750EDA500C483B3 /* common */,
 				D0CB5638273E65EF00AE85DF /* Session */,
@@ -557,6 +568,7 @@
 				D03B1876274F94DB00C483B3 /* MyGroupsViewModel.swift in Sources */,
 				D03B187D2750D39300C483B3 /* FriendsProfileViewModel.swift in Sources */,
 				D06313C6270B147E00D0E12C /* SceneDelegate.swift in Sources */,
+				D03B18912752D7EB00C483B3 /* MyCustomUIViewController.swift in Sources */,
 				D03B1874274F850900C483B3 /* NewsViewModel.swift in Sources */,
 				D050CD1C271A07BA0076D78E /* LikeControl.swift in Sources */,
 				D0D2F0AB27478C53008E9AB4 /* Loader.swift in Sources */,
