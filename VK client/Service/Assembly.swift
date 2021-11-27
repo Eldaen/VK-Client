@@ -49,6 +49,11 @@ final class Assembly {
 		self.demoMode = state
 	}
 	
+	/// Возможность включить Демо режим
+	func getDemoMode() -> Bool {
+		self.demoMode
+	}
+	
 	/// геттер для класса переменной friendProfileViewModel
 	func getFriendProfileViewModel(
 		friend: UserModel,
