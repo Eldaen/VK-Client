@@ -93,6 +93,10 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 			}
 		}
 	}
+	
+	func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+		return "Покинуть"
+	}
 }
 
 // MARK: - Nav bar configuration
@@ -136,7 +140,7 @@ private extension MyGroupsController {
 	
 	/// Запускает переход на экран со всеми группами
 	@objc func addGroup() {
-		let searchGroupsController = SearchGroupsController(model: SearchGroupsViewModel(loader: viewModel.loader))
+		let searchGroupsController = SearchGroupsController(model: Assembly.instance.searchGroupsViewModel)
 		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: false)
 	}

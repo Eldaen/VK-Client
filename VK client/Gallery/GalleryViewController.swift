@@ -10,7 +10,7 @@ import UIKit
 // TODO: - Надо бы галерею в отдельный модуль вынести, а то что-то она в контроллере застряла с былых времён
 
 /// Класс для отображения карусели полноэкранного просмотра фотографий
-final class FullscreenViewController: UIViewController {
+final class GalleryViewController: UIViewController {
 	
 	private let galleryView: UIView = {
 		let view = UIView()
@@ -25,22 +25,11 @@ final class FullscreenViewController: UIViewController {
 		return progressView
 	}()
 	
-	lazy private var progress = Progress(totalUnitCount: Int64(photoViews.count))
+	lazy private var progress = Progress(totalUnitCount: Int64(viewModel.photoViews.count))
 	
-	/// Сервис по загрузке данных
-	private var loader: UserLoader
+	/// Вью модель для галереи
+	var viewModel: GalleryType
 	
-	/// Массив картинок пользователя
-	private var storedImages: [String] = []
-	
-	/// Массив моделей картинок, которые нужно отобразить в галерее
-	var photoModels: [UserImages] = []
-	
-	/// Массив вью для картинок
-	private var photoViews: [UIImageView] = []
-	
-	/// Номер фото, по которому кликнули и нужно на него в галерее поставить фокус
-	var selectedPhoto: Int = 0
 	
 	// Создаём три переменные, которые будут отвечать за то, что мы видим на экране и с чем взаимодействуем
 	private var leftImageView: UIImageView!
@@ -52,8 +41,8 @@ final class FullscreenViewController: UIViewController {
 	private var swipeToLeft: UIViewPropertyAnimator!
 	
 	// MARK: - Init
-	init(loader: UserLoader) {
-		self.loader = loader
+	init(model: GalleryType) {
+		self.viewModel = model
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -67,11 +56,11 @@ final class FullscreenViewController: UIViewController {
 		view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 		self.title = "Галерея"
 		
-		// Получаем ссылки на изображения нужного размера
-		storedImages = loader.sortImage(by: .x, from: photoModels)
+		//Получаем ссылки на картинки нужного размера
+		viewModel.getStoredImages(size: .x)
 		
 		// создаём вьюхи с картинками
-		createImageViews()
+		viewModel.createImageViews()
 		
 		// выставляем progress bar на нужное значение
 		self.updateProgress()
@@ -99,33 +88,33 @@ final class FullscreenViewController: UIViewController {
 }
 
 // MARK: - Private methods
-extension FullscreenViewController {
+extension GalleryViewController {
 	
 	// конфигурируем отображение
 	func setImage(){
-		var indexPhotoLeft = selectedPhoto - 1
-		let indexPhotoMid = selectedPhoto
-		var indexPhotoRight = selectedPhoto + 1
+		var indexPhotoLeft = viewModel.selectedPhoto - 1
+		let indexPhotoMid = viewModel.selectedPhoto
+		var indexPhotoRight = viewModel.selectedPhoto + 1
 		
 		// делаем круговую прокрутку, чтобы если левый индекс меньше 0, то его ставит последним
 		if indexPhotoLeft < 0 {
-			indexPhotoLeft = storedImages.count - 1
+			indexPhotoLeft = viewModel.storedImages.count - 1
 			
 		}
-		if indexPhotoRight > storedImages.count - 1 {
+		if indexPhotoRight > viewModel.storedImages.count - 1 {
 			indexPhotoRight = 0
 		}
 		
 		// запускаем загрузку картинок
-		loadImages(array: [indexPhotoLeft, indexPhotoMid, indexPhotoRight])
+		viewModel.fetchPhotos(array: [indexPhotoLeft, indexPhotoMid, indexPhotoRight])
 		
 		// чистим вьюхи, т.к. мы постоянно добавляем новые
 		galleryView.subviews.forEach({ $0.removeFromSuperview() })
 		
 		// Присваиваем видимым картинкам нужные вьюхи
-		leftImageView = photoViews[indexPhotoLeft]
-		middleImageView = photoViews[indexPhotoMid]
-		rightImageView = photoViews[indexPhotoRight]
+		leftImageView = viewModel.photoViews[indexPhotoLeft]
+		middleImageView = viewModel.photoViews[indexPhotoMid]
+		rightImageView = viewModel.photoViews[indexPhotoRight]
 		
 		galleryView.addSubview(leftImageView)
 		galleryView.addSubview(middleImageView)
@@ -204,9 +193,9 @@ extension FullscreenViewController {
 							self.rightImageView.transform = transform
 							self.leftImageView.transform = transform
 						}, completion: { [unowned self] _ in
-							self.selectedPhoto -= 1
-							if self.selectedPhoto < 0 {
-								self.selectedPhoto = self.storedImages.count - 1
+							self.viewModel.selectedPhoto -= 1
+							if self.viewModel.selectedPhoto < 0 {
+								self.viewModel.selectedPhoto = self.viewModel.storedImages.count - 1
 							}
 							self.updateProgress()
 							self.startAnimate()
@@ -227,9 +216,9 @@ extension FullscreenViewController {
 							self.rightImageView.transform = transform
 							self.leftImageView.transform = transform
 						}, completion: { [unowned self] _ in
-							self.selectedPhoto += 1
-							if self.selectedPhoto > self.storedImages.count - 1 {
-								self.selectedPhoto = 0
+							self.viewModel.selectedPhoto += 1
+							if self.viewModel.selectedPhoto > self.viewModel.storedImages.count - 1 {
+								self.viewModel.selectedPhoto = 0
 							}
 							self.updateProgress()
 							self.startAnimate()
@@ -251,18 +240,8 @@ extension FullscreenViewController {
 		}
 	}
 	
-	//  создаём массив вьюх с картинками для галлереи
-	func createImageViews() {
-		for _ in storedImages {
-			let view = UIImageView()
-			view.contentMode = .scaleAspectFit
-			
-			photoViews.append(view)
-		}
-	}
-	
 	func updateProgress() {
-		self.progress.completedUnitCount = Int64(selectedPhoto + 1)
+		self.progress.completedUnitCount = Int64(viewModel.selectedPhoto + 1)
 		self.progressView.setProgress(Float(self.progress.fractionCompleted), animated: true)
 	}
 	
@@ -288,15 +267,5 @@ extension FullscreenViewController {
 		
 		view.addSubview(galleryView)
 		view.addSubview(progressView)
-	}
-	
-	/// Загружаем картинки
-	func loadImages(array: [Int]) {
-		for index in array {
-			loader.loadImage(url: storedImages[index]) { [weak self] image in
-				self?.photoViews[index].image = image
-				self?.photoViews[index].layoutIfNeeded()
-			}
-		}
 	}
 }

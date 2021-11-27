@@ -214,11 +214,17 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 			return
 		}
 		
-		let profileController = FriendProfileViewController(loader: viewModel.loader)
 		let section = viewModel.filteredData[indexPath.section]
-		profileController.friend = section.data[indexPath.row]
-		profileController.profileImage = cell.getImage()
 		
+		let profileController = FriendProfileViewController(
+			model: Assembly.instance.getFriendProfileViewModel(
+				friend: section.data[indexPath.row],
+				loader: viewModel.loader,
+				profileImage: cell.getImage()
+			)
+		)
+		
+		self.tableView.deselectRow(at: indexPath, animated: true)
 		self.navigationController?.pushViewController(profileController, animated: true)
 	}
 }

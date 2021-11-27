@@ -16,7 +16,7 @@ protocol FriendsViewModelType {
 	/// Cписок друзей текущего пользователя, которые подходят под поисковой запрос
 	var filteredData: [FriendsSection] { get }
 	
-	/// Сервис по загрузке данных групп
+	/// Сервис по загрузке данных пользователей
 	var loader: UserLoader { get }
 	
 	/// Список букв для заголовков секций
@@ -53,7 +53,7 @@ final class FriendsViewModel: FriendsViewModelType {
 		let image = section.data[indexPath.row].image
 		
 		// конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage(named: image) ?? UIImage())
+		cell.configure(name: name, image: UIImage())
 		
 		// Ставим картинку на загрузку
 		loader.loadImage(url: image) { image in

@@ -69,7 +69,7 @@ final class NetworkManager {
 			
 			do {
 				let decodedData = try strongSelf.decoder.decode(T.self, from: data)
-				return completionOnMain(.success(decodedData))
+				completionOnMain(.success(decodedData))
 			} catch {
 				print(error)
 				completionOnMain(.failure(error))

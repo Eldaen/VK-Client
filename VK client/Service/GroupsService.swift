@@ -5,6 +5,8 @@
 //  Created by Денис Сизов on 13.10.2021.
 //
 
+import UIKit.UIImage
+
 protocol GroupsLoader: Loader {
 	func loadGroups(completion: @escaping ([GroupModel]) -> Void)
 	func searchGroups(with query: String, completion: @escaping ([GroupModel]) -> Void)
@@ -100,5 +102,48 @@ class GroupsService: GroupsLoader {
 				debugPrint("Error: \(error.localizedDescription)")
 			}
 		}
+	}
+	
+	// MARK: - Пришлось устроить дублирование кода из-за Демо режима.
+	// До него всё было в экстеншне протокола Loader, но в демо не получается заменить эти функции, так что так
+	
+	/// Загружает картинку и возвращает её, если получилось
+	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
+		guard let url = URL(string: url) else { return }
+		
+		// если есть в кэше, то грузить не нужно
+		if let image = cache[url] {
+			completion(image)
+		}
+		
+		networkManager.loadImage(url: url) { [weak self] result in
+			switch result {
+			case .success(let data):
+				guard let image = UIImage(data: data) else {
+					return
+				}
+				
+				// Если пришлось загружать, то добавим в кэш
+				self?.cache[url] = image
+				
+				completion(image)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
+	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String] {
+		var imageLinks: [String] = []
+		
+		for model in array {
+			for size in model.sizes {
+				if size.type == sizeType {
+					imageLinks.append(size.url)
+				}
+			}
+		}
+		return imageLinks
 	}
 }
