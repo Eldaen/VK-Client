@@ -17,8 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		window = UIWindow(frame: windowScene.coordinateSpace.bounds)
 		window?.windowScene = windowScene
 		
-		Assembly.instance.setDemoMode(true)
-		
 		let navigationController = UINavigationController()
 		window?.rootViewController = navigationController
 

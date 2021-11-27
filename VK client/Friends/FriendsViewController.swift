@@ -224,6 +224,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 			)
 		)
 		
+		self.tableView.deselectRow(at: indexPath, animated: true)
 		self.navigationController?.pushViewController(profileController, animated: true)
 	}
 }

@@ -86,6 +86,7 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 			} else {
 				self?.showJoiningError()
 			}
+			self?.tableView.deselectRow(at: indexPath, animated: true)
 		}
 	}
 }

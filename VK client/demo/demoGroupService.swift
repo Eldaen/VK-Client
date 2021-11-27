@@ -9,7 +9,7 @@ import UIKit.UIImage
 
 class demoGroupService: GroupsLoader {
 	
-	let groups: [GroupModel] = []
+	var groups: [GroupModel] = []
 	
 	var networkManager: NetworkManager
 	var cache: ImageCache
@@ -26,6 +26,7 @@ class demoGroupService: GroupsLoader {
 			do {
 				let contents = try Data(contentsOf: URL(fileURLWithPath: filepath))
 				let decodedData = try JSONDecoder().decode([GroupModel].self, from: contents)
+				groups = decodedData
 				completion(decodedData)
 			} catch {
 				print(error)
@@ -51,11 +52,11 @@ class demoGroupService: GroupsLoader {
 	}
 	
 	func joinGroup(id: Int, completion: @escaping (Int) -> Void) {
-		
+		completion(1)
 	}
 	
 	func leaveGroup(id: Int, completion: @escaping (Int) -> Void) {
-		
+		completion(1)
 	}
 	
 

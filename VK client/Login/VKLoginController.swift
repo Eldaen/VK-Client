@@ -7,6 +7,7 @@
 
 import WebKit
 import UIKit
+import SwiftUI
 
 final class VKLoginController: UIViewController {
 	
@@ -16,8 +17,22 @@ final class VKLoginController: UIViewController {
 		return view
 	}()
 	
+	private let demoButton: UIButton = {
+		var configuration = UIButton.Configuration.filled()
+		configuration.title = "Demo режим"
+		configuration.titlePadding = 10
+		configuration.titleAlignment = .center
+		configuration.baseBackgroundColor = .orange
+		let button = UIButton(configuration: configuration, primaryAction: nil)
+		
+		button.setTitleColor(.black, for: .normal)
+		button.layer.cornerRadius = 8
+		button.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}()
+	
 	/// Контроллер, на который перекинет при успешной авторизации
-	private let nextController: UITabBarController = CustomTabBarController()
+	private lazy var nextController: UITabBarController = CustomTabBarController()
 	
 	// MARK: - View controller life cycle
 	// заменяем стандартную вьюху
@@ -28,25 +43,10 @@ final class VKLoginController: UIViewController {
 	override func viewDidLoad() {
 		navigationController?.isNavigationBarHidden = true
 		configureWebView()
-		
-		// TODO: вынести в отдельный сервис
-		var urlComponents = URLComponents()
-		urlComponents.scheme = "https"
-		urlComponents.host = "oauth.vk.com"
-		urlComponents.path = "/authorize"
-		urlComponents.queryItems = [
-			URLQueryItem(name: "client_id", value: "8002318"),
-			URLQueryItem(name: "display", value: "mobile"),
-			URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
-			URLQueryItem(name: "scope", value: "262150"),
-			URLQueryItem(name: "response_type", value: "token"),
-			URLQueryItem(name: "v", value: "5.68")
-		]
-		
-		let request = URLRequest(url: urlComponents.url!)
-		//
-		
-		vkWebView.load(request)
+		configureDemoButton()
+		setupConstraints()
+		removeCookies()
+		loadAuth()
 	}
 }
 
@@ -87,5 +87,53 @@ extension VKLoginController: WKNavigationDelegate {
 		}
 		
 		decisionHandler(.cancel)
+	}
+}
+
+// MARK: - Private methods
+private extension VKLoginController {
+	func setupConstraints() {
+		NSLayoutConstraint.activate([
+			demoButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -40),
+			demoButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+		])
+	}
+	
+	func removeCookies(){
+		let cookieJar = HTTPCookieStorage.shared
+
+		for cookie in cookieJar.cookies! {
+			cookieJar.deleteCookie(cookie)
+		}
+	}
+	
+	func loadAuth() {
+		var urlComponents = URLComponents()
+		urlComponents.scheme = "https"
+		urlComponents.host = "oauth.vk.com"
+		urlComponents.path = "/authorize"
+		urlComponents.queryItems = [
+			URLQueryItem(name: "client_id", value: "8002318"),
+			URLQueryItem(name: "display", value: "mobile"),
+			URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
+			URLQueryItem(name: "scope", value: "262150"),
+			URLQueryItem(name: "response_type", value: "token"),
+			URLQueryItem(name: "v", value: "5.68")
+		]
+		
+		let request = URLRequest(url: urlComponents.url!)
+		//
+		
+		vkWebView.load(request)
+	}
+	
+	func configureDemoButton() {
+		self.view.addSubview(demoButton)
+		demoButton.addTarget(self, action: #selector(demoOn), for: .touchUpInside)
+	}
+	
+	@objc func demoOn () {
+		Assembly.instance.setDemoMode(true)
+		self.navigationController?.pushViewController(nextController, animated: true)
 	}
 }
