@@ -20,12 +20,15 @@ final class CustomTabBarController: UITabBarController {
 	/// Cоздаём и конфигурируем Navigation Контроллеры, которые будут отображены в табах
 	private func setupVCs() {
 		
+		let groupsVM = Assembly.instance.myGroupsViewModel
+		let friendsVM = Assembly.instance.friendsViewModel
+		
 		let myGroups = createNavController(for: MyGroupsController(
-			model: Assembly.instance.myGroupsViewModel),
+			model: groupsVM),
 								  title: "Мои группы", image: UIImage(systemName: "person.3")!)
 		
 		let friends = createNavController(for: FriendsViewController(
-			model: Assembly.instance.friendsViewModel),
+			model: friendsVM),
 								  title: "Друзья", image: UIImage(systemName: "person")!)
 		
 		let news = createNavController(for: NewsController(model: NewsViewModel()),

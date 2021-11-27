@@ -18,25 +18,9 @@ final class Assembly {
 	var userService: UserLoader
 	var groupsService: GroupsLoader
 	
-//	var userService: UserLoader = {
-//		if demoMode == false {
-//			return UserService(networkManager: networkManager, cache: cacheService)
-//		} else {
-//			return demoUserService(networkManager: networkManager, cache: cacheService)
-//		}
-//	}()
-//
-//	var groupsService: GroupsLoader = {
-//		if demoMode == false {
-//			return GroupsService(networkManager: networkManager, cache: cacheService)
-//		} else {
-//			return demoGroupService(networkManager: networkManager, cache: cacheService)
-//		}
-//	}()
-	
-	lazy var myGroupsViewModel: MyGroupsViewModelType = MyGroupsViewModel(loader: groupsService)
-	lazy var searchGroupsViewModel: SearchGroupsViewModelType = SearchGroupsViewModel(loader: groupsService)
-	lazy var friendsViewModel: FriendsViewModelType = FriendsViewModel(loader: userService)
+	var myGroupsViewModel: MyGroupsViewModelType
+	var searchGroupsViewModel: SearchGroupsViewModelType
+	var friendsViewModel: FriendsViewModelType
 	
 	// Вот тут у нас только тип, т.к. там через инициализаторы передаются данные при переходе
 	var friendProfileViewModel: FriendsProfileViewModelType.Type = FriendsProfileViewModel.self
@@ -52,8 +36,15 @@ final class Assembly {
 		let network = NetworkManager()
 		self.networkManager = network
 		
-		self.userService = UserService(networkManager: network, cache: cache)
-		self.groupsService = GroupsService(networkManager: network, cache: cache)
+		let userService = UserService(networkManager: network, cache: cache)
+		self.userService = userService
+		
+		let groupsService = GroupsService(networkManager: network, cache: cache)
+		self.groupsService = groupsService
+		
+		self.myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
+		self.searchGroupsViewModel = SearchGroupsViewModel(loader: groupsService)
+		self.friendsViewModel = FriendsViewModel(loader: userService)
 	}
 	
 	/// Возможность включить Демо режим
@@ -67,6 +58,10 @@ final class Assembly {
 			userService = UserService(networkManager: networkManager, cache: cacheService)
 			groupsService = GroupsService(networkManager: networkManager, cache: cacheService)
 		}
+		
+		myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
+		searchGroupsViewModel = SearchGroupsViewModel(loader: groupsService)
+		friendsViewModel = FriendsViewModel(loader: userService)
 	}
 	
 	/// Возможность включить Демо режим
