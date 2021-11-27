@@ -97,6 +97,10 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
 		return "Покинуть"
 	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.tableView.deselectRow(at: indexPath, animated: true)
+	}
 }
 
 // MARK: - Nav bar configuration

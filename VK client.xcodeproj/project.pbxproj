@@ -190,6 +190,7 @@
 		D03B188F2752D7D400C483B3 /* CustomControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D080897C2735500000A6394B /* CustomTabBarController.swift */,
 				D03B18902752D7EB00C483B3 /* MyCustomUIViewController.swift */,
 			);
 			path = CustomControllers;
@@ -364,7 +365,6 @@
 		D08132142710719B00A280B0 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				D080897C2735500000A6394B /* CustomTabBarController.swift */,
 				D0615C8E27352C400098F5D7 /* Views */,
 				D06313C7270B147E00D0E12C /* LoginController.swift */,
 				D0CB563B2743A5D200AE85DF /* VKLoginController.swift */,

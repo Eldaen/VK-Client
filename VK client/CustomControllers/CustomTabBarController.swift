@@ -31,7 +31,6 @@ final class CustomTabBarController: UITabBarController {
 		let news = createNavController(for: NewsController(model: NewsViewModel()),
 										  title: "Новости", image: UIImage(systemName: "newspaper")!)
 		
-		
 		viewControllers = [myGroups, friends, news]
 	}
 	

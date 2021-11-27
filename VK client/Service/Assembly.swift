@@ -12,24 +12,27 @@ import UIKit
 final class Assembly {
 	private var demoMode: Bool = false
 	
-	lazy var networkManager: NetworkManager = NetworkManager()
-	lazy var cacheService: ImageCache = ImageCacheService()
+	var networkManager: NetworkManager
+	var cacheService: ImageCache
 	
-	lazy var userService: UserLoader = {
-		if demoMode == false {
-			return UserService(networkManager: networkManager, cache: cacheService)
-		} else {
-			return demoUserService(networkManager: networkManager, cache: cacheService)
-		}
-	}()
+	var userService: UserLoader
+	var groupsService: GroupsLoader
 	
-	lazy var groupsService: GroupsLoader = {
-		if demoMode == false {
-			return GroupsService(networkManager: networkManager, cache: cacheService)
-		} else {
-			return demoGroupService(networkManager: networkManager, cache: cacheService)
-		}
-	}()
+//	var userService: UserLoader = {
+//		if demoMode == false {
+//			return UserService(networkManager: networkManager, cache: cacheService)
+//		} else {
+//			return demoUserService(networkManager: networkManager, cache: cacheService)
+//		}
+//	}()
+//
+//	var groupsService: GroupsLoader = {
+//		if demoMode == false {
+//			return GroupsService(networkManager: networkManager, cache: cacheService)
+//		} else {
+//			return demoGroupService(networkManager: networkManager, cache: cacheService)
+//		}
+//	}()
 	
 	lazy var myGroupsViewModel: MyGroupsViewModelType = MyGroupsViewModel(loader: groupsService)
 	lazy var searchGroupsViewModel: SearchGroupsViewModelType = SearchGroupsViewModel(loader: groupsService)
@@ -42,11 +45,28 @@ final class Assembly {
 	///  Инстанс синглтона Assembly
 	static let instance = Assembly()
 	
-	private init() {}
+	private init() {
+		let cache = ImageCacheService()
+		self.cacheService = cache
+		
+		let network = NetworkManager()
+		self.networkManager = network
+		
+		self.userService = UserService(networkManager: network, cache: cache)
+		self.groupsService = GroupsService(networkManager: network, cache: cache)
+	}
 	
 	/// Возможность включить Демо режим
 	func setDemoMode(_ state: Bool) {
 		self.demoMode = state
+		
+		if demoMode == true {
+			userService = demoUserService(networkManager: networkManager, cache: cacheService)
+			groupsService = demoGroupService(networkManager: networkManager, cache: cacheService)
+		} else {
+			userService = UserService(networkManager: networkManager, cache: cacheService)
+			groupsService = GroupsService(networkManager: networkManager, cache: cacheService)
+		}
 	}
 	
 	/// Возможность включить Демо режим

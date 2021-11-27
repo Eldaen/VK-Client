@@ -44,6 +44,10 @@ private extension MyCustomUIViewController {
 		let navigationController = UINavigationController(rootViewController: loginController)
 		navigationController.modalPresentationStyle = .fullScreen
 		
+		if Assembly.instance.getDemoMode() == true {
+			Assembly.instance.setDemoMode(false)
+		}
+		
 		Session.instance.clean()
 		self.present(navigationController, animated: true, completion: nil)
 	}
