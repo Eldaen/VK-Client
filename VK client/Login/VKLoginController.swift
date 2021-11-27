@@ -134,6 +134,6 @@ private extension VKLoginController {
 	
 	@objc func demoOn () {
 		Assembly.instance.setDemoMode(true)
-		self.navigationController?.pushViewController(nextController, animated: true)
+		self.navigationController?.pushViewController(LoginController(), animated: true)
 	}
 }
