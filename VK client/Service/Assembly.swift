@@ -7,33 +7,20 @@
 
 import UIKit
 
-/// Конфиг зависимостей, ничего лучше синглтона не придумал
+/// Сборщик зависимостей, ничего лучше синглтона не придумал
 /// Можно сделать чтение этого всего из конфига
 final class Assembly {
 	private var demoMode: Bool = false
 	
-	lazy var networkManager: NetworkManager = NetworkManager()
-	lazy var cacheService: ImageCache = ImageCacheService()
+	var networkManager: NetworkManager
+	var cacheService: ImageCache
 	
-	lazy var userService: UserLoader = {
-		if demoMode == false {
-			return UserService(networkManager: networkManager, cache: cacheService)
-		} else {
-			return demoUserService(networkManager: networkManager, cache: cacheService)
-		}
-	}()
+	var userService: UserLoader
+	var groupsService: GroupsLoader
 	
-	lazy var groupsService: GroupsLoader = {
-		if demoMode == false {
-			return GroupsService(networkManager: networkManager, cache: cacheService)
-		} else {
-			return demoGroupService(networkManager: networkManager, cache: cacheService)
-		}
-	}()
-	
-	lazy var myGroupsViewModel: MyGroupsViewModelType = MyGroupsViewModel(loader: groupsService)
-	lazy var searchGroupsViewModel: SearchGroupsViewModelType = SearchGroupsViewModel(loader: groupsService)
-	lazy var friendsViewModel: FriendsViewModelType = FriendsViewModel(loader: userService)
+	var myGroupsViewModel: MyGroupsViewModelType
+	var searchGroupsViewModel: SearchGroupsViewModelType
+	var friendsViewModel: FriendsViewModelType
 	
 	// Вот тут у нас только тип, т.к. там через инициализаторы передаются данные при переходе
 	var friendProfileViewModel: FriendsProfileViewModelType.Type = FriendsProfileViewModel.self
@@ -42,11 +29,39 @@ final class Assembly {
 	///  Инстанс синглтона Assembly
 	static let instance = Assembly()
 	
-	private init() {}
+	private init() {
+		let cache = ImageCacheService()
+		self.cacheService = cache
+		
+		let network = NetworkManager()
+		self.networkManager = network
+		
+		let userService = UserService(networkManager: network, cache: cache)
+		self.userService = userService
+		
+		let groupsService = GroupsService(networkManager: network, cache: cache)
+		self.groupsService = groupsService
+		
+		self.myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
+		self.searchGroupsViewModel = SearchGroupsViewModel(loader: groupsService)
+		self.friendsViewModel = FriendsViewModel(loader: userService)
+	}
 	
 	/// Возможность включить Демо режим
 	func setDemoMode(_ state: Bool) {
 		self.demoMode = state
+		
+		if demoMode == true {
+			userService = demoUserService(networkManager: networkManager, cache: cacheService)
+			groupsService = demoGroupService(networkManager: networkManager, cache: cacheService)
+		} else {
+			userService = UserService(networkManager: networkManager, cache: cacheService)
+			groupsService = GroupsService(networkManager: networkManager, cache: cacheService)
+		}
+		
+		myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
+		searchGroupsViewModel = SearchGroupsViewModel(loader: groupsService)
+		friendsViewModel = FriendsViewModel(loader: userService)
 	}
 	
 	/// Возможность включить Демо режим

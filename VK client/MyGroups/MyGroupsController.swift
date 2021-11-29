@@ -13,7 +13,7 @@ protocol MyGroupsDelegate: AnyObject {
 }
 
 /// Контроллер списка групп, в которых состоит пользователь
-final class MyGroupsController: UIViewController {
+final class MyGroupsController: MyCustomUIViewController {
     
 	/// Вью модель контроллера MyGroups
 	private var viewModel: MyGroupsViewModelType
@@ -97,6 +97,10 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
 		return "Покинуть"
 	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.tableView.deselectRow(at: indexPath, animated: true)
+	}
 }
 
 // MARK: - Nav bar configuration
@@ -113,15 +117,6 @@ private extension MyGroupsController {
 		)
 		add.tintColor = .black
 		navigationItem.rightBarButtonItem = add
-		
-			let logout = UIBarButtonItem(
-				title: "Logout",
-				style: .plain,
-				target: self,
-				action: #selector(logout)
-			)
-			logout.tintColor = .black
-			navigationItem.leftBarButtonItem = logout
 	}
 	
 	// Конфигурируем ячейку
@@ -152,33 +147,6 @@ private extension MyGroupsController {
 		let searchGroupsController = SearchGroupsController(model: Assembly.instance.searchGroupsViewModel)
 		searchGroupsController.delegate = self
 		navigationController?.pushViewController(searchGroupsController, animated: false)
-	}
-	
-	/// Выходит из демо режима или разлогинивает пользователя
-	@objc func logout() {
-		// Создаём контроллер
-		let alter = UIAlertController(title: "Выход",
-									  message: "Вы уверены что хотите выйти?", preferredStyle: .alert)
-		
-		let actionYes = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
-			let loginController = VKLoginController()
-			let navController = UINavigationController(rootViewController: loginController)
-			navController.modalPresentationStyle = .fullScreen
-			
-			// чистим куки авторизации, если мы не из демо режима выходим
-			if Assembly.instance.getDemoMode() == false {
-				Session.instance.clean()
-			}
-			
-			self?.present(navController, animated: true, completion: nil)
-		}
-		
-		let actionCancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-		
-		alter.addAction(actionYes)
-		alter.addAction(actionCancel)
-		
-		present(alter, animated: true, completion: nil)
 	}
 	
 	/// Отображение ошибки о том, что не удалось выйти из группы
