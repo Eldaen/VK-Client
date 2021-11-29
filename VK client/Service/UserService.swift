@@ -81,12 +81,27 @@ class UserService: UserLoader {
 			"fields" : "photo_100",
 		]
 		
+		var friends: [UserModel] = []
+		
+		persistence.read(UserModel.self) { result in
+			friends = Array(result)
+		}
+		
+		if !friends.isEmpty {
+			let sections = formFriendsArray(from: friends)
+			completion(sections)
+			return
+		}
+		
 		networkManager.request(method: .friendsGet,
 							   httpMethod: .get,
 							   params: params) { [weak self] (result: Result<VkFriendsMainResponse, Error>) in
 			switch result {
 			case .success(let friendsResponse):
-				guard let sections = self?.formFriendsArray(from: friendsResponse.response.items) else {
+				let friends = friendsResponse.response.items
+				self?.persistence.create(friends) { _ in }
+				
+				guard let sections = self?.formFriendsArray(from: friends) else {
 					return
 				}
 				completion(sections)
@@ -127,15 +142,14 @@ class UserService: UserLoader {
 			completion(image)
 		}
 		
-		let model = ImageModel()
-		persistence.read(model, key: url) { result in
-			switch result {
-			case .success(let image):
-				completion(image.image)
-			case .failure(_):
-				break
-			}
-		}
+//		persistence.read(ImageModel.Type, key: url) { result in
+//			switch result {
+//			case .success(let image):
+//				completion(image.image)
+//			case .failure(_):
+//				break
+//			}
+//		}
 		
 		networkManager.loadImage(url: imageUrl) { [weak self] result in
 			switch result {
@@ -147,10 +161,10 @@ class UserService: UserLoader {
 				// Если пришлось загружать, то добавим в кэш
 				self?.cache[imageUrl] = image
 				
-				// В БД тоже добавим
-				model.url = url
-				model.image = image
-				self?.persistence.create(model) {_ in}
+//				// В БД тоже добавим
+//				model.url = url
+//				model.image = image
+//				self?.persistence.create(model) {_ in}
 				
 				completion(image)
 			case .failure(let error):

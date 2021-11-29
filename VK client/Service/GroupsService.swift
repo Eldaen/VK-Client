@@ -35,11 +35,25 @@ class GroupsService: GroupsLoader {
 			"extended" : "1",
 		]
 		
+		var groups: [GroupModel] = []
+		
+		persistence.read(GroupModel.self) { result in
+			groups = Array(result)
+		}
+		
+		if !groups.isEmpty {
+			completion(groups)
+			return
+		}
+		
 		networkManager.request(method: .groupsGet,
 							   httpMethod: .get,
-							   params: params) { (result: Result<GroupsMyMainResponse, Error>) in
+							   params: params) { [weak self] (result: Result<GroupsMyMainResponse, Error>) in
 			switch result {
 			case .success(let groupsResponse):
+				let items = groupsResponse.response.items
+				self?.persistence.create(items) { _ in }
+				
 				completion(groupsResponse.response.items)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
@@ -118,15 +132,15 @@ class GroupsService: GroupsLoader {
 			completion(image)
 		}
 		
-		let model = ImageModel()
-		persistence.read(model, key: url) { result in
-			switch result {
-			case .success(let image):
-				completion(image.image)
-			case .failure(_):
-				break
-			}
-		}
+//		let model = ImageModel()
+//		persistence.read(model, key: url) { result in
+//			switch result {
+//			case .success(let image):
+//				completion(image.image)
+//			case .failure(_):
+//				break
+//			}
+//		}
 		
 		networkManager.loadImage(url: imageUrl) { [weak self] result in
 			switch result {
@@ -138,10 +152,10 @@ class GroupsService: GroupsLoader {
 				// Если пришлось загружать, то добавим в кэш
 				self?.cache[imageUrl] = image
 				
-				// В БД тоже добавим
-				model.url = url
-				model.image = image
-				self?.persistence.create(model) {_ in}
+//				// В БД тоже добавим
+//				model.url = url
+//				model.image = image
+//				self?.persistence.create(model) {_ in}
 				
 				completion(image)
 			case .failure(let error):

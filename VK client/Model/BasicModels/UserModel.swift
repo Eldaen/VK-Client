@@ -9,9 +9,9 @@ import RealmSwift
 
 /// Модель пользователя
 class UserModel: Object, Codable {
-    @objc dynamic var name: String
-	@objc dynamic var image: String
-	@objc dynamic var id: Int
+	@objc dynamic var name: String = ""
+	@objc dynamic var image: String = ""
+	@objc dynamic var id: Int = 0
 	
 	/// Перечисление соответствия полям в АПИ к полям в нашей модели
 	enum CodingKeys: String, CodingKey {
