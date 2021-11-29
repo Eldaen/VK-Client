@@ -14,13 +14,15 @@ protocol PersistenceManager {
 	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
 	
 	/// Читает запись из БД
-	func read<T: Object>(_ object: T, completion: @escaping (Result<[T], Error>) -> Void)
+	func read<T: Object>(_ object: T, key: String, completion: @escaping (Result<[T], Error>) -> Void)
 	
 	/// Обновляет запись в БД
 	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
 	
 	/// Удаляет запись из БД
-	func delete()
+	func deleteOne<T: Object>(_ object: T, key: String, completion: @escaping (Result<Bool, Error>) -> Void)
+	
+	func deleteAllByType<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 /// Cервис по работе с Realm
@@ -44,22 +46,29 @@ final class RealmService: PersistenceManager {
 	}
 	
 	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
-	
-		DispatchQueue.main.async { [weak self] in
-			do {
-				self?.realm.add(object)
-				try self?.realm.commitWrite()
-				completion(.success(true))
-			} catch {
-				completion(.failure(error))
-			}
+		
+		do {
+			realm.beginWrite()
+			realm.add(object)
+			try realm.commitWrite()
+			completion(.success(true))
+		} catch {
+			completion(.failure(error))
 		}
 	}
 	
-	func read<T: Object>(_ object: T, completion: @escaping (Result<[T], Error>) -> Void) {
+	func read<T: Object>(_ object: T, key: String = "", completion: @escaping (Result<[T], Error>) -> Void) {
 		
-		let result = realm.objects(T.self)
-		let objects = Array(result)
+		var objects: [T] = []
+		
+		if object.objectSchema.primaryKeyProperty == nil {
+			let result = realm.objects(T.self)
+			objects = Array(result)
+		} else {
+			if let result = realm.object(ofType: T.self, forPrimaryKey: key) {
+				objects.append(result)
+			}
+		}
 		
 		completion(.success(objects))
 	}
@@ -67,21 +76,46 @@ final class RealmService: PersistenceManager {
 	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
 		
 		if object.objectSchema.primaryKeyProperty == nil {
-				completion(.failure(errors.noPrimaryKeys("This model does not have a primary key")))
+			completion(.failure(errors.noPrimaryKeys("This model does not have a primary key")))
 		}
-	
-		DispatchQueue.main.async { [weak self] in
-			do {
-				self?.realm.add(object, update: .modified)
-				try self?.realm.commitWrite()
-				completion(.success(true))
-			} catch {
-				completion(.failure(error))
-			}
+		
+		do {
+			realm.beginWrite()
+			realm.add(object, update: .modified)
+			try realm.commitWrite()
+			completion(.success(true))
+		} catch {
+			completion(.failure(error))
 		}
 	}
 	
-	func delete() {
+	func deleteOne<T: Object>(_ object: T, key: String, completion: @escaping (Result<Bool, Error>) -> Void) {
 		
+		guard let object = realm.objects(T.self).filter("code = %@", key).first else {
+			completion(.failure(errors.noRealmObject("There is no such object")))
+			return
+		}
+		
+		do {
+			realm.beginWrite()
+			realm.delete(object)
+			try realm.commitWrite()
+			completion(.success(true))
+		} catch {
+			completion(.failure(error))
+		}
+	}
+	
+	func deleteAllByType<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
+		let oldData = realm.objects(T.self)
+		
+		do {
+			realm.beginWrite()
+			realm.delete(oldData)
+			try realm.commitWrite()
+			completion(.success(true))
+		} catch {
+			completion(.failure(error))
+		}
 	}
 }
