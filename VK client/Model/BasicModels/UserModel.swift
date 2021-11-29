@@ -9,9 +9,9 @@ import RealmSwift
 
 /// Модель пользователя
 class UserModel: Object, Codable {
-    @objc dynamic let name: String
-	@objc dynamic let image: String
-	@objc dynamic let id: Int
+    @objc dynamic var name: String
+	@objc dynamic var image: String
+	@objc dynamic var id: Int
 	
 	/// Перечисление соответствия полям в АПИ к полям в нашей модели
 	enum CodingKeys: String, CodingKey {
@@ -20,9 +20,11 @@ class UserModel: Object, Codable {
 		case id
 	}
 	
-	init(name: String, image: String, id: Int) {
-		self.name = name
-		self.image = image
-		self.id = id
+	override static func primaryKey() -> String? {
+		return "id"
+	}
+	
+	override static func indexedProperties() -> [String] {
+		return ["name", "image"]
 	}
 }

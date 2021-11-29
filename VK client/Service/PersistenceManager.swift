@@ -11,13 +11,13 @@ import RealmSwift
 protocol PersistenceManager {
 	
 	/// Добавляет запись в БД
-	func create<T: Object>(_ object: T, completion: @escaping (Bool) -> Void)
+	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
 	
 	/// Читает запись из БД
-	func read()
+	func read<T: Object>(_ object: T, completion: @escaping (Result<[T], Error>) -> Void)
 	
 	/// Обновляет запись в БД
-	func update()
+	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
 	
 	/// Удаляет запись из БД
 	func delete()
@@ -26,52 +26,62 @@ protocol PersistenceManager {
 /// Cервис по работе с Realm
 final class RealmService: PersistenceManager {
 	
+	enum errors: Error {
+		case noRealmObject(String)
+		case noPrimaryKeys(String)
+	}
+	
 	/// Объект хранилища
-	var realm: Realm?
+	var realm: Realm
 	
 	init() {
-		createContainer()
-	}
-	
-	func create<T: Object>(_ object: T, completion: @escaping (Bool) -> Void) {
-		guard let realm = realm else {
-			completion(false)
-			return
-		}
-	
-		do {
-			realm.add(object)
-			try realm.commitWrite()
-			completion(true)
-		} catch {
-			print(error)
-			completion(false)
-		}
-	}
-	
-	func read() {
-		
-	}
-	
-	func update() {
-		
-	}
-	
-	func delete() {
-		
-	}
-}
-
-// MARK: Private methods
-private extension RealmService {
-	
-	/// Cоздаёт контейнер Realm
-	func createContainer() {
 		do {
 			let realm = try Realm()
 			self.realm = realm
 		} catch {
-			return
+			fatalError("Can't create Realm object")
 		}
+	}
+	
+	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
+	
+		DispatchQueue.main.async { [weak self] in
+			do {
+				self?.realm.add(object)
+				try self?.realm.commitWrite()
+				completion(.success(true))
+			} catch {
+				completion(.failure(error))
+			}
+		}
+	}
+	
+	func read<T: Object>(_ object: T, completion: @escaping (Result<[T], Error>) -> Void) {
+		
+		let result = realm.objects(T.self)
+		let objects = Array(result)
+		
+		completion(.success(objects))
+	}
+	
+	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
+		
+		if object.objectSchema.primaryKeyProperty == nil {
+				completion(.failure(errors.noPrimaryKeys("This model does not have a primary key")))
+		}
+	
+		DispatchQueue.main.async { [weak self] in
+			do {
+				self?.realm.add(object, update: .modified)
+				try self?.realm.commitWrite()
+				completion(.success(true))
+			} catch {
+				completion(.failure(error))
+			}
+		}
+	}
+	
+	func delete() {
+		
 	}
 }
