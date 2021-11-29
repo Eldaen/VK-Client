@@ -13,6 +13,9 @@ protocol PersistenceManager {
 	/// Добавляет запись в БД
 	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
 	
+	/// Добавляет записи в БД
+	func createMany<T: Object>(_ object: [T], completion: @escaping (Result<Bool, Error>) -> Void)
+	
 	/// Читает запись из БД
 	func read<T: Object>(_ object: T, key: String, completion: @escaping (Result<[T], Error>) -> Void)
 	
@@ -46,10 +49,20 @@ final class RealmService: PersistenceManager {
 	}
 	
 	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
-		
 		do {
 			realm.beginWrite()
 			realm.add(object)
+			try realm.commitWrite()
+			completion(.success(true))
+		} catch {
+			completion(.failure(error))
+		}
+	}
+	
+	func createMany<T: Object>(_ objects: [T], completion: @escaping (Result<Bool, Error>) -> Void) {
+		do {
+			realm.beginWrite()
+			realm.add(objects)
 			try realm.commitWrite()
 			completion(.success(true))
 		} catch {
