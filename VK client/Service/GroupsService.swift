@@ -20,10 +20,12 @@ class GroupsService: GroupsLoader {
 	
 	internal var networkManager: NetworkManager
 	internal var cache: ImageCache
+	internal var persistence: PersistenceManager
 	
-	required init(networkManager: NetworkManager, cache: ImageCache) {
+	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
+		self.persistence = persistence
 	}
 	
 	/// Загружает список групп пользователя
@@ -109,14 +111,24 @@ class GroupsService: GroupsLoader {
 	
 	/// Загружает картинку и возвращает её, если получилось
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
-		guard let url = URL(string: url) else { return }
+		guard let imageUrl = URL(string: url) else { return }
 		
 		// если есть в кэше, то грузить не нужно
-		if let image = cache[url] {
+		if let image = cache[imageUrl] {
 			completion(image)
 		}
 		
-		networkManager.loadImage(url: url) { [weak self] result in
+		let model = ImageModel()
+		persistence.read(model, key: url) { result in
+			switch result {
+			case .success(let image):
+				completion(image.image)
+			case .failure(_):
+				break
+			}
+		}
+		
+		networkManager.loadImage(url: imageUrl) { [weak self] result in
 			switch result {
 			case .success(let data):
 				guard let image = UIImage(data: data) else {
@@ -124,7 +136,12 @@ class GroupsService: GroupsLoader {
 				}
 				
 				// Если пришлось загружать, то добавим в кэш
-				self?.cache[url] = image
+				self?.cache[imageUrl] = image
+				
+				// В БД тоже добавим
+				model.url = url
+				model.image = image
+				self?.persistence.create(model) {_ in}
 				
 				completion(image)
 			case .failure(let error):

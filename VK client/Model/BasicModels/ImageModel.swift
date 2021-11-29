@@ -7,14 +7,18 @@
 
 import RealmSwift
 import UIKit.UIImage
+import UIKit
 
 /// Модель картинки, нужна чтобы кэшировать в БД
 class ImageModel: Object {
-	@objc dynamic var url: URL
-	@objc dynamic var image: UIImage
+	@objc dynamic var url: String = ""
+	@objc dynamic var image: UIImage = UIImage()
 	
-	init(url: URL, image: UIImage) {
-		self.url = url
-		self.image = image
+	override static func primaryKey() -> String? {
+		return "url"
+	}
+	
+	override static func indexedProperties() -> [String] {
+		return ["url"]
 	}
 }

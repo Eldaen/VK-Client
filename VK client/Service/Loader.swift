@@ -11,10 +11,13 @@ import UIKit
 protocol Loader {
 	
 	/// Переменная, хранящая в себе Networkmanager, он у нас один и других не будет, так что без протокола
-	var networkManager: NetworkManager {get set}
+	var networkManager: NetworkManager { get set }
 	
 	/// Кэш сервис
-	var cache: ImageCache {get set}
+	var cache: ImageCache { get set }
+	
+	/// Сервис для работы с БД
+	var persistence: PersistenceManager { get set }
 	
 	/// Загружает картинку и возвращает её, если получилось
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void)
@@ -22,5 +25,5 @@ protocol Loader {
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
 	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String]
 	
-	init(networkManager: NetworkManager, cache: ImageCache)
+	init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager)
 }
