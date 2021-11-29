@@ -14,7 +14,11 @@ protocol PersistenceManager {
 	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
 	
 	/// Читает запись из БД
+<<<<<<< HEAD
 	func read<T: Object>(_ object: T, key: String, completion: @escaping (Result<[T], Error>) -> Void)
+=======
+	func read<T: Object>(_ object: T, completion: @escaping (Result<[T], Error>) -> Void)
+>>>>>>> lesson6
 	
 	/// Обновляет запись в БД
 	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
@@ -44,6 +48,7 @@ final class RealmService: PersistenceManager {
 			fatalError("Can't create Realm object")
 		}
 	}
+<<<<<<< HEAD
 	
 	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
 		
@@ -70,10 +75,32 @@ final class RealmService: PersistenceManager {
 			}
 		}
 		
+=======
+	
+	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
+	
+		DispatchQueue.main.async { [weak self] in
+			do {
+				self?.realm.add(object)
+				try self?.realm.commitWrite()
+				completion(.success(true))
+			} catch {
+				completion(.failure(error))
+			}
+		}
+	}
+	
+	func read<T: Object>(_ object: T, completion: @escaping (Result<[T], Error>) -> Void) {
+		
+		let result = realm.objects(T.self)
+		let objects = Array(result)
+		
+>>>>>>> lesson6
 		completion(.success(objects))
 	}
 	
 	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
+<<<<<<< HEAD
 		
 		if object.objectSchema.primaryKeyProperty == nil {
 			completion(.failure(errors.noPrimaryKeys("This model does not have a primary key")))
@@ -86,6 +113,21 @@ final class RealmService: PersistenceManager {
 			completion(.success(true))
 		} catch {
 			completion(.failure(error))
+=======
+		
+		if object.objectSchema.primaryKeyProperty == nil {
+				completion(.failure(errors.noPrimaryKeys("This model does not have a primary key")))
+		}
+	
+		DispatchQueue.main.async { [weak self] in
+			do {
+				self?.realm.add(object, update: .modified)
+				try self?.realm.commitWrite()
+				completion(.success(true))
+			} catch {
+				completion(.failure(error))
+			}
+>>>>>>> lesson6
 		}
 	}
 	
@@ -105,6 +147,7 @@ final class RealmService: PersistenceManager {
 			completion(.failure(error))
 		}
 	}
+<<<<<<< HEAD
 	
 	func deleteAllByType<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
 		let oldData = realm.objects(T.self)
@@ -118,4 +161,6 @@ final class RealmService: PersistenceManager {
 			completion(.failure(error))
 		}
 	}
+=======
+>>>>>>> lesson6
 }
