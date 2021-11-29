@@ -17,25 +17,21 @@ class demoUserService: UserLoader {
 		self.cache = cache
 	}
 	
-	let friends = [UserModel(name: "Vasia", image: "vasia", id: 0),
-				   UserModel(name: "Petia", image: "petia", id: 1),
-	   UserModel(name: "Dima", image: "dima", id: 2),
-	   UserModel(name: "Andrey", image: "misha", id: 3),
-	   UserModel(name: "Bob", image: "petia", id: 4),
-	   UserModel(name: "Coby", image: "dima", id: 5),
-	   UserModel(name: "Misha", image: "misha", id: 6),
-	   UserModel(name: "Nick", image: "petia", id: 7),
-	   UserModel(name: "Kane", image: "dima", id: 8),
-	   UserModel(name: "Stepan", image: "misha", id: 9),
-	   UserModel(name: "Kira", image: "petia", id: 10),
-	   UserModel(name: "James", image: "dima", id: 11),
-	   UserModel(name: "Walter", image: "misha", id: 12),
-	   UserModel(name: "Oprah", image: "petia", id: 13),
-	   UserModel(name: "Vitalik", image: "dima", id: 14),
-	   UserModel(name: "Harold", image: "misha", id: 15),
-]
+	var friends: [UserModel] = []
 	
 	func loadFriends(completion: @escaping ([FriendsSection]) -> Void) {
+		
+		// читаем файлик ./friends.json
+		if let filepath = Bundle.main.path(forResource: "friends", ofType: "json") {
+			do {
+				let contents = try Data(contentsOf: URL(fileURLWithPath: filepath))
+				let decodedData = try JSONDecoder().decode([UserModel].self, from: contents)
+				friends = decodedData
+			} catch {
+				print(error)
+			}
+		}
+		
 		let sortedArray = sortFriends(friends)
 		let sectionsArray = formFriendsSections(sortedArray)
 		completion(sectionsArray)
