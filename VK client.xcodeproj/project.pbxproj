@@ -21,6 +21,7 @@
 		D03B188B275173B600C483B3 /* demoUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B188A275173B600C483B3 /* demoUserService.swift */; };
 		D03B188D275192BA00C483B3 /* groups.json in Resources */ = {isa = PBXBuildFile; fileRef = D03B188C275192BA00C483B3 /* groups.json */; };
 		D03B18912752D7EB00C483B3 /* MyCustomUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18902752D7EB00C483B3 /* MyCustomUIViewController.swift */; };
+		D03B18932754D56400C483B3 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B18922754D56400C483B3 /* PersistenceManager.swift */; };
 		D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */; };
 		D05028E72749077F00F912EE /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05028E62749077F00F912EE /* BoolResponse.swift */; };
 		D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D050CCFA2716D89A0076D78E /* FriendsViewController.swift */; };
@@ -83,6 +84,7 @@
 		D03B188A275173B600C483B3 /* demoUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUserService.swift; sourceTree = "<group>"; };
 		D03B188C275192BA00C483B3 /* groups.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = groups.json; sourceTree = "<group>"; };
 		D03B18902752D7EB00C483B3 /* MyCustomUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomUIViewController.swift; sourceTree = "<group>"; };
+		D03B18922754D56400C483B3 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		D04F214527463F6F00968CB5 /* VkFriendsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFriendsResponse.swift; sourceTree = "<group>"; };
 		D05028E62749077F00F912EE /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
 		D050CCFA2716D89A0076D78E /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 				D0D2F0AA27478C53008E9AB4 /* Loader.swift */,
 				D03B1871274E2F4700C483B3 /* ImageCache.swift */,
 				D03B18822750EDC200C483B3 /* Assembly.swift */,
+				D03B18922754D56400C483B3 /* PersistenceManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 				D03B1872274E2F4700C483B3 /* ImageCache.swift in Sources */,
 				D0800D1B27283B0800347AB7 /* CustomSearchBar.swift in Sources */,
 				D050CD112716E1CF0076D78E /* GroupModel.swift in Sources */,
+				D03B18932754D56400C483B3 /* PersistenceManager.swift in Sources */,
 				D050CD1E271A2DD60076D78E /* FriendsSection.swift in Sources */,
 				D050CD052716DF890076D78E /* MyGroupsController.swift in Sources */,
 				D0800D20272BF0A200347AB7 /* PhotoCollectionViewCell.swift in Sources */,
