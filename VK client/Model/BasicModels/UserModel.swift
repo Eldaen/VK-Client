@@ -8,7 +8,7 @@
 import RealmSwift
 
 /// Модель пользователя
-class UserModel: Codable {
+class UserModel: Object, Codable {
     @objc dynamic let name: String
 	@objc dynamic let image: String
 	@objc dynamic let id: Int
