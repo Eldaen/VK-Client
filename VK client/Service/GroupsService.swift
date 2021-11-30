@@ -7,6 +7,7 @@
 
 import UIKit.UIImage
 
+/// Протокол загрузки данных групп
 protocol GroupsLoader: Loader {
 	func loadGroups(completion: @escaping ([GroupModel]) -> Void)
 	func searchGroups(with query: String, completion: @escaping ([GroupModel]) -> Void)
@@ -14,9 +15,8 @@ protocol GroupsLoader: Loader {
 	func leaveGroup(id: Int, completion: @escaping (Int) -> Void)
 }
 
-
-// Сервис загрузки данных для групп из сети
-class GroupsService: GroupsLoader {
+/// Сервис загрузки данных для групп из сети
+final class GroupsService: GroupsLoader {
 	
 	internal var networkManager: NetworkManager
 	internal var cache: ImageCache

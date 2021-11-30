@@ -7,14 +7,14 @@
 
 import UIKit.UIImage
 
+/// Протокол загрузки данных пользователей
 protocol UserLoader: Loader {
 	func loadFriends(completion: @escaping ([FriendsSection]) -> Void)
 	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void)
 }
 
-
-// Серивс для загрузки данных пользователей из сети
-class UserService: UserLoader {
+/// Сервис для загрузки данных пользователей из сети
+final class UserService: UserLoader {
 	
 	internal var networkManager: NetworkManager
 	internal var cache: ImageCache
