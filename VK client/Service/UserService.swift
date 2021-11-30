@@ -20,6 +20,9 @@ class UserService: UserLoader {
 	internal var cache: ImageCache
 	internal var persistence: PersistenceManager
 	
+	/// Ключ для сохранения данных о просрочке в Userdefaults
+	let cacheKey = "usersExpiry"
+	
 	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
@@ -81,17 +84,20 @@ class UserService: UserLoader {
 			"fields" : "photo_100",
 		]
 		
-		var friends: [UserModel] = []
-		
-		persistence.read(UserModel.self) { result in
-			friends = Array(result)
+		if checkExpiry(key: cacheKey) {
+			var friends: [UserModel] = []
+			
+			persistence.read(UserModel.self) { result in
+				friends = Array(result)
+			}
+			
+			if !friends.isEmpty {
+				let sections = formFriendsArray(from: friends)
+				completion(sections)
+				return
+			}
 		}
-		
-		if !friends.isEmpty {
-			let sections = formFriendsArray(from: friends)
-			completion(sections)
-			return
-		}
+
 		
 		networkManager.request(method: .friendsGet,
 							   httpMethod: .get,
@@ -104,6 +110,12 @@ class UserService: UserLoader {
 				guard let sections = self?.formFriendsArray(from: friends) else {
 					return
 				}
+				
+				// Ставим дату просрочки данных
+				if let cacheKey = self?.cacheKey {
+					self?.setExpiry(key: cacheKey, time: 10 * 60)
+				}
+				
 				completion(sections)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
@@ -142,15 +154,12 @@ class UserService: UserLoader {
 			completion(image)
 		}
 		
-//		persistence.read(ImageModel.Type, key: url) { result in
-//			switch result {
-//			case .success(let image):
-//				completion(image.image)
-//			case .failure(_):
-//				break
-//			}
-//		}
+		// Проверим наличие в файлах
+		if let image = loadImageFromDiskWith(imageName: imageUrl.absoluteString) {
+			completion(image)
+		}
 		
+		// Если нигде нет, то грузим
 		networkManager.loadImage(url: imageUrl) { [weak self] result in
 			switch result {
 			case .success(let data):
@@ -161,10 +170,10 @@ class UserService: UserLoader {
 				// Если пришлось загружать, то добавим в кэш
 				self?.cache[imageUrl] = image
 				
-//				// В БД тоже добавим
-//				model.url = url
-//				model.image = image
-//				self?.persistence.create(model) {_ in}
+				// И в файлы сохраним
+				DispatchQueue.global(qos: .background).async {
+					self?.saveImage(imageName: imageUrl.absoluteString, image: image)
+				}
 				
 				completion(image)
 			case .failure(let error):

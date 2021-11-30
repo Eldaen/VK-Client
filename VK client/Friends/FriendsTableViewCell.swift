@@ -51,7 +51,7 @@ final class FriendsTableViewCell: UITableViewCell {
     /// Запуск анимации ячейки
     func animate() {
         self.friendImage.alpha = 0
-        self.frame.origin.x += 200
+        self.frame.origin.x += 50
         
         UIView.animate(withDuration: 0.3,
                        delay: 0.15,
@@ -60,7 +60,7 @@ final class FriendsTableViewCell: UITableViewCell {
             self.friendImage.alpha = 1
         })
         
-        UIView.animate(withDuration: 0.7,
+        UIView.animate(withDuration: 0.2,
                        delay: 0.1,
                        usingSpringWithDamping: 0.4,
                        initialSpringVelocity: 0,

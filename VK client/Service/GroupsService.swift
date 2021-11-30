@@ -22,6 +22,9 @@ class GroupsService: GroupsLoader {
 	internal var cache: ImageCache
 	internal var persistence: PersistenceManager
 	
+	/// Ключ для сохранения данных о просрочке в Userdefaults
+	let cacheKey = "groupsExpiry"
+	
 	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
@@ -35,15 +38,17 @@ class GroupsService: GroupsLoader {
 			"extended" : "1",
 		]
 		
-		var groups: [GroupModel] = []
-		
-		persistence.read(GroupModel.self) { result in
-			groups = Array(result)
-		}
-		
-		if !groups.isEmpty {
-			completion(groups)
-			return
+		if checkExpiry(key: cacheKey) {
+			var groups: [GroupModel] = []
+
+			persistence.read(GroupModel.self) { result in
+				groups = Array(result)
+			}
+
+			if !groups.isEmpty {
+				completion(groups)
+				return
+			}
 		}
 		
 		networkManager.request(method: .groupsGet,
@@ -53,6 +58,11 @@ class GroupsService: GroupsLoader {
 			case .success(let groupsResponse):
 				let items = groupsResponse.response.items
 				self?.persistence.create(items) { _ in }
+				
+				// Ставим дату просрочки данных
+				if let cacheKey = self?.cacheKey {
+					self?.setExpiry(key: cacheKey, time: 10 * 60)
+				}
 				
 				completion(groupsResponse.response.items)
 			case .failure(let error):
@@ -132,16 +142,12 @@ class GroupsService: GroupsLoader {
 			completion(image)
 		}
 		
-//		let model = ImageModel()
-//		persistence.read(model, key: url) { result in
-//			switch result {
-//			case .success(let image):
-//				completion(image.image)
-//			case .failure(_):
-//				break
-//			}
-//		}
+		// Проверим наличие в файлах
+		if let image = loadImageFromDiskWith(imageName: imageUrl.absoluteString) {
+			completion(image)
+		}
 		
+		// Если нигде нет, то грузим
 		networkManager.loadImage(url: imageUrl) { [weak self] result in
 			switch result {
 			case .success(let data):
@@ -152,10 +158,10 @@ class GroupsService: GroupsLoader {
 				// Если пришлось загружать, то добавим в кэш
 				self?.cache[imageUrl] = image
 				
-//				// В БД тоже добавим
-//				model.url = url
-//				model.image = image
-//				self?.persistence.create(model) {_ in}
+				// И в файлы сохраним
+				DispatchQueue.global(qos: .background).async {
+					self?.saveImage(imageName: imageUrl.absoluteString, image: image)
+				}
 				
 				completion(image)
 			case .failure(let error):

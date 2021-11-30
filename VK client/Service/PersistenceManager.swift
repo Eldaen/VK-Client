@@ -61,7 +61,7 @@ final class RealmService: PersistenceManager {
 	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
 		do {
 			realm.beginWrite()
-			realm.add(object)
+			realm.add(object, update: .modified)
 			try realm.commitWrite()
 			completion(.success(true))
 		} catch {
@@ -72,7 +72,7 @@ final class RealmService: PersistenceManager {
 	func create<T: Object>(_ objects: [T], completion: @escaping (Result<Bool, Error>) -> Void) {
 		do {
 			realm.beginWrite()
-			realm.add(objects)
+			realm.add(objects, update: .modified)
 			try realm.commitWrite()
 			completion(.success(true))
 		} catch {
