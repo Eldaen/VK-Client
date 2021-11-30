@@ -140,11 +140,13 @@ class GroupsService: GroupsLoader {
 		// если есть в кэше, то грузить не нужно
 		if let image = cache[imageUrl] {
 			completion(image)
+			return
 		}
 		
 		// Проверим наличие в файлах
 		if let image = loadImageFromDiskWith(imageName: imageUrl.absoluteString) {
 			completion(image)
+			return
 		}
 		
 		// Если нигде нет, то грузим
