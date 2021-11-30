@@ -7,21 +7,30 @@
 
 import UIKit.UIImage
 
+/// Протокол загрузки данных пользователей
 protocol UserLoader: Loader {
+	
+	/// Загружает список друзей
 	func loadFriends(completion: @escaping ([FriendsSection]) -> Void)
+	
+	/// Загружает все фото пользователя
 	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void)
 }
 
-
-// Серивс для загрузки данных пользователей из сети
-class UserService: UserLoader {
+/// Сервис для загрузки данных пользователей из сети
+final class UserService: UserLoader {
 	
 	internal var networkManager: NetworkManager
 	internal var cache: ImageCache
+	internal var persistence: PersistenceManager
 	
-	required init(networkManager: NetworkManager, cache: ImageCache) {
+	/// Ключ для сохранения данных о просрочке в Userdefaults
+	let cacheKey = "usersExpiry"
+	
+	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
+		self.persistence = persistence
 	}
 	
 	
@@ -79,14 +88,37 @@ class UserService: UserLoader {
 			"fields" : "photo_100",
 		]
 		
+		if checkExpiry(key: cacheKey) {
+			var friends: [UserModel] = []
+			
+			persistence.read(UserModel.self) { result in
+				friends = Array(result)
+			}
+			
+			if !friends.isEmpty {
+				let sections = formFriendsArray(from: friends)
+				completion(sections)
+				return
+			}
+		}
+		
 		networkManager.request(method: .friendsGet,
 							   httpMethod: .get,
 							   params: params) { [weak self] (result: Result<VkFriendsMainResponse, Error>) in
 			switch result {
 			case .success(let friendsResponse):
-				guard let sections = self?.formFriendsArray(from: friendsResponse.response.items) else {
+				let friends = friendsResponse.response.items
+				self?.persistence.create(friends) { _ in }
+				
+				guard let sections = self?.formFriendsArray(from: friends) else {
 					return
 				}
+				
+				// Ставим дату просрочки данных
+				if let cacheKey = self?.cacheKey {
+					self?.setExpiry(key: cacheKey, time: 10 * 60)
+				}
+				
 				completion(sections)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
@@ -118,14 +150,22 @@ class UserService: UserLoader {
 	
 	/// Загружает картинку и возвращает её, если получилось
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
-		guard let url = URL(string: url) else { return }
+		guard let imageUrl = URL(string: url) else { return }
 		
 		// если есть в кэше, то грузить не нужно
-		if let image = cache[url] {
+		if let image = cache[imageUrl] {
 			completion(image)
+			return
 		}
 		
-		networkManager.loadImage(url: url) { [weak self] result in
+		// Проверим наличие в файлах
+		if let image = loadImageFromDiskWith(imageName: imageUrl.absoluteString) {
+			completion(image)
+			return
+		}
+		
+		// Если нигде нет, то грузим
+		networkManager.loadImage(url: imageUrl) { [weak self] result in
 			switch result {
 			case .success(let data):
 				guard let image = UIImage(data: data) else {
@@ -133,7 +173,12 @@ class UserService: UserLoader {
 				}
 				
 				// Если пришлось загружать, то добавим в кэш
-				self?.cache[url] = image
+				self?.cache[imageUrl] = image
+				
+				// И в файлы сохраним
+				DispatchQueue.global(qos: .background).async {
+					self?.saveImage(imageName: imageUrl.absoluteString, image: image)
+				}
 				
 				completion(image)
 			case .failure(let error):

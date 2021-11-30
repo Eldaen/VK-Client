@@ -13,10 +13,12 @@ class demoGroupService: GroupsLoader {
 	
 	var networkManager: NetworkManager
 	var cache: ImageCache
+	var persistence: PersistenceManager
 	
-	required init(networkManager: NetworkManager, cache: ImageCache) {
+	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
+		self.persistence = persistence
 	}
 	
 	func loadGroups(completion: @escaping ([GroupModel]) -> Void) {

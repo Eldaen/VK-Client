@@ -14,6 +14,7 @@ final class Assembly {
 	
 	var networkManager: NetworkManager
 	var cacheService: ImageCache
+	var persistence: PersistenceManager
 	
 	var userService: UserLoader
 	var groupsService: GroupsLoader
@@ -36,10 +37,13 @@ final class Assembly {
 		let network = NetworkManager()
 		self.networkManager = network
 		
-		let userService = UserService(networkManager: network, cache: cache)
+		let persistence = RealmService()
+		self.persistence = persistence
+		
+		let userService = UserService(networkManager: network, cache: cache, persistence: persistence)
 		self.userService = userService
 		
-		let groupsService = GroupsService(networkManager: network, cache: cache)
+		let groupsService = GroupsService(networkManager: network, cache: cache, persistence: persistence)
 		self.groupsService = groupsService
 		
 		self.myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
@@ -52,11 +56,11 @@ final class Assembly {
 		self.demoMode = state
 		
 		if demoMode == true {
-			userService = demoUserService(networkManager: networkManager, cache: cacheService)
-			groupsService = demoGroupService(networkManager: networkManager, cache: cacheService)
+			userService = demoUserService(networkManager: networkManager, cache: cacheService, persistence: persistence)
+			groupsService = demoGroupService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 		} else {
-			userService = UserService(networkManager: networkManager, cache: cacheService)
-			groupsService = GroupsService(networkManager: networkManager, cache: cacheService)
+			userService = UserService(networkManager: networkManager, cache: cacheService, persistence: persistence)
+			groupsService = GroupsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 		}
 		
 		myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
