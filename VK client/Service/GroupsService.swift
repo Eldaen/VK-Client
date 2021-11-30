@@ -9,9 +9,17 @@ import UIKit.UIImage
 
 /// Протокол загрузки данных групп
 protocol GroupsLoader: Loader {
+	
+	/// Загружает список групп пользователя
 	func loadGroups(completion: @escaping ([GroupModel]) -> Void)
+	
+	/// Ищет группы, подходящие под текстовый запрос
 	func searchGroups(with query: String, completion: @escaping ([GroupModel]) -> Void)
+	
+	/// Запрос на вступление в группу по id
 	func joinGroup(id: Int, completion: @escaping (Int) -> Void)
+	
+	/// Запрос на вступление в группу по id
 	func leaveGroup(id: Int, completion: @escaping (Int) -> Void)
 }
 
@@ -57,6 +65,7 @@ final class GroupsService: GroupsLoader {
 			switch result {
 			case .success(let groupsResponse):
 				let items = groupsResponse.response.items
+				self?.persistence.delete(GroupModel.self) { _ in }
 				self?.persistence.create(items) { _ in }
 				
 				// Ставим дату просрочки данных
@@ -101,9 +110,14 @@ final class GroupsService: GroupsLoader {
 		
 		networkManager.request(method: .groupsJoin,
 							   httpMethod: .post,
-							   params: params) { (result: Result<BoolResponse, Error>) in
+							   params: params) {[weak self] (result: Result<BoolResponse, Error>) in
 			switch result {
 			case .success(let response):
+				
+				// Нужно перекачать данные групп, сбросим кэш
+				if let cacheKey = self?.cacheKey {
+					self?.dropCache(key: cacheKey)
+				}
 				completion(response.response)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
@@ -120,9 +134,16 @@ final class GroupsService: GroupsLoader {
 		
 		networkManager.request(method: .groupsLeave,
 							   httpMethod: .post,
-							   params: params) { (result: Result<BoolResponse, Error>) in
+							   params: params) { [weak self] (result: Result<BoolResponse, Error>) in
 			switch result {
 			case .success(let response):
+				self?.persistence.delete(GroupModel.self, keyValue: "\(id)") { _ in }
+				
+				// Нужно перекачать данные групп, сбросим кэш
+				if let cacheKey = self?.cacheKey {
+					self?.dropCache(key: cacheKey)
+				}
+				
 				completion(response.response)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")

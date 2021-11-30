@@ -51,8 +51,9 @@ final class RealmService: PersistenceManager {
 	
 	init() {
 		do {
-			let realm = try Realm()
-			self.realm = realm
+			let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+			self.realm = try Realm(configuration: config)
+			print(realm.configuration.fileURL)
 		} catch {
 			fatalError(error.localizedDescription)
 		}
@@ -119,7 +120,7 @@ final class RealmService: PersistenceManager {
 			return
 		}
 		
-		guard let object = realm.objects(T.self).filter("\(primaryKey) = %@", keyValue).first else {
+		guard let object = realm.objects(T.self).filter("\(primaryKey) = %@", Int(keyValue)).first else {
 			completion(.failure(errors.noRealmObject("There is no such object")))
 			return
 		}

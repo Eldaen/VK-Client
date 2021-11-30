@@ -93,4 +93,9 @@ extension Loader {
 		let date = (Date.init() + time).timeIntervalSince1970
 		UserDefaults.standard.set(String(date), forKey: key)
 	}
+	
+	/// Сбрасывает кэш, дата просрочки будет 0
+	func dropCache(key: String) {
+		UserDefaults.standard.set("0", forKey: key)
+	}
 }

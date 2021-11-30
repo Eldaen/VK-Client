@@ -78,26 +78,25 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 			}
 		}
 	}
-	
-	func search(_ text: String, completion: @escaping () -> Void) {
-		filteredGroups = []
 
-		// Если строка поиска пустая, то показываем все группы
-		if text == "" {
-			filteredGroups = groups
-			completion()
-		} else {
-			for group in groups {
-				if group.name.lowercased().contains(text.lowercased()) {
-					filteredGroups.append(group)
-				}
-			}
-			completion()
-		}
-	}
+func search(_ text: String, completion: @escaping () -> Void) {		filteredGroups = []
 	
-	func cancelSearch(completion: @escaping() -> Void) {
+	// Если строка поиска пустая, то показываем все группы
+	if text == "" {
 		filteredGroups = groups
 		completion()
+	} else {
+		for group in groups {
+			if group.name.lowercased().contains(text.lowercased()) {
+				filteredGroups.append(group)
+			}
+		}
+		completion()
 	}
+}
+
+func cancelSearch(completion: @escaping() -> Void) {
+	filteredGroups = groups
+	completion()
+}
 }

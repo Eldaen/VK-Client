@@ -87,6 +87,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 			viewModel.leaveGroup(id: id, index: indexPath.row) { [weak self] result in
 				if result == true {
 					self?.tableView.deleteRows(at: [indexPath], with: .fade)
+					self?.viewModel.fetchGroups { }
 				} else {
 					self?.showLeavingError()
 				}
@@ -169,7 +170,7 @@ private extension MyGroupsController {
 // MARK: - Delegate for SearchGroupsController
 extension MyGroupsController: MyGroupsDelegate {
 
-	/// Принимает выбранную группу в контроллере моих групп и добавляет её в список
+	/// Запускает обновление списка групп он изменился
 	func groupDidSelect() {
 		viewModel.fetchGroups() { [weak self] in
 			self?.tableView.reloadData()

@@ -9,7 +9,11 @@ import UIKit.UIImage
 
 /// Протокол загрузки данных пользователей
 protocol UserLoader: Loader {
+	
+	/// Загружает список друзей
 	func loadFriends(completion: @escaping ([FriendsSection]) -> Void)
+	
+	/// Загружает все фото пользователя
 	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void)
 }
 
