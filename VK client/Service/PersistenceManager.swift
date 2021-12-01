@@ -11,27 +11,27 @@ import RealmSwift
 protocol PersistenceManager {
 	
 	/// Добавляет запись в БД
-	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
+	func create<T: Object>(_ object: T, completion: (Result<Bool, Error>) -> Void)
 	
 	/// Добавляет записи в БД
-	func create<T: Object>(_ object: [T], completion: @escaping (Result<Bool, Error>) -> Void)
+	func create<T: Object>(_ object: [T], completion: (Result<Bool, Error>) -> Void)
 	
 	/// Читает запись из БД
-	func read<T: Object>(_ object: T.Type, key: String, completion: @escaping (Result<T, Error>) -> Void)
+	func read<T: Object>(_ object: T.Type, key: String, completion: (Result<T, Error>) -> Void)
 	
 	/// Читает все записи данного типа
-	func read<T: Object>(_ object: T.Type, completion: @escaping (Results<T>) -> Void)
+	func read<T: Object>(_ object: T.Type, completion: (Results<T>) -> Void)
 	
 	/// Обновляет запись в БД
-	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void)
+	func update<T: Object>(_ object: T, completion: (Result<Bool, Error>) -> Void)
 	
 	/// Удаляет запись из БД
 	func delete<T: Object>(_ object: T.Type,
 							  keyValue: String,
-							  completion: @escaping (Result<Bool, Error>) -> Void)
+							  completion: (Result<Bool, Error>) -> Void)
 	
 	/// Удаляет все записи данного типа
-	func delete<T: Object>(_ object: T.Type, completion: @escaping (Result<Bool, Error>) -> Void)
+	func delete<T: Object>(_ object: T.Type, completion: (Result<Bool, Error>) -> Void)
 	
 	/// Удаляет всё из БД
 	func deleteAll()
@@ -59,7 +59,7 @@ final class RealmService: PersistenceManager {
 		}
 	}
 	
-	func create<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
+	func create<T: Object>(_ object: T, completion: (Result<Bool, Error>) -> Void) {
 		do {
 			realm.beginWrite()
 			realm.add(object, update: .modified)
@@ -70,7 +70,7 @@ final class RealmService: PersistenceManager {
 		}
 	}
 	
-	func create<T: Object>(_ objects: [T], completion: @escaping (Result<Bool, Error>) -> Void) {
+	func create<T: Object>(_ objects: [T], completion: (Result<Bool, Error>) -> Void) {
 		do {
 			realm.beginWrite()
 			realm.add(objects, update: .modified)
@@ -81,7 +81,7 @@ final class RealmService: PersistenceManager {
 		}
 	}
 	
-	func read<T: Object>(_ object: T.Type, key: String = "", completion: @escaping (Result<T, Error>) -> Void) {
+	func read<T: Object>(_ object: T.Type, key: String = "", completion: (Result<T, Error>) -> Void) {
 		
 		if let result = realm.object(ofType: T.self, forPrimaryKey: key) {
 			completion(.success(result))
@@ -90,13 +90,13 @@ final class RealmService: PersistenceManager {
 		}
 	}
 	
-	func read<T: Object>(_ object: T.Type, completion: @escaping (Results<T>) -> Void) {
+	func read<T: Object>(_ object: T.Type, completion: (Results<T>) -> Void) {
 		
  		let result = realm.objects(T.self)
 		completion(result)
 	}
 	
-	func update<T: Object>(_ object: T, completion: @escaping (Result<Bool, Error>) -> Void) {
+	func update<T: Object>(_ object: T, completion: (Result<Bool, Error>) -> Void) {
 		
 		guard let _ = T.primaryKey() else {
 			completion(.failure(errors.noPrimaryKeys("This model does not have a primary key")))
@@ -113,7 +113,7 @@ final class RealmService: PersistenceManager {
 		}
 	}
 	
-	func delete<T: Object>(_ object: T.Type, keyValue: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+	func delete<T: Object>(_ object: T.Type, keyValue: String, completion: (Result<Bool, Error>) -> Void) {
 		
 		guard let primaryKey = T.primaryKey() else {
 			completion(.failure(errors.noPrimaryKeys("This model does not have a primary key")))
@@ -135,7 +135,7 @@ final class RealmService: PersistenceManager {
 		}
 	}
 	
-	func delete<T: Object>(_ object: T.Type, completion: @escaping (Result<Bool, Error>) -> Void) {
+	func delete<T: Object>(_ object: T.Type, completion: (Result<Bool, Error>) -> Void) {
 		let oldData = realm.objects(T.self)
 		
 		do {
