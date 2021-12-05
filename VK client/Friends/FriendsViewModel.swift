@@ -6,12 +6,13 @@
 //
 
 import UIKit.UIImage
+import RealmSwift
 
 /// Протокол вью модели для контроллера Friends
 protocol FriendsViewModelType {
 	
 	/// Список друзей текущего пользователя
-	var friends: [FriendsSection] { get }
+	var friends: Results<UserModel>? { get }
 	
 	/// Cписок друзей текущего пользователя, которые подходят под поисковой запрос
 	var filteredData: [FriendsSection] { get }
@@ -37,88 +38,55 @@ protocol FriendsViewModelType {
 
 /// Вью модель для контроллера Friends
 final class FriendsViewModel: FriendsViewModelType {
-	var friends: [FriendsSection] = []
+	var friends: Results<UserModel>?
 	var filteredData: [FriendsSection] = []
 	var lettersOfNames: [String] = []
 	
 	var loader: UserLoader
+	
+	private let realm = RealmService()
 	
 	init(loader: UserLoader){
 		self.loader = loader
 	}
 	
 	func configureCell(cell: FriendsTableViewCell, indexPath: IndexPath) {
-		let section = filteredData[indexPath.section]
-		let name = section.data[indexPath.row].name
-		let image = section.data[indexPath.row].image
+		let name = friends?[indexPath.row].name
+		let image = friends?[indexPath.row].image
 		
 		// конфигурируем и возвращаем готовую ячейку
-		cell.configure(name: name, image: UIImage())
+		cell.configure(name: name ?? "", image: UIImage())
 		
 		// Ставим картинку на загрузку
-		loader.loadImage(url: image) { image in
+		loader.loadImage(url: image ?? "") { image in
 			cell.updateImage(with: image)
 		}
 	}
 	
 	func fetchFriends(completion: @escaping () -> Void) {
 		loader.loadFriends() { [weak self] friends in
-			self?.friends = friends
-			self?.filteredData = friends
-			
-			// наполянем имена заголовков секций
-			self?.loadLetters()
-
+			self?.realm.read(UserModel.self) { [weak self] result in
+				self?.friends = result
+			}
 			completion()
 		}
 	}
 	
 	func search(_ text: String, completion: @escaping () -> Void) {
 		
-		//занулим для повторных поисков
-		filteredData = []
+		fetchFriends { }
 		
-		// Если поиск пустой, то ничего фильтровать нам не нужно
+		// Если строка поиска пустая, то показываем все группы
 		if text == "" {
-			filteredData = friends
-			completion()
+			fetchFriends { }
 		} else {
-			for section in friends { // сначала перебираем массив секций с друзьями
-				for (_, friend) in section.data.enumerated() { // потом перебираем массивы друзей в секциях
-					if friend.name.lowercased().contains(text.lowercased()) { // Ищем в имени нужный текст, оба текста сравниваем в нижнем регистре
-						var searchedSection = section
-						
-						// Если фильтр пустой, то можно сразу добавлять
-						if filteredData.isEmpty {
-							searchedSection.data = [friend]
-							filteredData.append(searchedSection)
-							break
-						}
-						
-						// Если в массиве секций уже есть секция с таким ключом, то нужно к имеющемуся массиву друзей добавить друга
-						var found = false
-						for (sectionIndex, filteredSection) in filteredData.enumerated() {
-							if filteredSection.key == section.key {
-								filteredData[sectionIndex].data.append(friend)
-								found = true
-								break
-							}
-						}
-						
-						// Если такого ключа ещё нет, то создаём новый массив с нашим найденным другом
-						if !found {
-							searchedSection.data = [friend]
-							filteredData.append(searchedSection)
-						}
-					}
-				}
-			}
+			friends = realm.realm.objects(UserModel.self).filter("name CONTAINS %@", "\(text.lowercased())")
 			completion()
 		}
 	}
 	
 	func cancelSearch(completion: @escaping () -> Void) {
-		filteredData = friends
+		fetchFriends { }
 		completion()
 	}
 }
@@ -126,10 +94,10 @@ final class FriendsViewModel: FriendsViewModelType {
 // MARK: - Private methods
 private extension FriendsViewModel {
 	
-	/// Cоздаёт массив  букв для заголовков секций
-	func loadLetters() {
-		for user in friends {
-			lettersOfNames.append(String(user.key))
-		}
-	}
+//	/// Cоздаёт массив  букв для заголовков секций
+//	func loadLetters() {
+//		for user in friends {
+//			lettersOfNames.append(String(user.key))
+//		}
+//	}
 }

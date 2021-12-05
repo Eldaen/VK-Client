@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 /// Отображает список всех пользователей
 final class FriendsViewController: MyCustomUIViewController {
@@ -34,6 +35,8 @@ final class FriendsViewController: MyCustomUIViewController {
 	
 	/// Фото профиля
 	var profileImage: UIImage?
+	
+	private var notificationToken: NotificationToken?
 	
 	// Вынес сюда closure анимации, чтобы 2 раза не повторять код.
 	private func searchBarAnimationClosure () -> () -> Void {
@@ -81,6 +84,8 @@ final class FriendsViewController: MyCustomUIViewController {
 		viewModel.fetchFriends { [weak self] in
 			self?.tableView.reloadData()
 		}
+		
+		createNotificationGroupToken()
 	}
 }
 
@@ -147,20 +152,20 @@ extension FriendsViewController: UISearchBarDelegate {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	
-	// настройка хедера ячеек и добавление букв в него
-	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		//Создаём кастомную вьюху заголовка
-		let header = UIView()
-		header.backgroundColor = .lightGray.withAlphaComponent(0.5)
-		
-		let leter: UILabel = UILabel(frame: CGRect(x: 30, y: 5, width: 20, height: 20))
-		leter.textColor = UIColor.black.withAlphaComponent(0.5)  // прозрачность только надписи
-		leter.text = String(viewModel.filteredData[section].key) // В зависимости от номера секции - даём ей разные названия из массива имён секций
-		leter.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
-		header.addSubview(leter)
-		
-		return header
-	}
+//	// настройка хедера ячеек и добавление букв в него
+//	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//		//Создаём кастомную вьюху заголовка
+//		let header = UIView()
+//		header.backgroundColor = .lightGray.withAlphaComponent(0.5)
+//
+//		let leter: UILabel = UILabel(frame: CGRect(x: 30, y: 5, width: 20, height: 20))
+//		leter.textColor = UIColor.black.withAlphaComponent(0.5)  // прозрачность только надписи
+//		leter.text = String(viewModel.filteredData[section].key) // В зависимости от номера секции - даём ей разные названия из массива имён секций
+//		leter.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
+//		header.addSubview(leter)
+//
+//		return header
+//	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
@@ -178,19 +183,19 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
 		// Кол-во секций
-		return viewModel.filteredData.count
+		return 1
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// Кол-во рядов в секции
-		return viewModel.filteredData[section].data.count
+		return viewModel.friends?.count ?? 0
 	}
 	
-	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		let section = viewModel.friends[section]
-		
-		return String(section.key)
-	}
+//	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//		let section = viewModel.friends[section]
+//		
+//		return String(section.key)
+//	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
@@ -204,21 +209,19 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 		return cell
 	}
 	
-	/// Создаёт массив заголовков секций, по одной букве, с которой начинаются имена друзей
-	func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-		return viewModel.lettersOfNames
-	}
+//	/// Создаёт массив заголовков секций, по одной букве, с которой начинаются имена друзей
+//	func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+//		return viewModel.lettersOfNames
+//	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		guard let cell = tableView.cellForRow(at: indexPath) as? FriendsTableViewCell else {
 			return
 		}
 		
-		let section = viewModel.filteredData[indexPath.section]
-		
 		let profileController = FriendProfileViewController(
 			model: Assembly.instance.getFriendProfileViewModel(
-				friend: section.data[indexPath.row],
+				friend: viewModel.friends![indexPath.row],
 				loader: viewModel.loader,
 				profileImage: cell.getImage()
 			)
@@ -256,5 +259,39 @@ private extension FriendsViewController {
 			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
 			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 		])
+	}
+	
+	func createNotificationGroupToken() {
+		notificationToken = viewModel.friends?.observe { [weak self] result in
+			switch result {
+			case .initial(let groupsData):
+				print("init with \(groupsData.count) groups")
+				self?.tableView.reloadData()
+			case .update(let groups,
+						 deletions: let deletions,
+						 insertions: let insertions,
+						 modifications: let modifications):
+				print("""
+						New count \(groups.count)
+						Deletions \(deletions)
+						Insertions \(insertions)
+						Modification \(modifications)
+						""")
+
+				let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
+				let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
+				let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
+
+				DispatchQueue.main.async {
+					self?.tableView.beginUpdates()
+					self?.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
+					self?.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
+					self?.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
+					self?.tableView.endUpdates()
+				}
+			case .error(let error):
+				print("\(error)")
+			}
+		}
 	}
 }

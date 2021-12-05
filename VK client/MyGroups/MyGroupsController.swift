@@ -19,6 +19,8 @@ final class MyGroupsController: MyCustomUIViewController {
 	/// Вью модель контроллера MyGroups
 	private var viewModel: MyGroupsViewModelType
 	
+	private var notificationToken: NotificationToken?
+	
 	/// Таблица с ячейками групп, в которых состоит пользователь
 	private let tableView: UITableView = {
 		let tableView = UITableView()
@@ -58,6 +60,10 @@ final class MyGroupsController: MyCustomUIViewController {
 		viewModel.fetchGroups { [weak self] in
 			self?.tableView.reloadData()
 		}
+		
+		createNotificationGroupToken()
+		
+
     }
 }
 
@@ -65,7 +71,7 @@ final class MyGroupsController: MyCustomUIViewController {
 extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return viewModel.filteredGroups.count
+		return viewModel.groups?.count ?? 0
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -164,6 +170,40 @@ private extension MyGroupsController {
 		
 		// Показываем UIAlertController
 		present(alert, animated: true, completion: nil)
+	}
+	
+	func createNotificationGroupToken() {
+		notificationToken = viewModel.groups?.observe { [weak self] result in
+			switch result {
+			case .initial(let groupsData):
+				print("init with \(groupsData.count) groups")
+				self?.tableView.reloadData()
+			case .update(let groups,
+						 deletions: let deletions,
+						 insertions: let insertions,
+						 modifications: let modifications):
+				print("""
+						New count \(groups.count)
+						Deletions \(deletions)
+						Insertions \(insertions)
+						Modification \(modifications)
+						""")
+
+				let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
+				let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
+				let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
+
+				DispatchQueue.main.async {
+					self?.tableView.beginUpdates()
+					self?.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
+					self?.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
+					self?.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
+					self?.tableView.endUpdates()
+				}
+			case .error(let error):
+				print("\(error)")
+			}
+		}
 	}
 }
 

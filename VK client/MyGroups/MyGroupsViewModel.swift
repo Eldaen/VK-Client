@@ -6,12 +6,13 @@
 //
 
 import UIKit.UIImage
+import RealmSwift
 
 /// Протокол Вью модели для контроллера MyGroups
 protocol MyGroupsViewModelType {
 	
 	/// Cписок групп текущего пользователя
-	var groups: [GroupModel] { get }
+	var groups: Results<GroupModel>? { get }
 	
 	/// Cписок групп текущего пользователя, которые подходят под поисковой запрос
 	var filteredGroups: [GroupModel] { get }
@@ -37,45 +38,40 @@ protocol MyGroupsViewModelType {
 
 /// Вью модель для контроллера MyGroups
 final class MyGroupsViewModel: MyGroupsViewModelType {
+	var groups: Results<GroupModel>?
+	
 	var loader: GroupsLoader
-	var groups: [GroupModel] = []
+	//var groups: [GroupModel] = []
 	var filteredGroups: [GroupModel] = []
+	
+	private let realm = RealmService()
 	
 	init(loader: GroupsLoader){
 		self.loader = loader
 	}
 	
 	func configureCell(cell: MyGroupsCell, index: Int) {
-		let name = filteredGroups[index].name
-		let image = filteredGroups[index].image
-		let id = filteredGroups[index].id
+		let name = groups?[index].name
+		let image = groups?[index].image
+		let id = groups?[index].id
 		
-		cell.configure(name: name, image: UIImage(), id: id)
+		cell.configure(name: name ?? "", image: UIImage(), id: id ?? 0)
 		
-		loader.loadImage(url: image) { image in
+		loader.loadImage(url: image ?? "") { image in
 			cell.setImage(with: image)
 		}
 	}
 	
 	func fetchGroups(completion: @escaping () -> Void) {
-		loader.loadGroups() { [weak self] groups in
-			self?.groups = groups
-			self?.filteredGroups = groups
-			completion()
+		realm.read(GroupModel.self) { [weak self] result in
+			self?.groups = result
 		}
+		completion()
 	}
 	
 	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void) {
 		loader.leaveGroup(id: id) { [weak self] result in
-			DispatchQueue.main.async {
-				if result == 1 {
-					self?.groups.remove(at: index)
-					self?.filteredGroups.remove(at: index)
-					completion(true)
-				} else {
-					completion(false)
-				}
-			}
+			self?.realm.delete(GroupModel.self, keyValue: String(id) ) { _ in }
 		}
 	}
 
@@ -83,20 +79,15 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 		
 		// Если строка поиска пустая, то показываем все группы
 		if text == "" {
-			filteredGroups = groups
-			completion()
+			fetchGroups { }
 		} else {
-			for group in groups {
-				if group.name.lowercased().contains(text.lowercased()) {
-					filteredGroups.append(group)
-				}
-			}
+			groups = realm.realm.objects(GroupModel.self).filter("name CONTAINS %@", "\(text.lowercased())")
 			completion()
 		}
 	}
 
 	func cancelSearch(completion: @escaping() -> Void) {
-		filteredGroups = groups
+		//filteredGroups = groups
 		completion()
 	}
 }
