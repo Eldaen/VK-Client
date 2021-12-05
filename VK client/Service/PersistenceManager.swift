@@ -51,9 +51,7 @@ final class RealmService: PersistenceManager {
 	
 	init() {
 		do {
-			let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
-			self.realm = try Realm(configuration: config)
-			print(realm.configuration.fileURL)
+			self.realm = try Realm()
 		} catch {
 			fatalError(error.localizedDescription)
 		}

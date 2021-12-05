@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 /// Протокол Делегат для добавления группы в список моих групп
 protocol MyGroupsDelegate: AnyObject {
@@ -64,7 +65,6 @@ final class MyGroupsController: MyCustomUIViewController {
 extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		// #warning Incomplete implementation, return the number of rows
 		return viewModel.filteredGroups.count
 	}
 	

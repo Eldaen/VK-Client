@@ -182,7 +182,7 @@ final class GroupsService: GroupsLoader {
 				self?.cache[imageUrl] = image
 				
 				// И в файлы сохраним
-				DispatchQueue.global(qos: .background).async {
+				DispatchQueue.global(qos: .utility).async {
 					self?.saveImage(imageName: imageUrl.absoluteString, image: image)
 				}
 				
