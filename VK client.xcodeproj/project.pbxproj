@@ -72,6 +72,7 @@
 		D0DE036B275E038A008CD9EB /* MyGroupsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE0365275E038A008CD9EB /* MyGroupsModels.swift */; };
 		D0DE036C275E038A008CD9EB /* MyGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE0366275E038A008CD9EB /* MyGroupsViewController.swift */; };
 		D0DE036D275E038A008CD9EB /* MyGroupsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE0367275E038A008CD9EB /* MyGroupsInteractor.swift */; };
+		D0DE036F275F4426008CD9EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0DE036E275F4426008CD9EB /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -144,6 +145,7 @@
 		D0DE0365275E038A008CD9EB /* MyGroupsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsModels.swift; sourceTree = "<group>"; };
 		D0DE0366275E038A008CD9EB /* MyGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewController.swift; sourceTree = "<group>"; };
 		D0DE0367275E038A008CD9EB /* MyGroupsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsInteractor.swift; sourceTree = "<group>"; };
+		D0DE036E275F4426008CD9EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -348,6 +350,7 @@
 				D050CCF92716D87B0076D78E /* Friends */,
 				D08132142710719B00A280B0 /* Login */,
 				D06313CC270B148000D0E12C /* Assets.xcassets */,
+				D0DE036E275F4426008CD9EB /* GoogleService-Info.plist */,
 				D06313D1270B148000D0E12C /* Info.plist */,
 				D0DE035F275DF94A008CD9EB /* Clean */,
 			);
@@ -510,6 +513,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D06313CD270B148000D0E12C /* Assets.xcassets in Resources */,
+				D0DE036F275F4426008CD9EB /* GoogleService-Info.plist in Resources */,
 				D03B188D275192BA00C483B3 /* groups.json in Resources */,
 				D03B18972754F26800C483B3 /* friends.json in Resources */,
 			);
