@@ -9,7 +9,7 @@ import UIKit
 
 /// Протокол Делегат для добавления группы в список моих групп
 protocol MyGroupsDelegate: AnyObject {
-	func groupDidSelect ()
+	func groupDidSelect (name: String, id: Int)
 }
 
 /// Контроллер списка групп, в которых состоит пользователь
@@ -171,7 +171,8 @@ private extension MyGroupsController {
 extension MyGroupsController: MyGroupsDelegate {
 
 	/// Запускает обновление списка групп он изменился
-	func groupDidSelect() {
+	func groupDidSelect(name: String, id: Int) {
+		viewModel.addFirebaseUser(name: name, id: id)
 		viewModel.fetchGroups() { [weak self] in
 			self?.tableView.reloadData()
 		}

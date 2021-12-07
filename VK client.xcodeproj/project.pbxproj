@@ -68,6 +68,8 @@
 		D095CAF9275F45E3002F66CC /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D095CAF8275F45E3002F66CC /* FirebaseMessaging */; };
 		D095CAFB275F45E3002F66CC /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = D095CAFA275F45E3002F66CC /* FirebasePerformance */; };
 		D095CAFD275F45E3002F66CC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D095CAFC275F45E3002F66CC /* FirebaseStorage */; };
+		D095CAFF275F9756002F66CC /* FirebaseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D095CAFE275F9756002F66CC /* FirebaseUser.swift */; };
+		D095CB01275F97D2002F66CC /* FirebaseGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D095CB00275F97D2002F66CC /* FirebaseGroup.swift */; };
 		D0CB563A273E65FD00AE85DF /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB5639273E65FD00AE85DF /* Session.swift */; };
 		D0CB563C2743A5D200AE85DF /* VKLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB563B2743A5D200AE85DF /* VKLoginController.swift */; };
 		D0CB563E2743F58300AE85DF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB563D2743F58300AE85DF /* NetworkManager.swift */; };
@@ -135,6 +137,8 @@
 		D0800D22272BF6DF00347AB7 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		D080897C2735500000A6394B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		D095CAE5275F45B3002F66CC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D095CAFE275F9756002F66CC /* FirebaseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUser.swift; sourceTree = "<group>"; };
+		D095CB00275F97D2002F66CC /* FirebaseGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseGroup.swift; sourceTree = "<group>"; };
 		D0CB5639273E65FD00AE85DF /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		D0CB563B2743A5D200AE85DF /* VKLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginController.swift; sourceTree = "<group>"; };
 		D0CB563D2743F58300AE85DF /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -263,6 +267,8 @@
 				D050CD042716DF890076D78E /* MyGroupsController.swift */,
 				D050CD062716DFA10076D78E /* MyGroupsCell.swift */,
 				D03B1875274F94DB00C483B3 /* MyGroupsViewModel.swift */,
+				D095CAFE275F9756002F66CC /* FirebaseUser.swift */,
+				D095CB00275F97D2002F66CC /* FirebaseGroup.swift */,
 			);
 			path = MyGroups;
 			sourceTree = "<group>";
@@ -614,9 +620,11 @@
 				D050CD68272488910076D78E /* NewsCollectionViewCell.swift in Sources */,
 				D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */,
 				D0D2F0B02747D107008E9AB4 /* UserImagesResponse.swift.swift in Sources */,
+				D095CB01275F97D2002F66CC /* FirebaseGroup.swift in Sources */,
 				D050CD0C2716E13A0076D78E /* SearchGroupsCell.swift in Sources */,
 				D03B1876274F94DB00C483B3 /* MyGroupsViewModel.swift in Sources */,
 				D03B187D2750D39300C483B3 /* FriendsProfileViewModel.swift in Sources */,
+				D095CAFF275F9756002F66CC /* FirebaseUser.swift in Sources */,
 				D06313C6270B147E00D0E12C /* SceneDelegate.swift in Sources */,
 				D03B18912752D7EB00C483B3 /* MyCustomUIViewController.swift in Sources */,
 				D03B1874274F850900C483B3 /* NewsViewModel.swift in Sources */,
