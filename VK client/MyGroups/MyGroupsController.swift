@@ -104,7 +104,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 	}
 }
 
-// MARK: - Nav bar configuration
+// MARK: - Private methods
 private extension MyGroupsController {
 	
 	// Конфигурируем Нав Бар
