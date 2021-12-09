@@ -194,7 +194,7 @@ final class GroupsService: GroupsLoader {
 	}
 	
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String] {
+	func sortImage(by sizeType: String, from array: [UserImages]) -> [String] {
 		var imageLinks: [String] = []
 		
 		for model in array {

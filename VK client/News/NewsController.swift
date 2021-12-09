@@ -34,6 +34,10 @@ final class NewsController: MyCustomUIViewController {
         super.viewDidLoad()
         setupTableView()
         tableView.reloadData()
+		
+		viewModel.fetchNews { [weak self] in
+			self?.tableView.reloadData()
+		}
     }
 }
 

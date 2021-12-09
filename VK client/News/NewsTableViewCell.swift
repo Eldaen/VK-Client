@@ -49,7 +49,7 @@ final class NewsTableViewCell: UITableViewCell {
 		return collection
 	}()
 	
-    private var collection: [NewsCollectionViewCellModel] = []
+    private var collection: [UIImage] = []
     
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
@@ -60,6 +60,12 @@ final class NewsTableViewCell: UITableViewCell {
 		setupConstraints()
 		updateCellData(with: model)
     }
+	
+	/// Добавляет в collectionView свежезагруженные картинки
+	func updateCollection(with images: [UIImage]) {
+		self.collection = images
+		self.collectionView.reloadData()
+	}
 }
 
 // MARK: collection view extension
@@ -103,7 +109,7 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
         
         // находим нужную модель ячейки коллекции в массиве collection и потом в нашу новую ячейку коллекции передаэм готовую картинку
         let collectionCell = collection[indexPath.row]
-        cell.configure(with: collectionCell.image)
+        cell.configure(with: collectionCell)
         
         return cell
     }
@@ -165,8 +171,8 @@ private extension NewsTableViewCell {
 	
 	// обновляет данные ячейки
 	func updateCellData(with model: NewsTableViewCellModel) {
-		userImage.image = UIImage(named: model.user.image)
-		userName.text = model.user.name
+		userImage.image = UIImage(named: model.source.image)
+		userName.text = model.source.name
 		self.postDate.text = model.postDate
 		postText.text = model.postText
 		self.collection = model.collection

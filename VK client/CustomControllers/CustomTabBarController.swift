@@ -22,6 +22,7 @@ final class CustomTabBarController: UITabBarController {
 		
 		let groupsVM = Assembly.instance.myGroupsViewModel
 		let friendsVM = Assembly.instance.friendsViewModel
+		let newsVM = Assembly.instance.newsViewModel
 		
 		let myGroups = createNavController(for: MyGroupsController(
 			model: groupsVM),
@@ -31,7 +32,8 @@ final class CustomTabBarController: UITabBarController {
 			model: friendsVM),
 								  title: "Друзья", image: UIImage(systemName: "person")!)
 		
-		let news = createNavController(for: NewsController(model: NewsViewModel()),
+		let news = createNavController(for: NewsController(
+			model: newsVM),
 										  title: "Новости", image: UIImage(systemName: "newspaper")!)
 		
 		viewControllers = [myGroups, friends, news]

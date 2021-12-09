@@ -31,7 +31,7 @@ protocol GalleryType {
 	func createImageViews()
 	
 	/// Получает ссылки на картинки нужного размера
-	func getStoredImages(size: Sizes.TypeEnum)
+	func getStoredImages(size: String)
 	
 	init(loader: UserLoader, selectedPhoto: Int, images: [UserImages])
 }
@@ -68,7 +68,7 @@ final class GalleryViewModel: GalleryType {
 		}
 	}
 	
-	func getStoredImages(size: Sizes.TypeEnum) {
+	func getStoredImages(size: String) {
 		storedImages = loader.sortImage(by: size, from: photoModels)
 	}
 }

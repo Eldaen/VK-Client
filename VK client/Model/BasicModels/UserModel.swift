@@ -8,7 +8,7 @@
 import RealmSwift
 
 /// Модель пользователя
-class UserModel: Object, Codable {
+class UserModel: Object, NewsSourceProtocol, Codable {
 	@objc dynamic var name: String = ""
 	@objc dynamic var image: String = ""
 	@objc dynamic var id: Int = 0

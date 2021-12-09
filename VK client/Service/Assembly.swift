@@ -18,10 +18,12 @@ final class Assembly {
 	
 	var userService: UserLoader
 	var groupsService: GroupsLoader
+	var newsService: NewsLoader
 	
 	var myGroupsViewModel: MyGroupsViewModelType
 	var searchGroupsViewModel: SearchGroupsViewModelType
 	var friendsViewModel: FriendsViewModelType
+	var newsViewModel: NewsViewModelType
 	
 	// Вот тут у нас только тип, т.к. там через инициализаторы передаются данные при переходе
 	var friendProfileViewModel: FriendsProfileViewModelType.Type = FriendsProfileViewModel.self
@@ -46,9 +48,13 @@ final class Assembly {
 		let groupsService = GroupsService(networkManager: network, cache: cache, persistence: persistence)
 		self.groupsService = groupsService
 		
+		let newsService = NewsService(networkManager: network, cache: cache, persistence: persistence)
+		self.newsService = newsService
+		
 		self.myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
 		self.searchGroupsViewModel = SearchGroupsViewModel(loader: groupsService)
 		self.friendsViewModel = FriendsViewModel(loader: userService)
+		self.newsViewModel = NewsViewModel(loader: newsService)
 	}
 	
 	/// Возможность включить Демо режим
@@ -58,9 +64,11 @@ final class Assembly {
 		if demoMode == true {
 			userService = demoUserService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 			groupsService = demoGroupService(networkManager: networkManager, cache: cacheService, persistence: persistence)
+			newsService = demoNewsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 		} else {
 			userService = UserService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 			groupsService = GroupsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
+			newsService = NewsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 		}
 		
 		myGroupsViewModel = MyGroupsViewModel(loader: groupsService)

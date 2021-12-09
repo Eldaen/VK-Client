@@ -57,7 +57,7 @@ final class FriendsProfileViewModel: FriendsProfileViewModelType {
 		loader.loadUserPhotos(for: String(friend.id)) { [weak self] images in
 			self?.storedModels = images
 			
-			if let imagesLinks = self?.loader.sortImage(by: .m, from: images) {
+			if let imagesLinks = self?.loader.sortImage(by: "m", from: images) {
 				self?.storedImages = imagesLinks
 			}
 			completion()
