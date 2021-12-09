@@ -137,7 +137,7 @@ private extension NewsService {
 				continue
 			}
 			
-			let date = Date(timeIntervalSince1970: Double(post.date))
+			let date = getDate(post.date)
 			let sourceID = post.sourceID
 			let text = post.text
 			
@@ -193,6 +193,17 @@ private extension NewsService {
 			news.append(newsModel)
 		}
 		return news
+	}
+	
+	func getDate(_ date: Int) -> String {
+		let date = Date(timeIntervalSince1970: Double(1415637900))
+		let dateFormatter = DateFormatter()
+		dateFormatter.locale = Locale(identifier: "ru_RU")
+		dateFormatter.timeStyle = DateFormatter.Style.short
+		dateFormatter.dateStyle = DateFormatter.Style.medium
+		dateFormatter.timeZone = .current
+		let localDate = dateFormatter.string(from: date)
+		return localDate
 	}
 }
 
