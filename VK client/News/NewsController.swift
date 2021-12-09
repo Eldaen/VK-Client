@@ -73,8 +73,12 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		let likeControl = LikeControl(frame: CGRect(x: 5, y: 0, width: 50, height: 20))
 		likeControl.tintColor = .red
 		
+		let likes = viewModel.news[section].likesModel?.count
+		likeControl.likesCount = likes ?? 0
+		
 		let views = UILabel(frame: CGRect(x: footer.frame.size.width - 50, y: 0, width: 50, height: 20))
-		views.text = "42"
+		
+		views.text =  "42"
 		views.font = UIFont.systemFont(ofSize: 18)
 		
 		footer.addSubview(likeControl)

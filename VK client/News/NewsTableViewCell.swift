@@ -50,6 +50,12 @@ final class NewsTableViewCell: UITableViewCell {
 	}()
 	
     private var collection: [UIImage] = []
+	
+	/// Стандартная высота ячейки коллекции
+	private var standard: NSLayoutConstraint?
+	
+	/// Ячейка коллекции, если картинок нет
+	private var empty: NSLayoutConstraint?
     
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
@@ -64,6 +70,7 @@ final class NewsTableViewCell: UITableViewCell {
 	/// Добавляет в collectionView свежезагруженные картинки
 	func updateCollection(with images: [UIImage]) {
 		self.collection = images
+		//reloadCollectionConstraints()
 		self.collectionView.reloadData()
 	}
 }
@@ -120,12 +127,23 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 	) -> CGFloat {
         return 0
     }
+	
+	override func prepareForReuse() {
+		standard = nil
+		empty = nil
+	}
 }
 
 // MARK: - Private methods
 private extension NewsTableViewCell {
 	
+	
 	func setupConstraints() {
+		
+		// Стандартная высота колекции
+		standard = collectionView.heightAnchor.constraint(equalToConstant: 300)
+		standard?.isActive = true
+		
 		NSLayoutConstraint.activate([
 			userImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
 			userImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
@@ -147,7 +165,6 @@ private extension NewsTableViewCell {
 			collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 			collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-			collectionView.heightAnchor.constraint(equalToConstant: 350),
 		])
 	}
 	
@@ -178,5 +195,26 @@ private extension NewsTableViewCell {
 		self.collection = model.collection
 		
 		self.collectionView.reloadData()
+	}
+	
+	///  Выставляем высоту коллекции
+	func reloadCollectionConstraints() {
+		
+		//let height = collectionView.subviews.reduce(CGRect.zero, {$0.union($1.frame)}).size
+		
+		standard = collectionView.heightAnchor.constraint(equalToConstant: 350)//height.height)
+		empty = collectionView.heightAnchor.constraint(equalToConstant: 0)
+		
+//		if collection.isEmpty {
+//			standard?.isActive = false
+//			empty?.isActive = true
+//		} else {
+//			empty?.isActive = false
+//			standard?.isActive = true
+//		}
+		
+		standard?.isActive = true
+		
+		self.collectionView.layoutIfNeeded()
 	}
 }

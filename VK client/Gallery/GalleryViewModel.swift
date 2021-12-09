@@ -11,7 +11,7 @@ import UIKit.UIImage
 protocol GalleryType {
 	
 	/// Загруженные модели картинок
-	var photoModels: [UserImages] { get }
+	var photoModels: [ApiImage] { get }
 	
 	var selectedPhoto: Int { get set }
 	
@@ -33,18 +33,18 @@ protocol GalleryType {
 	/// Получает ссылки на картинки нужного размера
 	func getStoredImages(size: String)
 	
-	init(loader: UserLoader, selectedPhoto: Int, images: [UserImages])
+	init(loader: UserLoader, selectedPhoto: Int, images: [ApiImage])
 }
 
 /// Вью модель для Gallery контроллера
 final class GalleryViewModel: GalleryType {
-	var photoModels: [UserImages] = []
+	var photoModels: [ApiImage] = []
 	var storedImages: [String] = []
 	var photoViews: [UIImageView] = []
 	var loader: UserLoader
 	var selectedPhoto: Int = 0
 	
-	init(loader: UserLoader, selectedPhoto: Int, images: [UserImages]){
+	init(loader: UserLoader, selectedPhoto: Int, images: [ApiImage]){
 		self.loader = loader
 		self.selectedPhoto = selectedPhoto
 		self.photoModels = images

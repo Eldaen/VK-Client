@@ -77,7 +77,7 @@ final class NewsService: NewsLoader {
 					}
 					
 					if let attachments = post.attachments {
-						var images = [UserImages]()
+						var images = [ApiImage]()
 						
 						for attachment in attachments {
 							if let image = attachment.photo {
@@ -98,7 +98,8 @@ final class NewsService: NewsLoader {
 						source: source,
 						postDate: date.description,
 						postText: text ?? "",
-						newsImageNames: imageLinksArray ?? []
+						newsImageNames: imageLinksArray ?? [],
+						likesModel: post.likes
 					)
 					news.append(newsModel)
 				}
@@ -153,7 +154,7 @@ final class NewsService: NewsLoader {
 	}
 	
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: String, from array: [UserImages]) -> [String] {
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
 		var imageLinks: [String] = []
 		
 	mainLoop: for model in array {

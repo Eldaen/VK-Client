@@ -30,7 +30,7 @@ final class demoNewsService: NewsLoader {
 		
 	}
 	
-	func sortImage(by sizeType: String, from array: [UserImages]) -> [String] {
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
 		[]
 	}
 	

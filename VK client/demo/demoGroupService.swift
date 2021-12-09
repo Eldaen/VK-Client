@@ -71,7 +71,7 @@ class demoGroupService: GroupsLoader {
 	}
 	
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: String, from array: [UserImages]) -> [String] {
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
 		var imageLinks: [String] = []
 		
 		// выбираем из вариантов картинок картинки типа X

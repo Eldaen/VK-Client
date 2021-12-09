@@ -8,5 +8,5 @@
 /// Ответ АПИ про фото у новости
 struct Photos: Codable {
 	let count: Int
-	let items: [UserImages]
+	let items: [ApiImage]
 }

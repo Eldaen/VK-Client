@@ -91,7 +91,7 @@ final class Assembly {
 	}
 	
 	/// геттер для класса переменной galleryViewModel
-	func getGalleryViewModel(loader: UserLoader, selectedPhoto: Int, images: [UserImages]) -> GalleryType {
+	func getGalleryViewModel(loader: UserLoader, selectedPhoto: Int, images: [ApiImage]) -> GalleryType {
 		return GalleryViewModel(loader: loader, selectedPhoto: selectedPhoto, images: images)
 	}
 }

@@ -10,7 +10,9 @@ import UIKit
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 final class LikeControl: UIControl {
     
-    var likesCount: Int = 0
+	var likesCount: Int = 0
+	private var myLike: Int = 0
+	
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let recognizer = UITapGestureRecognizer(target: self,
                                                 action: #selector(onClick))
@@ -56,20 +58,28 @@ final class LikeControl: UIControl {
         
         self.addSubview(bgView)
     }
+	
+	func setLikes(with value: Int) {
+		likesCount = value
+		likesLabel.text = "\(value)"
+		likesLabel.layoutIfNeeded()
+	}
     
     /// Меняет вью с одной картинкой на вью с другой
     @objc func onClick() {
-        if likesCount == 0 {
-            self.likesLabel.text = "1"
-            likesCount = 1
+        if myLike == 0 {
+            self.likesLabel.text = "\(likesCount + 1)"
+            likesCount += 1
+			myLike = 1
             
             UIView.transition(from: likesImageEmpty,
                               to: likesImageFill,
                               duration: 0.2,
                               options: .transitionCrossDissolve)
         } else {
-            self.likesLabel.text = "0"
-            likesCount = 0
+            self.likesLabel.text = "\(likesCount - 1)"
+            likesCount -= 1
+			myLike = 0
             
             UIView.transition(from: likesImageFill,
                               to: likesImageEmpty,

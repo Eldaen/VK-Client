@@ -21,7 +21,8 @@ struct NewsModel: Codable {
 		case postType = "post_type"
 		case text
 		case attachments
-		case likes, views
+		case likes
+		case views
 		case type
 		case photos
 	}
@@ -36,7 +37,7 @@ struct Views: Codable {
 struct Attachment: Codable {
 	let type: String
 	let link: Link?
-	let photo: UserImages?
+	let photo: ApiImage?
 }
 
 /// Модель для получения данных приложения к посту типа CСЫЛКА
@@ -44,7 +45,7 @@ struct Link: Codable {
 	let url: String
 	let title, linkDescription: String
 	let caption: String?
-	let photo: UserImages?
+	let photo: ApiImage?
 
 	enum CodingKeys: String, CodingKey {
 		case url, title
