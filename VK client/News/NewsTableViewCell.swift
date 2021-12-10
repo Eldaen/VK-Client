@@ -34,6 +34,7 @@ final class NewsTableViewCell: UITableViewCell {
 	
 	private let postText: UITextView = {
 		let text = UITextView()
+		text.inputView = nil
 		text.translatesAutoresizingMaskIntoConstraints = false
 		text.isScrollEnabled = false
 		text.autocapitalizationType = .sentences
@@ -72,6 +73,12 @@ final class NewsTableViewCell: UITableViewCell {
 		self.collection = images
 		//reloadCollectionConstraints()
 		self.collectionView.reloadData()
+	}
+	
+	/// Устанавливает картинку профиля, после того как она загрузится
+	func updateProfileImage(with image: UIImage) {
+		userImage.image = image
+		userImage.layoutIfNeeded()
 	}
 }
 
@@ -202,7 +209,7 @@ private extension NewsTableViewCell {
 		
 		//let height = collectionView.subviews.reduce(CGRect.zero, {$0.union($1.frame)}).size
 		
-		standard = collectionView.heightAnchor.constraint(equalToConstant: 350)//height.height)
+		standard = collectionView.heightAnchor.constraint(equalToConstant: 300)//height.height)
 		empty = collectionView.heightAnchor.constraint(equalToConstant: 0)
 		
 //		if collection.isEmpty {

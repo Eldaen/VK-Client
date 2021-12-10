@@ -40,6 +40,10 @@ final class NewsViewModel: NewsViewModelType {
 			loadImages(array: news[index].newsImageNames) { images in
 				cell.updateCollection(with: images)
 			}
+			
+			loadPorfileImage(profile: news[index].source) { image in
+				cell.updateProfileImage(with: image)
+			}
 		}
 	}
 	
@@ -70,7 +74,12 @@ final class NewsViewModel: NewsViewModelType {
 		}
 	}
 	
-	func loadPorfileImage(profile: NewsSourceProtocol) -> UIImage {
-		return UIImage()
+	/// Загружает картинку профиля создателя новости
+	func loadPorfileImage(profile: NewsSourceProtocol, completion: @escaping (UIImage) -> Void) {
+		let url = profile.image
+		
+		loader.loadImage(url: url) { image in
+			completion(image)
+		}
 	}
 }

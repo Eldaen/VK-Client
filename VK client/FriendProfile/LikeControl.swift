@@ -10,7 +10,7 @@ import UIKit
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 final class LikeControl: UIControl {
     
-	var likesCount: Int = 0
+	var likesCount: Int = 0 
 	private var myLike: Int = 0
 	
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
@@ -45,9 +45,9 @@ final class LikeControl: UIControl {
             
         
         //Настраиваем Label
-        likesLabel.frame = CGRect(x: self.frame.size.width - 20, y: 4, width: 10, height: 12)
+        likesLabel.frame = CGRect(x: 30, y: 4, width: 50, height: 12)
         likesLabel.text = String(likesCount)
-        likesLabel.textAlignment = .center
+        likesLabel.textAlignment = .left
         likesLabel.textColor = .red
         likesLabel.font = UIFont.systemFont(ofSize: 16)
         

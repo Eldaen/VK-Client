@@ -140,6 +140,7 @@ private extension NewsService {
 			let date = getDate(post.date)
 			let sourceID = post.sourceID
 			let text = post.text
+			let views = post.views
 			
 			// Выясняем, от группы или от пользователя новость
 			if sourceID < 0 {
@@ -188,15 +189,17 @@ private extension NewsService {
 				postDate: date.description,
 				postText: text ?? "",
 				newsImageNames: imageLinksArray ?? [],
-				likesModel: post.likes
+				likesModel: post.likes,
+				views: views
 			)
 			news.append(newsModel)
 		}
 		return news
 	}
 	
+	/// Возвращаем красивую дату cтрокой из unixtime
 	func getDate(_ date: Int) -> String {
-		let date = Date(timeIntervalSince1970: Double(1415637900))
+		let date = Date(timeIntervalSince1970: Double(date))
 		let dateFormatter = DateFormatter()
 		dateFormatter.locale = Locale(identifier: "ru_RU")
 		dateFormatter.timeStyle = DateFormatter.Style.short
