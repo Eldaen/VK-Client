@@ -79,6 +79,8 @@ final class NewsTableViewCell: UITableViewCell {
 	func updateProfileImage(with image: UIImage) {
 		userImage.image = image
 		userImage.layoutIfNeeded()
+		userImage.layer.cornerRadius = userImage.frame.size.width / 2
+		userImage.layer.masksToBounds = true
 	}
 }
 

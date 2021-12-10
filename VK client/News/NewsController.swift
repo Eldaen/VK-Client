@@ -89,6 +89,10 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		20
 	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.tableView.deselectRow(at: indexPath, animated: true)
+	}
 }
 
 // MARK: - Private methods

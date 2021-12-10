@@ -160,6 +160,9 @@ private extension NewsService {
 			// Вытаскиваем нужные картинки
 			var imageLinksArray: [String]? = []
 			
+			// Превью, если видео
+			var videoImages: [String] = []
+			
 			// Если есть фото, то нам нужны фото
 			if let images = post.photos?.items {
 				imageLinksArray = sortImage(by: "z", from: images)
@@ -179,9 +182,22 @@ private extension NewsService {
 							images.append(photo)
 						}
 					}
+					
+					if let video = attachment.video {
+						if let photo = video.photo?.first?.url {
+							videoImages.append(photo)
+						}
+					}
 				}
 			
 				imageLinksArray = sortImage(by: "z", from: images)
+				
+				if let imagesArray = imageLinksArray {
+					if imagesArray.isEmpty {
+						imageLinksArray = videoImages
+					}
+				}
+				
 			}
 			
 			let newsModel = NewsTableViewCellModel(

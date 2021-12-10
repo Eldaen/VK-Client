@@ -25,6 +25,7 @@ final class Session {
 	func loginUser(with token: String, userId: Int) {
 		self.token = token
 		self.userID = userId
+		print("Token: \(token)")
 	}
 	
 	func clean() {
