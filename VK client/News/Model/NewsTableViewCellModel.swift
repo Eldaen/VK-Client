@@ -11,6 +11,7 @@ struct NewsTableViewCellModel {
     var source: NewsSourceProtocol
 	var likesModel: LikesModel?
 	var views: Views?
+	var postID: Int
     var postDate: String
     var postText: String
     var newsImageNames: [String]
@@ -20,12 +21,14 @@ struct NewsTableViewCellModel {
 		source: NewsSourceProtocol, postDate: String,
 		postText: String,
 		newsImageNames: [String],
+		postId: Int,
 		likesModel: LikesModel? = nil,
 		views: Views? = nil
 	) {
         self.source = source
         self.postDate = postDate
         self.postText = postText
+		self.postID = postId
         self.newsImageNames = newsImageNames
 		self.likesModel = likesModel
 		self.views = views

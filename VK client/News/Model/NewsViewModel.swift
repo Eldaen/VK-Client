@@ -21,6 +21,12 @@ protocol NewsViewModelType {
 	
 	/// Скачиваем из сети список новостей для пользователя
 	func fetchNews(completion: @escaping () -> Void)
+	
+	/// Ставит лайк текущей новости
+	func setLike(_ postId: Int)
+	
+	/// Отменяет лайк текущей новости
+	func removeLike(_ postId: Int)
 }
 
 /// ВьюМодель новости, заполняет ячейки данными и получает их от менеджера
@@ -35,6 +41,7 @@ final class NewsViewModel: NewsViewModelType {
 	
 	func configureCell(cell: NewsTableViewCell, index: Int) {
 		cell.configure(with: news[index])
+		cell.likesResponder = self
 		
 		if !news.isEmpty {
 			loadImages(array: news[index].newsImageNames) { images in
@@ -81,5 +88,15 @@ final class NewsViewModel: NewsViewModelType {
 		loader.loadImage(url: url) { image in
 			completion(image)
 		}
+	}
+	
+	/// Отправляет запрос на лайк
+	func setLike(_ postId: Int) {
+		print("Like was added")
+	}
+	
+	/// Отправляет запрос на отмену лайка
+	func removeLike(_ postId: Int) {
+		print("Like was removed")
 	}
 }

@@ -13,6 +13,7 @@ final class NewsController: MyCustomUIViewController {
 	private let tableView: UITableView = {
 		let tableView = UITableView()
 		tableView.backgroundColor = .white
+		tableView.separatorStyle = .none
 		tableView.translatesAutoresizingMaskIntoConstraints = false
 		return tableView
 	}()
@@ -65,11 +66,11 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	// Добавляем футер с лайк контролом
-	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-		
-		let footer = getFooter(for: section)
-		return footer
-	}
+//	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//		
+//		let footer = getFooter(for: section)
+//		return footer
+//	}
 	
 	// добавляем заголовок, чтобы визуально разграничить новости
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -87,7 +88,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-		20
+		5
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

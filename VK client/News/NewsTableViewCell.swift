@@ -50,6 +50,24 @@ final class NewsTableViewCell: UITableViewCell {
 		return collection
 	}()
 	
+	private let footerView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	private let likesControl: LikeControl = {
+		let likeControl = LikeControl(frame: CGRect(x: 5, y: 0, width: 100, height: 20))
+		likeControl.tintColor = .red
+		return likeControl
+	}()
+	
+	private let viewsLabel: UILabel = {
+		let views = UILabel(frame: CGRect(x: 105, y: 0, width: 100, height: 20))
+		views.font = UIFont.systemFont(ofSize: 18)
+		return views
+	}()
+	
     private var collection: [UIImage] = []
 	
 	/// Стандартная высота ячейки коллекции
@@ -57,6 +75,12 @@ final class NewsTableViewCell: UITableViewCell {
 	
 	/// Ячейка коллекции, если картинок нет
 	private var empty: NSLayoutConstraint?
+	
+	/// Модель новости, которую отображаем
+	private var model: NewsTableViewCellModel?
+	
+	/// Вью модель
+	var likesResponder: NewsViewModelType?
     
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
@@ -64,14 +88,17 @@ final class NewsTableViewCell: UITableViewCell {
     func configure (with model: NewsTableViewCellModel) {
 		setupCell()
 		setupCollectionView()
+		setupFooter()
 		setupConstraints()
 		updateCellData(with: model)
+		self.model = model
+		
+		likesControl.setLikesResponder(responder: self)
     }
 	
 	/// Добавляет в collectionView свежезагруженные картинки
 	func updateCollection(with images: [UIImage]) {
 		self.collection = images
-		//reloadCollectionConstraints()
 		self.collectionView.reloadData()
 	}
 	
@@ -146,18 +173,13 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 // MARK: - Private methods
 private extension NewsTableViewCell {
 	
-	
 	func setupConstraints() {
-		
-		// Стандартная высота колекции
-		standard = collectionView.heightAnchor.constraint(equalToConstant: 300)
-		standard?.isActive = true
 		
 		NSLayoutConstraint.activate([
 			userImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
 			userImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
 			userImage.widthAnchor.constraint(equalToConstant: 60),
-			userImage.heightAnchor.constraint(equalTo: userImage.widthAnchor, multiplier: 1.0),
+			userImage.heightAnchor.constraint(equalToConstant: 60),
 			
 			userName.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 10),
 			userName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -173,7 +195,13 @@ private extension NewsTableViewCell {
 			collectionView.topAnchor.constraint(equalTo: postText.bottomAnchor, constant: 10),
 			collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+			collectionView.heightAnchor.constraint(equalToConstant: 300),
+			
+			footerView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
+			footerView.heightAnchor.constraint(equalToConstant: 30),
 		])
 	}
 	
@@ -183,9 +211,10 @@ private extension NewsTableViewCell {
 		contentView.addSubview(postDate)
 		contentView.addSubview(postText)
 		contentView.addSubview(collectionView)
+		contentView.addSubview(footerView)
 	}
 	
-	// Конфигурируем нашу collectionView и добавляем в основную view
+	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
 		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
 		collectionView.backgroundColor = .white
@@ -195,35 +224,42 @@ private extension NewsTableViewCell {
 		contentView.addSubview(collectionView)
 	}
 	
-	// обновляет данные ячейки
+	/// Конфигурируем футер
+	func setupFooter() {
+		footerView.addSubview(likesControl)
+		footerView.addSubview(viewsLabel)
+	}
+	
+	/// обновляет данные ячейки
 	func updateCellData(with model: NewsTableViewCellModel) {
 		userImage.image = UIImage(named: model.source.image)
 		userName.text = model.source.name
-		self.postDate.text = model.postDate
+		postDate.text = model.postDate
 		postText.text = model.postText
-		self.collection = model.collection
+		collection = model.collection
+		
+		likesControl.setLikes(with: model.likesModel?.count ?? 0)
+		viewsLabel.text = "🔍 \(model.views?.count ?? 0)"
 		
 		self.collectionView.reloadData()
 	}
+}
+
+// MARK: - CanLike protocol extension
+
+extension NewsTableViewCell: CanLike {
 	
-	///  Выставляем высоту коллекции
-	func reloadCollectionConstraints() {
-		
-		//let height = collectionView.subviews.reduce(CGRect.zero, {$0.union($1.frame)}).size
-		
-		standard = collectionView.heightAnchor.constraint(equalToConstant: 300)//height.height)
-		empty = collectionView.heightAnchor.constraint(equalToConstant: 0)
-		
-//		if collection.isEmpty {
-//			standard?.isActive = false
-//			empty?.isActive = true
-//		} else {
-//			empty?.isActive = false
-//			standard?.isActive = true
-//		}
-		
-		standard?.isActive = true
-		
-		self.collectionView.layoutIfNeeded()
+	///  Отправляет запрос на лайк поста
+	func likeOccured() {
+		if let id = model?.postID {
+			likesResponder?.setLike(id)
+		}
+	}
+	
+	/// Отправляет запрос на отмену лайка
+	func removeLike() {
+		if let id = model?.postID {
+			likesResponder?.removeLike(id)
+		}
 	}
 }

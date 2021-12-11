@@ -141,6 +141,7 @@ private extension NewsService {
 			let sourceID = post.sourceID
 			let text = post.text
 			let views = post.views
+			let postId = post.postId
 			
 			// Выясняем, от группы или от пользователя новость
 			if sourceID < 0 {
@@ -205,6 +206,7 @@ private extension NewsService {
 				postDate: date.description,
 				postText: text ?? "",
 				newsImageNames: imageLinksArray ?? [],
+				postId: postId,
 				likesModel: post.likes,
 				views: views
 			)

@@ -7,11 +7,18 @@
 
 import UIKit
 
+/// Протокол описывающий класс, который будет что-то делать с фактом нажатия кноки лайк
+protocol CanLike {
+	func likeOccured()
+	func removeLike()
+}
+
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 final class LikeControl: UIControl {
     
 	var likesCount: Int = 0 
 	private var myLike: Int = 0
+	var responder: CanLike?
 	
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let recognizer = UITapGestureRecognizer(target: self,
@@ -59,10 +66,16 @@ final class LikeControl: UIControl {
         self.addSubview(bgView)
     }
 	
+	/// Обновляет текущее кол-во лайков
 	func setLikes(with value: Int) {
 		likesCount = value
 		likesLabel.text = "\(value)"
 		likesLabel.layoutIfNeeded()
+	}
+	
+	/// Отправляет в ячейку информацию о том, что кто-то что-то лайкнул
+	func setLikesResponder(responder: CanLike) {
+		self.responder = responder
 	}
     
     /// Меняет вью с одной картинкой на вью с другой
@@ -71,6 +84,7 @@ final class LikeControl: UIControl {
             self.likesLabel.text = "\(likesCount + 1)"
             likesCount += 1
 			myLike = 1
+			responder?.likeOccured()
             
             UIView.transition(from: likesImageEmpty,
                               to: likesImageFill,
@@ -80,6 +94,7 @@ final class LikeControl: UIControl {
             self.likesLabel.text = "\(likesCount - 1)"
             likesCount -= 1
 			myLike = 0
+			responder?.removeLike()
             
             UIView.transition(from: likesImageFill,
                               to: likesImageEmpty,
