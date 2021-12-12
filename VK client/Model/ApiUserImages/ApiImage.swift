@@ -6,6 +6,6 @@
 //
 
 /// Модель картинки пользователя
-struct UserImages: Codable {
+struct ApiImage: Codable {
 	let sizes: [Sizes]
 }

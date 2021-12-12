@@ -20,7 +20,7 @@ protocol FriendsProfileViewModelType {
 	var storedImages: [String] { get }
 	
 	/// Загруженные модели картинок
-	var storedModels: [UserImages] { get }
+	var storedModels: [ApiImage] { get }
 	
 	/// Сервис по загрузке данных пользователя
 	var loader: UserLoader { get }
@@ -38,7 +38,7 @@ final class FriendsProfileViewModel: FriendsProfileViewModelType {
 	var friend: UserModel
 	var profileImage: UIImage
 	var storedImages: [String] = []
-	var storedModels: [UserImages] = []
+	var storedModels: [ApiImage] = []
 	var loader: UserLoader
 	
 	init(friend: UserModel, loader: UserLoader, profileImage image: UIImage){
@@ -57,7 +57,7 @@ final class FriendsProfileViewModel: FriendsProfileViewModelType {
 		loader.loadUserPhotos(for: String(friend.id)) { [weak self] images in
 			self?.storedModels = images
 			
-			if let imagesLinks = self?.loader.sortImage(by: .m, from: images) {
+			if let imagesLinks = self?.loader.sortImage(by: "m", from: images) {
 				self?.storedImages = imagesLinks
 			}
 			completion()

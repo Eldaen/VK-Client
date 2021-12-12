@@ -88,7 +88,6 @@ import UIKit
         
         // Чтобы тень рисовалась и круглые картинки были
 		containerView.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
-        containerView.layer.cornerRadius = 20
         
         //чтобы округлялось
 		imageView.frame = CGRect(x: 0, y: 0, width: 60, height: 60)

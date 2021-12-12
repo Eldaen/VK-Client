@@ -34,6 +34,7 @@ final class NewsTableViewCell: UITableViewCell {
 	
 	private let postText: UITextView = {
 		let text = UITextView()
+		text.inputView = nil
 		text.translatesAutoresizingMaskIntoConstraints = false
 		text.isScrollEnabled = false
 		text.autocapitalizationType = .sentences
@@ -49,7 +50,37 @@ final class NewsTableViewCell: UITableViewCell {
 		return collection
 	}()
 	
-    private var collection: [NewsCollectionViewCellModel] = []
+	private let footerView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	private let likesControl: LikeControl = {
+		let likeControl = LikeControl(frame: CGRect(x: 5, y: 0, width: 100, height: 20))
+		likeControl.tintColor = .red
+		return likeControl
+	}()
+	
+	private let viewsLabel: UILabel = {
+		let views = UILabel(frame: CGRect(x: 105, y: 0, width: 100, height: 20))
+		views.font = UIFont.systemFont(ofSize: 18)
+		return views
+	}()
+	
+    private var collection: [UIImage] = []
+	
+	/// Стандартная высота ячейки коллекции
+	private var standard: NSLayoutConstraint?
+	
+	/// Ячейка коллекции, если картинок нет
+	private var empty: NSLayoutConstraint?
+	
+	/// Модель новости, которую отображаем
+	private var model: NewsTableViewCellModel?
+	
+	/// Вью модель
+	var likesResponder: NewsViewModelType?
     
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
@@ -57,9 +88,27 @@ final class NewsTableViewCell: UITableViewCell {
     func configure (with model: NewsTableViewCellModel) {
 		setupCell()
 		setupCollectionView()
+		setupFooter()
 		setupConstraints()
 		updateCellData(with: model)
+		self.model = model
+		
+		likesControl.setLikesResponder(responder: self)
     }
+	
+	/// Добавляет в collectionView свежезагруженные картинки
+	func updateCollection(with images: [UIImage]) {
+		self.collection = images
+		self.collectionView.reloadData()
+	}
+	
+	/// Устанавливает картинку профиля, после того как она загрузится
+	func updateProfileImage(with image: UIImage) {
+		userImage.image = image
+		userImage.layoutIfNeeded()
+		userImage.layer.cornerRadius = userImage.frame.size.width / 2
+		userImage.layer.masksToBounds = true
+	}
 }
 
 // MARK: collection view extension
@@ -103,7 +152,7 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
         
         // находим нужную модель ячейки коллекции в массиве collection и потом в нашу новую ячейку коллекции передаэм готовую картинку
         let collectionCell = collection[indexPath.row]
-        cell.configure(with: collectionCell.image)
+        cell.configure(with: collectionCell)
         
         return cell
     }
@@ -114,17 +163,23 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 	) -> CGFloat {
         return 0
     }
+	
+	override func prepareForReuse() {
+		standard = nil
+		empty = nil
+	}
 }
 
 // MARK: - Private methods
 private extension NewsTableViewCell {
 	
 	func setupConstraints() {
+		
 		NSLayoutConstraint.activate([
 			userImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
 			userImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
 			userImage.widthAnchor.constraint(equalToConstant: 60),
-			userImage.heightAnchor.constraint(equalTo: userImage.widthAnchor, multiplier: 1.0),
+			userImage.heightAnchor.constraint(equalToConstant: 60),
 			
 			userName.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 10),
 			userName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -140,8 +195,13 @@ private extension NewsTableViewCell {
 			collectionView.topAnchor.constraint(equalTo: postText.bottomAnchor, constant: 10),
 			collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-			collectionView.heightAnchor.constraint(equalToConstant: 350),
+			collectionView.heightAnchor.constraint(equalToConstant: 300),
+			
+			footerView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
+			footerView.heightAnchor.constraint(equalToConstant: 30),
 		])
 	}
 	
@@ -151,9 +211,10 @@ private extension NewsTableViewCell {
 		contentView.addSubview(postDate)
 		contentView.addSubview(postText)
 		contentView.addSubview(collectionView)
+		contentView.addSubview(footerView)
 	}
 	
-	// Конфигурируем нашу collectionView и добавляем в основную view
+	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
 		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
 		collectionView.backgroundColor = .white
@@ -163,14 +224,42 @@ private extension NewsTableViewCell {
 		contentView.addSubview(collectionView)
 	}
 	
-	// обновляет данные ячейки
+	/// Конфигурируем футер
+	func setupFooter() {
+		footerView.addSubview(likesControl)
+		footerView.addSubview(viewsLabel)
+	}
+	
+	/// обновляет данные ячейки
 	func updateCellData(with model: NewsTableViewCellModel) {
-		userImage.image = UIImage(named: model.user.image)
-		userName.text = model.user.name
-		self.postDate.text = model.postDate
+		userImage.image = UIImage(named: model.source.image)
+		userName.text = model.source.name
+		postDate.text = model.postDate
 		postText.text = model.postText
-		self.collection = model.collection
+		collection = model.collection
+		
+		likesControl.setLikes(with: model.likesModel?.count ?? 0)
+		viewsLabel.text = "🔍 \(model.views?.count ?? 0)"
 		
 		self.collectionView.reloadData()
+	}
+}
+
+// MARK: - CanLike protocol extension
+
+extension NewsTableViewCell: CanLike {
+	
+	///  Отправляет запрос на лайк поста
+	func likeOccured() {
+		if let id = model?.postID {
+			likesResponder?.setLike(id)
+		}
+	}
+	
+	/// Отправляет запрос на отмену лайка
+	func removeLike() {
+		if let id = model?.postID {
+			likesResponder?.removeLike(id)
+		}
 	}
 }

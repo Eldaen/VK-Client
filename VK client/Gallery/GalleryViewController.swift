@@ -57,7 +57,7 @@ final class GalleryViewController: UIViewController {
 		self.title = "Галерея"
 		
 		//Получаем ссылки на картинки нужного размера
-		viewModel.getStoredImages(size: .x)
+		viewModel.getStoredImages(size: "x")
 		
 		// создаём вьюхи с картинками
 		viewModel.createImageViews()

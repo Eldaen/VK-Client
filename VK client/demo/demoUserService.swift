@@ -39,59 +39,59 @@ class demoUserService: UserLoader {
 		completion(sectionsArray)
 	}
 	
-	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void) {
+	func loadUserPhotos(for id: String, completion: @escaping ([ApiImage]) -> Void) {
 		let images = [
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
-			UserImages(sizes: [
-				Sizes(url: "vasia", type: .x),
-				Sizes(url: "vasia", type: .m)
+			ApiImage(sizes: [
+				Sizes(url: "vasia", type: "x"),
+				Sizes(url: "vasia", type: "m")
 			]),
 		]
 		completion(images)
@@ -105,7 +105,7 @@ class demoUserService: UserLoader {
 	}
 	
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String] {
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
 		var imageLinks: [String] = []
 		
 		for model in array {

@@ -15,7 +15,7 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 		let image = UIImageView()
 		image.translatesAutoresizingMaskIntoConstraints = false
 		image.clipsToBounds = true
-		image.contentMode = .scaleAspectFill
+		image.contentMode = .scaleAspectFit
 		return image
 	}()
 	

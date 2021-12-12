@@ -17,6 +17,9 @@ final class SearchGroupsCell: UITableViewCell {
 	var isMember: Int?
 	
 	/// Название группы
+	var name: String?
+	
+	/// Название группы
 	private let groupName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +46,7 @@ final class SearchGroupsCell: UITableViewCell {
 		groupImage.image = image
 		self.id = id
 		self.isMember = isMember
+		self.name = name
 		
 		self.contentView.addSubview(groupName)
 		self.contentView.addSubview(groupImage)

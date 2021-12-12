@@ -14,7 +14,7 @@ protocol UserLoader: Loader {
 	func loadFriends(completion: @escaping ([FriendsSection]) -> Void)
 	
 	/// Загружает все фото пользователя
-	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void)
+	func loadUserPhotos(for id: String, completion: @escaping ([ApiImage]) -> Void)
 }
 
 /// Сервис для загрузки данных пользователей из сети
@@ -127,7 +127,7 @@ final class UserService: UserLoader {
 	}
 	
 	/// Загружает все фото пользователя
-	func loadUserPhotos(for id: String, completion: @escaping ([UserImages]) -> Void) {
+	func loadUserPhotos(for id: String, completion: @escaping ([ApiImage]) -> Void) {
 		let params = [
 			"owner_id" : id,
 			"count": "40",
@@ -188,7 +188,7 @@ final class UserService: UserLoader {
 	}
 	
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String] {
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
 		var imageLinks: [String] = []
 		
 		for model in array {

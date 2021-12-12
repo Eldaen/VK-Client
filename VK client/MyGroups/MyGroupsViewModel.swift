@@ -6,6 +6,7 @@
 //
 
 import UIKit.UIImage
+import Firebase
 
 /// Протокол Вью модели для контроллера MyGroups
 protocol MyGroupsViewModelType {
@@ -25,6 +26,9 @@ protocol MyGroupsViewModelType {
 	/// Скачиваем из сети список групп пользователя
 	func fetchGroups(completion: @escaping () -> Void)
 	
+	/// Добавляет пользователя и в Firebase и данные о группе, в которую он вступил
+	func addFirebaseUser(name: String, id: Int)
+	
 	/// Отправляет запрос на выход из группы и если успех, то удаляет её из списка для отображения
 	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void)
 	
@@ -40,6 +44,8 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 	var loader: GroupsLoader
 	var groups: [GroupModel] = []
 	var filteredGroups: [GroupModel] = []
+	var ref = Database.database(url: "https://vk-client-97140-default-rtdb.europe-west1.firebasedatabase.app")
+		.reference(withPath: "Users")
 	
 	init(loader: GroupsLoader){
 		self.loader = loader
@@ -61,8 +67,37 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 		loader.loadGroups() { [weak self] groups in
 			self?.groups = groups
 			self?.filteredGroups = groups
+			self?.observe()
 			completion()
 		}
+	}
+	
+	/// Создаём наблюдатель за группами в Firebase
+	func observe() {
+		ref.observe(.value) { snapshot in
+			var groups: [FirebaseGroup] = []
+			
+			for child in snapshot.children {
+				if let snapshot = child as? DataSnapshot,
+				   let group = FirebaseGroup(snapshot: snapshot) {
+					groups.append(group)
+				}
+			}
+			
+			print("Количество групп: " + String(groups.count))
+		}
+	}
+	
+	/// Добавляет в Firebase данные о пользователе и о группе, в которую он вступил
+	func addFirebaseUser(name: String, id: Int) {
+		guard let userId = Session.instance.userID else {
+			return
+		}
+		let user = FirebaseUser(id: userId)
+		user.groups.append(FirebaseGroup(name: name, id: id))
+		
+		let userRef = self.ref.child(String(userId))
+		userRef.setValue(user.toFireBase)
 	}
 	
 	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void) {

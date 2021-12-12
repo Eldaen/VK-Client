@@ -8,7 +8,7 @@
 import RealmSwift
 
 /// Модель группы Вконтакте
-class GroupModel: Object, Codable {
+class GroupModel: Object, NewsSourceProtocol, Codable {
 	@objc dynamic var name: String = ""
 	@objc dynamic var image: String = ""
 	@objc dynamic var id: Int = 0

@@ -49,7 +49,7 @@ final class SearchGroupsViewModel: SearchGroupsViewModelType {
 		let name = filteredGroups[index].name
 		let image = filteredGroups[index].image
 		let id = filteredGroups[index].id
-		let isMember = filteredGroups[index].isMember
+		let isMember = filteredGroups[10000].isMember
 		
 		//Конфигурируем и возвращаем готовую ячейку
 		cell.configure(name: name, image: UIImage(), id: id, isMember: isMember)

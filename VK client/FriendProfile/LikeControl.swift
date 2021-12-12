@@ -7,10 +7,19 @@
 
 import UIKit
 
+/// Протокол описывающий класс, который будет что-то делать с фактом нажатия кноки лайк
+protocol CanLike {
+	func likeOccured()
+	func removeLike()
+}
+
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 final class LikeControl: UIControl {
     
-    var likesCount: Int = 0
+	var likesCount: Int = 0 
+	private var myLike: Int = 0
+	var responder: CanLike?
+	
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let recognizer = UITapGestureRecognizer(target: self,
                                                 action: #selector(onClick))
@@ -43,9 +52,9 @@ final class LikeControl: UIControl {
             
         
         //Настраиваем Label
-        likesLabel.frame = CGRect(x: self.frame.size.width - 20, y: 4, width: 10, height: 12)
+        likesLabel.frame = CGRect(x: 30, y: 4, width: 50, height: 12)
         likesLabel.text = String(likesCount)
-        likesLabel.textAlignment = .center
+        likesLabel.textAlignment = .left
         likesLabel.textColor = .red
         likesLabel.font = UIFont.systemFont(ofSize: 16)
         
@@ -56,20 +65,36 @@ final class LikeControl: UIControl {
         
         self.addSubview(bgView)
     }
+	
+	/// Обновляет текущее кол-во лайков
+	func setLikes(with value: Int) {
+		likesCount = value
+		likesLabel.text = "\(value)"
+		likesLabel.layoutIfNeeded()
+	}
+	
+	/// Отправляет в ячейку информацию о том, что кто-то что-то лайкнул
+	func setLikesResponder(responder: CanLike) {
+		self.responder = responder
+	}
     
     /// Меняет вью с одной картинкой на вью с другой
     @objc func onClick() {
-        if likesCount == 0 {
-            self.likesLabel.text = "1"
-            likesCount = 1
+        if myLike == 0 {
+            self.likesLabel.text = "\(likesCount + 1)"
+            likesCount += 1
+			myLike = 1
+			responder?.likeOccured()
             
             UIView.transition(from: likesImageEmpty,
                               to: likesImageFill,
                               duration: 0.2,
                               options: .transitionCrossDissolve)
         } else {
-            self.likesLabel.text = "0"
-            likesCount = 0
+            self.likesLabel.text = "\(likesCount - 1)"
+            likesCount -= 1
+			myLike = 0
+			responder?.removeLike()
             
             UIView.transition(from: likesImageFill,
                               to: likesImageEmpty,

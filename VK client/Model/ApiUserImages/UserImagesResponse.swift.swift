@@ -8,5 +8,5 @@
 /// Cтруктура стандартного ответа API Вконтакте по запросу фото пользователя по id
 struct UserImagesResponse: Codable {
 	let count: Int
-	let items: [UserImages]
+	let items: [ApiImage]
 }

@@ -24,7 +24,7 @@ protocol Loader {
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void)
 	
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: Sizes.TypeEnum, from array: [UserImages]) -> [String]
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String]
 	
 	init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager)
 }

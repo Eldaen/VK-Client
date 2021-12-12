@@ -8,22 +8,29 @@
 import UIKit
 
 struct NewsTableViewCellModel {
-    var user: UserModel
+    var source: NewsSourceProtocol
+	var likesModel: LikesModel?
+	var views: Views?
+	var postID: Int
     var postDate: String
     var postText: String
     var newsImageNames: [String]
-    var collection: [NewsCollectionViewCellModel] = [] // у каждой table view должен быть массив ячеек коллекции для отображения картинок
+    var collection: [UIImage] = [] // у каждой table view должен быть массив ячеек коллекции для отображения картинок
     
-    init(user: UserModel, postDate: String, postText: String, newsImageNames: [String]) {
-        self.user = user
+	init(
+		source: NewsSourceProtocol, postDate: String,
+		postText: String,
+		newsImageNames: [String],
+		postId: Int,
+		likesModel: LikesModel? = nil,
+		views: Views? = nil
+	) {
+        self.source = source
         self.postDate = postDate
         self.postText = postText
+		self.postID = postId
         self.newsImageNames = newsImageNames
-        
-        // создаём массив моделей коллекций и создаём им картинки из имён
-        for newsImage in newsImageNames {
-            guard let image = UIImage(named: newsImage) else { continue }
-            self.collection.append(NewsCollectionViewCellModel(image: image))
-        }
+		self.likesModel = likesModel
+		self.views = views
     }
 }
