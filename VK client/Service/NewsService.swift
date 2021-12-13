@@ -187,55 +187,13 @@ private extension NewsService {
 			let postId = post.postId
 			
 			source = getSource(groups: groups, users: users, sourceId: sourceId)
-			
-			// Вытаскиваем нужные картинки
-			var imageLinksArray: [String]? = []
-			
-			// Превью, если видео
-			var videoImages: [String] = []
-			
-			// Если есть фото, то нам нужны фото
-			if let images = post.photos?.items {
-				imageLinksArray = sortImage(by: "z", from: images)
-			}
-			
-			// Если есть прикреплённые фото, то их тоже достанем
-			if let attachments = post.attachments {
-				var images = [ApiImage]()
-				
-				for attachment in attachments {
-					if let image = attachment.photo {
-						images.append(image)
-					}
-					
-					if let link = attachment.link {
-						if let photo = link.photo {
-							images.append(photo)
-						}
-					}
-					
-					if let video = attachment.video {
-						if let photo = video.photo?.first?.url {
-							videoImages.append(photo)
-						}
-					}
-				}
-			
-				imageLinksArray = sortImage(by: "z", from: images)
-				
-				if let imagesArray = imageLinksArray {
-					if imagesArray.isEmpty {
-						imageLinksArray = videoImages
-					}
-				}
-				
-			}
+			let imageLinksArray = getImages(post: post)
 			 
 			let newsModel = NewsTableViewCellModel(
 				source: source,
 				postDate: date.description,
 				postText: text ?? "",
-				newsImageNames: imageLinksArray ?? [],
+				newsImageNames: imageLinksArray,
 				postId: postId ?? 0,
 				likesModel: post.likes,
 				views: views
@@ -275,6 +233,52 @@ private extension NewsService {
 			}
 		}
 		return UserModel()
+	}
+	
+	func getImages(post: NewsModel) -> [String] {
+		// Вытаскиваем нужные картинки
+		var imageLinksArray: [String]? = []
+		
+		// Превью, если видео
+		var videoImages: [String] = []
+		
+		// Если есть фото, то нам нужны фото
+		if let images = post.photos?.items {
+			imageLinksArray = sortImage(by: "z", from: images)
+		}
+		
+		// Если есть прикреплённые фото, то их тоже достанем
+		if let attachments = post.attachments {
+			var images = [ApiImage]()
+			
+			for attachment in attachments {
+				if let image = attachment.photo {
+					images.append(image)
+				}
+				
+				if let link = attachment.link {
+					if let photo = link.photo {
+						images.append(photo)
+					}
+				}
+				
+				if let video = attachment.video {
+					if let photo = video.photo?.first?.url {
+						videoImages.append(photo)
+					}
+				}
+			}
+			
+			imageLinksArray = sortImage(by: "z", from: images)
+			
+			if let imagesArray = imageLinksArray {
+				if imagesArray.isEmpty {
+					imageLinksArray = videoImages
+				}
+			}
+			
+		}
+		return imageLinksArray ?? []
 	}
 }
 
