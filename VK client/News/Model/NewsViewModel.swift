@@ -23,10 +23,10 @@ protocol NewsViewModelType {
 	func fetchNews(completion: @escaping () -> Void)
 	
 	/// Ставит лайк текущей новости
-	func setLike(_ postId: Int)
+	func setLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void)
 	
 	/// Отменяет лайк текущей новости
-	func removeLike(_ postId: Int)
+	func removeLike(post postId: Int, owner ownerId: Int)
 }
 
 /// ВьюМодель новости, заполняет ячейки данными и получает их от менеджера
@@ -91,12 +91,14 @@ final class NewsViewModel: NewsViewModelType {
 	}
 	
 	/// Отправляет запрос на лайк
-	func setLike(_ postId: Int) {
-		print("Like was added")
+	func setLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void) {
+		loader.setLike(for: postId, owner: ownerId) { result in
+			completion(result)
+		}
 	}
 	
 	/// Отправляет запрос на отмену лайка
-	func removeLike(_ postId: Int) {
+	func removeLike(post postId: Int, owner ownerId: Int) {
 		print("Like was removed")
 	}
 }

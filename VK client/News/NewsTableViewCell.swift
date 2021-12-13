@@ -68,6 +68,7 @@ final class NewsTableViewCell: UITableViewCell {
 		return views
 	}()
 	
+	/// Массив картинок для отображения
     private var collection: [UIImage] = []
 	
 	/// Стандартная высота ячейки коллекции
@@ -167,6 +168,8 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 	override func prepareForReuse() {
 		standard = nil
 		empty = nil
+		model = nil
+		collection = []
 	}
 }
 
@@ -250,16 +253,20 @@ private extension NewsTableViewCell {
 extension NewsTableViewCell: CanLike {
 	
 	///  Отправляет запрос на лайк поста
-	func likeOccured() {
-		if let id = model?.postID {
-			likesResponder?.setLike(id)
+	func setLike() {
+		if let id = model?.postID,
+		   let ownerId = model?.source.id {
+			likesResponder?.setLike(post: id, owner: ownerId) { [weak self] result in
+				self?.likesControl.setLikes(with: result)
+			}
 		}
 	}
 	
 	/// Отправляет запрос на отмену лайка
 	func removeLike() {
-		if let id = model?.postID {
-			likesResponder?.removeLike(id)
+		if let id = model?.postID,
+		   let ownerId = model?.source.id {
+			likesResponder?.removeLike(post: id, owner: ownerId)
 		}
 	}
 }

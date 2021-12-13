@@ -9,16 +9,17 @@ import UIKit
 
 /// Протокол описывающий класс, который будет что-то делать с фактом нажатия кноки лайк
 protocol CanLike {
-	func likeOccured()
+	func setLike()
 	func removeLike()
 }
 
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 final class LikeControl: UIControl {
     
-	var likesCount: Int = 0 
-	private var myLike: Int = 0
+	var likesCount: Int = 0
 	var responder: CanLike?
+	
+	private var myLike: Bool = false
 	
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let recognizer = UITapGestureRecognizer(target: self,
@@ -80,11 +81,11 @@ final class LikeControl: UIControl {
     
     /// Меняет вью с одной картинкой на вью с другой
     @objc func onClick() {
-        if myLike == 0 {
+        if myLike == false {
             self.likesLabel.text = "\(likesCount + 1)"
             likesCount += 1
-			myLike = 1
-			responder?.likeOccured()
+			myLike = true
+			responder?.setLike()
             
             UIView.transition(from: likesImageEmpty,
                               to: likesImageFill,
@@ -93,7 +94,7 @@ final class LikeControl: UIControl {
         } else {
             self.likesLabel.text = "\(likesCount - 1)"
             likesCount -= 1
-			myLike = 0
+			myLike = false
 			responder?.removeLike()
             
             UIView.transition(from: likesImageFill,

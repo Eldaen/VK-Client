@@ -34,4 +34,8 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 			newsImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 		])
 	}
+	
+	override func prepareForReuse() {
+		newsImage.image = nil
+	}
 }

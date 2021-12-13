@@ -13,6 +13,11 @@ protocol NewsLoader: Loader {
 	/// Загружает список групп пользователя
 	func loadNews(completion: @escaping ([NewsTableViewCellModel]) -> Void)
 	
+	///   Отправляет запрос на лайк поста
+	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
+	
+	/// Отправляет запрос на отмену лайка поста
+	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
 }
 
 /// Сервис по загрузке данных новостей из сети
@@ -117,6 +122,44 @@ final class NewsService: NewsLoader {
 		
 		return imageLinks
 	}
+	
+	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
+		
+		let params = [
+			"type" : "post",
+			"item_id" : "\(id)",
+			"owner_id" : "\(owner)",
+		]
+		
+		networkManager.request(method: .setLike,
+							   httpMethod: .post,
+							   params: params) { (result: Result<LikesResponse, Error>) in
+			switch result {
+			case .success(let response):
+				completion(response.response.likes)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
+		let params = [
+			"type" : "post",
+			"item_id" : "\(id)",
+		]
+		
+		networkManager.request(method: .removeLike,
+							   httpMethod: .post,
+							   params: params) { (result: Result<BoolResponse, Error>) in
+			switch result {
+			case .success(let response):
+				completion(response.response)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
 }
 
 // MARK: - Private methods
@@ -138,25 +181,12 @@ private extension NewsService {
 			}
 			
 			let date = getDate(post.date)
-			let sourceID = post.sourceID
+			let sourceId = post.sourceID
 			let text = post.text
 			let views = post.views
 			let postId = post.postId
 			
-			// Выясняем, от группы или от пользователя новость
-			if sourceID < 0 {
-				for group in groups {
-					if group.id == sourceID.magnitude {
-						source = group
-					}
-				}
-			} else {
-				for user in users {
-					if user.id == sourceID {
-						source = user
-					}
-				}
-			}
+			source = getSource(groups: groups, users: users, sourceId: sourceId)
 			
 			// Вытаскиваем нужные картинки
 			var imageLinksArray: [String]? = []
@@ -200,13 +230,13 @@ private extension NewsService {
 				}
 				
 			}
-			
+			 
 			let newsModel = NewsTableViewCellModel(
 				source: source,
 				postDate: date.description,
 				postText: text ?? "",
 				newsImageNames: imageLinksArray ?? [],
-				postId: postId,
+				postId: postId ?? 0,
 				likesModel: post.likes,
 				views: views
 			)
@@ -225,6 +255,26 @@ private extension NewsService {
 		dateFormatter.timeZone = .current
 		let localDate = dateFormatter.string(from: date)
 		return localDate
+	}
+	
+	/// Возвращает модель источника новости
+	func getSource(groups: [GroupModel], users: [UserModel], sourceId: Int) -> NewsSourceProtocol {
+		if sourceId < 0 {
+			for group in groups {
+				if group.id == sourceId.magnitude || group.id == sourceId {
+					let source = group
+					source.id = -source.id
+					return source
+				}
+			}
+		} else {
+			for user in users {
+				if user.id == sourceId {
+					return user
+				}
+			}
+		}
+		return UserModel()
 	}
 }
 

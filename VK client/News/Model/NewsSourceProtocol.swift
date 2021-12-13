@@ -9,4 +9,5 @@
 protocol NewsSourceProtocol {
 	var name: String { get }
 	var image: String { get }
+	var id: Int { get set }
 }

@@ -65,13 +65,6 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		return cell
 	}
 	
-	// Добавляем футер с лайк контролом
-//	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//		
-//		let footer = getFooter(for: section)
-//		return footer
-//	}
-	
 	// добавляем заголовок, чтобы визуально разграничить новости
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		

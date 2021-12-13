@@ -18,6 +18,8 @@ enum apiMethods: String {
 	case groupsJoin = "/method/groups.join"
 	case groupsLeave = "/method/groups.leave"
 	case newsGet = "/method/newsfeed.get"
+	case setLike = "/method/likes.add"
+	case removeLike = "/method/likes.delete"
 }
 
 /// Возможные http методы
