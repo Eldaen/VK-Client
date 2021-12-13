@@ -54,8 +54,11 @@ final class NewsCollectionViewLayout: UICollectionViewLayout {
 
                 lastY += self.cellHeight
             } else if itemsCount == 1 {
+				let height = self.collectionView?.frame.height ?? 0
                 attributes.frame = CGRect(x: 0, y: 0,
-                                          width: bigCellWidth, height: self.collectionView?.frame.height ?? 0)
+                                          width: bigCellWidth, height: height)
+				lastY = height
+				
             } else {
                 attributes.frame = CGRect(x: lastX, y: lastY,
                                           width: smallCellWidth, height: self.cellHeight)

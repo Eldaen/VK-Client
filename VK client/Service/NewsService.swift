@@ -100,21 +100,24 @@ final class NewsService: NewsLoader {
 	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
 		var imageLinks: [String] = []
 		
-	mainLoop: for model in array {
-			let types = ["z", "k", "l", "x", "m"]
-			
+		for model in array {
 			for size in model.sizes {
 				if size.type == sizeType {
 					imageLinks.append(size.url)
-					break mainLoop
 				}
 			}
+		}
+		
+		if imageLinks.isEmpty {
+			let types = ["z", "k", "l", "x", "m"]
 			
 		outerLoop: for type in types {
-			for size in model.sizes {
-				if size.type == type {
-					imageLinks.append(size.url)
-					break outerLoop
+			for model in array {
+				for size in model.sizes {
+					if size.type == type {
+						imageLinks.append(size.url)
+						break outerLoop
+					}
 				}
 			}
 		}
@@ -235,6 +238,7 @@ private extension NewsService {
 		return UserModel()
 	}
 	
+	/// Вытаскивает из модели нужные ссылки на картинки
 	func getImages(post: NewsModel) -> [String] {
 		// Вытаскиваем нужные картинки
 		var imageLinksArray: [String]? = []

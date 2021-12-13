@@ -82,6 +82,15 @@ final class NewsTableViewCell: UITableViewCell {
 	
 	/// Вью модель
 	var likesResponder: NewsViewModelType?
+	
+	/// Констрейнт высоты коллекции
+	var collectionHeight: NSLayoutConstraint?
+	
+	/// Значение высоты коллекции
+	var collectionHeightValue: CGFloat = 270
+	
+	/// Обновлённая высота
+	var newHeight: NSLayoutConstraint?
     
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
@@ -99,8 +108,9 @@ final class NewsTableViewCell: UITableViewCell {
 	
 	/// Добавляет в collectionView свежезагруженные картинки
 	func updateCollection(with images: [UIImage]) {
-		self.collection = images
-		self.collectionView.reloadData()
+		collection = images
+		//countHeight(images: images)
+		collectionView.reloadData()
 	}
 	
 	/// Устанавливает картинку профиля, после того как она загрузится
@@ -171,6 +181,16 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 		model = nil
 		collection = []
 	}
+	
+	func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+		if let newHeight = newHeight {
+			newHeight.isActive = false
+		}
+		collectionHeight?.isActive = false
+
+		newHeight = collectionView.heightAnchor.constraint(equalToConstant: collectionHeightValue)
+		newHeight?.isActive = true
+	}
 }
 
 // MARK: - Private methods
@@ -198,7 +218,7 @@ private extension NewsTableViewCell {
 			collectionView.topAnchor.constraint(equalTo: postText.bottomAnchor, constant: 10),
 			collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			collectionView.heightAnchor.constraint(equalToConstant: 300),
+			collectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
 			
 			footerView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
 			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -206,6 +226,9 @@ private extension NewsTableViewCell {
 			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
 			footerView.heightAnchor.constraint(equalToConstant: 30),
 		])
+		
+		collectionHeight = collectionView.heightAnchor.constraint(equalToConstant: collectionHeightValue)
+		collectionHeight?.isActive = true
 	}
 	
 	func setupCell() {
@@ -245,6 +268,20 @@ private extension NewsTableViewCell {
 		viewsLabel.text = "🔍 \(model.views?.count ?? 0)"
 		
 		self.collectionView.reloadData()
+	}
+	
+	/// Cчитаем высоту коллекции, если там одна картинка
+	func countHeight(images: [UIImage]) {
+		if images.count == 1 {
+			let image = images[0]
+			let ratio = image.size.height / image.size.width
+			
+			if ratio < 1 {
+				collectionHeightValue = self.collectionView.frame.width * ratio
+			} else {
+				collectionHeightValue = self.collectionView.frame.width / ratio
+			}
+		}
 	}
 }
 
