@@ -15,6 +15,11 @@ protocol CanLike {
 
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 final class LikeControl: UIControl {
+	
+	override var intrinsicContentSize: CGSize {
+		let superSize = super.intrinsicContentSize
+		return CGSize(width: superSize.width, height: 30)
+	}
     
 	var likesCount: Int = 0
 	var responder: CanLike?

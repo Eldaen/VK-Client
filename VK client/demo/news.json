@@ -1,0 +1,87 @@
+
+[
+	{
+		"views": {
+			"count": 413
+		},
+		"likes": {
+			"can_like": 1,
+			"count": 0,
+			"user_likes": 0,
+			"can_publish": 1
+		},
+		"postDate": "14 Декабря 2021",
+		"postText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod, nisi a ultricies fringilla, massa nibh fermentum nunc, sodales porta ex urna id risus. Nam ut faucibus felis, sit amet. ",
+		"newsImageNames": ["vasia","vasia","vasia","vasia"]
+	},
+	{
+		"views": {
+			"count": 413
+		},
+		"likes": {
+			"can_like": 1,
+			"count": 0,
+			"user_likes": 0,
+			"can_publish": 1
+		},
+		"postDate": "14 Декабря 2021",
+		"postText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod, nisi a ultricies fringilla, massa nibh fermentum nunc, sodales porta ex urna id risus. Nam ut faucibus felis, sit amet. ",
+		"newsImageNames": ["vasia","vasia","vasia"]
+	},
+	{
+		"views": {
+			"count": 413
+		},
+		"likes": {
+			"can_like": 1,
+			"count": 0,
+			"user_likes": 0,
+			"can_publish": 1
+		},
+		"postDate": "14 Декабря 2021",
+		"postText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod, nisi a ultricies fringilla, massa nibh fermentum nunc, sodales porta ex urna id risus. Nam ut faucibus felis, sit amet. ",
+		"newsImageNames": ["vasia"]
+	},
+	{
+		"views": {
+			"count": 413
+		},
+		"likes": {
+			"can_like": 1,
+			"count": 0,
+			"user_likes": 0,
+			"can_publish": 1
+		},
+		"postDate": "14 Декабря 2021",
+		"postText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod, nisi a ultricies fringilla, massa nibh fermentum nunc, sodales porta ex urna id risus. Nam ut faucibus felis, sit amet. ",
+		"newsImageNames": ["pepe-yard-keeper"]
+	},
+	{
+		"views": {
+			"count": 413
+		},
+		"likes": {
+			"can_like": 1,
+			"count": 0,
+			"user_likes": 0,
+			"can_publish": 1
+		},
+		"postDate": "14 Декабря 2021",
+		"postText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod, nisi a ultricies fringilla, massa nibh fermentum nunc, sodales porta ex urna id risus. Nam ut faucibus felis, sit amet. ",
+		"newsImageNames": ["low-image"]
+	},
+	{
+		"views": {
+			"count": 413
+		},
+		"likes": {
+			"can_like": 1,
+			"count": 0,
+			"user_likes": 0,
+			"can_publish": 1
+		},
+		"postDate": "14 Декабря 2021",
+		"postText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod, nisi a ultricies fringilla, massa nibh fermentum nunc, sodales porta ex urna id risus. Nam ut faucibus felis, sit amet. ",
+		"newsImageNames": ["vasia"]
+	},
+]

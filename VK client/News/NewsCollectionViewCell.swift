@@ -24,6 +24,17 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 		contentView.addSubview(newsImage)
 		newsImage.image = image
 		setupConstraints()
+		self.contentView.backgroundColor = .red
+	}
+	
+	/// Констрейнт высоты
+	private var heightConstraint: NSLayoutConstraint?
+	
+	/// Выставляет новую высоту для contentView
+	func setNewHeight(_ value: CGFloat) {
+		heightConstraint = contentView.heightAnchor.constraint(equalToConstant: value)
+		heightConstraint?.isActive = true
+		newsImage.layoutIfNeeded()
 	}
 	
 	private func setupConstraints() {

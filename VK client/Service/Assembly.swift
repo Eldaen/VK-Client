@@ -74,6 +74,7 @@ final class Assembly {
 		myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
 		searchGroupsViewModel = SearchGroupsViewModel(loader: groupsService)
 		friendsViewModel = FriendsViewModel(loader: userService)
+		newsViewModel = NewsViewModel(loader: newsService)
 	}
 	
 	/// Возможность включить Демо режим

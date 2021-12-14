@@ -11,7 +11,7 @@ import UIKit
 protocol NewsLoader: Loader {
 	
 	/// Загружает список групп пользователя
-	func loadNews(completion: @escaping ([NewsTableViewCellModel]) -> Void)
+	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void)
 	
 	///   Отправляет запрос на лайк поста
 	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
@@ -33,7 +33,7 @@ final class NewsService: NewsLoader {
 		self.persistence = persistence
 	}
 	
-	func loadNews(completion: @escaping ([NewsTableViewCellModel]) -> Void) {
+	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
 		let params = [
 			"filters" : "posts",
 			"return_banned" : "0",

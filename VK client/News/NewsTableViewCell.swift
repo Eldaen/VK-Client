@@ -56,14 +56,23 @@ final class NewsTableViewCell: UITableViewCell {
 		return view
 	}()
 	
+	private let footerHorizontalStack: UIStackView = {
+		let stack = UIStackView()
+		stack.axis = .horizontal
+		stack.distribution = .equalSpacing
+		stack.contentMode = .center
+		stack.translatesAutoresizingMaskIntoConstraints = false
+		return stack
+	}()
+	
 	private let likesControl: LikeControl = {
-		let likeControl = LikeControl(frame: CGRect(x: 5, y: 0, width: 100, height: 20))
+		let likeControl = LikeControl(frame: .zero)
 		likeControl.tintColor = .red
 		return likeControl
 	}()
 	
 	private let viewsLabel: UILabel = {
-		let views = UILabel(frame: CGRect(x: 105, y: 0, width: 100, height: 20))
+		let views = UILabel()
 		views.font = UIFont.systemFont(ofSize: 18)
 		return views
 	}()
@@ -78,7 +87,7 @@ final class NewsTableViewCell: UITableViewCell {
 	private var empty: NSLayoutConstraint?
 	
 	/// Модель новости, которую отображаем
-	private var model: NewsTableViewCellModel?
+	private var model: NewsTableViewCellModelType?
 	
 	/// Вью модель
 	var likesResponder: NewsViewModelType?
@@ -95,7 +104,7 @@ final class NewsTableViewCell: UITableViewCell {
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
     ///   - model: Модель новости, которую нужно отобразить
-    func configure (with model: NewsTableViewCellModel) {
+    func configure (with model: NewsTableViewCellModelType) {
 		setupCell()
 		setupCollectionView()
 		setupFooter()
@@ -103,13 +112,15 @@ final class NewsTableViewCell: UITableViewCell {
 		updateCellData(with: model)
 		self.model = model
 		
+		self.backgroundColor = .yellow
+		
 		likesControl.setLikesResponder(responder: self)
     }
 	
 	/// Добавляет в collectionView свежезагруженные картинки
 	func updateCollection(with images: [UIImage]) {
 		collection = images
-		//countHeight(images: images)
+		countHeight(images: images)
 		collectionView.reloadData()
 	}
 	
@@ -190,6 +201,10 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 
 		newHeight = collectionView.heightAnchor.constraint(equalToConstant: collectionHeightValue)
 		newHeight?.isActive = true
+		
+		if let cell = cell as? NewsCollectionViewCell {
+			cell.setNewHeight(collectionHeightValue)
+		}
 	}
 }
 
@@ -221,10 +236,12 @@ private extension NewsTableViewCell {
 			collectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
 			
 			footerView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
-			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
 			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
 			footerView.heightAnchor.constraint(equalToConstant: 30),
+			
+			footerHorizontalStack.widthAnchor.constraint(equalTo: footerView.widthAnchor),
 		])
 		
 		collectionHeight = collectionView.heightAnchor.constraint(equalToConstant: collectionHeightValue)
@@ -252,12 +269,13 @@ private extension NewsTableViewCell {
 	
 	/// Конфигурируем футер
 	func setupFooter() {
-		footerView.addSubview(likesControl)
-		footerView.addSubview(viewsLabel)
+		footerHorizontalStack.addArrangedSubview(likesControl)
+		footerHorizontalStack.addArrangedSubview(viewsLabel)
+		footerView.addSubview(footerHorizontalStack)
 	}
 	
 	/// обновляет данные ячейки
-	func updateCellData(with model: NewsTableViewCellModel) {
+	func updateCellData(with model: NewsTableViewCellModelType) {
 		userImage.image = UIImage(named: model.source.image)
 		userName.text = model.source.name
 		postDate.text = model.postDate
@@ -303,7 +321,9 @@ extension NewsTableViewCell: CanLike {
 	func removeLike() {
 		if let id = model?.postID,
 		   let ownerId = model?.source.id {
-			likesResponder?.removeLike(post: id, owner: ownerId)
+			likesResponder?.setLike(post: id, owner: ownerId) { [weak self] result in
+				self?.likesControl.setLikes(with: result)
+			}
 		}
 	}
 }

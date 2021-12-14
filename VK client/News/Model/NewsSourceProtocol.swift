@@ -7,7 +7,7 @@
 
 /// Протокол, описывающий создателя новости
 protocol NewsSourceProtocol {
-	var name: String { get }
-	var image: String { get }
+	var name: String { get set }
+	var image: String { get set }
 	var id: Int { get set }
 }

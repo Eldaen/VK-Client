@@ -11,7 +11,7 @@ import UIKit
 protocol NewsViewModelType {
 	
 	/// Массив моделей ячейки новостей
-	var news: [NewsTableViewCellModel] { get }
+	var news: [NewsTableViewCellModelType] { get }
 	
 	/// Источник данных для отображения новостей
 	var loader: NewsLoader { get }
@@ -26,13 +26,13 @@ protocol NewsViewModelType {
 	func setLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void)
 	
 	/// Отменяет лайк текущей новости
-	func removeLike(post postId: Int, owner ownerId: Int)
+	func removeLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void)
 }
 
 /// ВьюМодель новости, заполняет ячейки данными и получает их от менеджера
 final class NewsViewModel: NewsViewModelType {
 
-	var news: [NewsTableViewCellModel] = []
+	var news: [NewsTableViewCellModelType] = []
 	var loader: NewsLoader
 	
 	init(loader: NewsLoader){
@@ -98,7 +98,9 @@ final class NewsViewModel: NewsViewModelType {
 	}
 	
 	/// Отправляет запрос на отмену лайка
-	func removeLike(post postId: Int, owner ownerId: Int) {
-		print("Like was removed")
+	func removeLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void) {
+		loader.removeLike(for: postId, owner: ownerId) { result in
+			completion(result)
+		}
 	}
 }
