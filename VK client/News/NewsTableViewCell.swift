@@ -73,7 +73,7 @@ final class NewsTableViewCell: UITableViewCell {
 	
 	private let viewsLabel: UILabel = {
 		let views = UILabel()
-		views.font = UIFont.systemFont(ofSize: 18)
+		views.font = UIFont.systemFont(ofSize: 14)
 		return views
 	}()
 	
@@ -112,8 +112,7 @@ final class NewsTableViewCell: UITableViewCell {
 		updateCellData(with: model)
 		self.model = model
 		
-		self.backgroundColor = .yellow
-		
+		selectionStyle = .none
 		likesControl.setLikesResponder(responder: self)
     }
 	
@@ -238,7 +237,7 @@ private extension NewsTableViewCell {
 			footerView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
 			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
 			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
+			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 			footerView.heightAnchor.constraint(equalToConstant: 30),
 			
 			footerHorizontalStack.widthAnchor.constraint(equalTo: footerView.widthAnchor),
