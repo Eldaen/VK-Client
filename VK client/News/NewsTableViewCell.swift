@@ -117,6 +117,9 @@ final class NewsTableViewCell: UITableViewCell {
 	/// Добавляет в collectionView свежезагруженные картинки
 	func updateCollection(with images: [UIImage]) {
 		collection = images
+		
+		let layout = getCollectionLayout(isMultiple: collection.count > 1)
+		collectionView.collectionViewLayout = layout
 		collectionView.reloadData()
 	}
 	
@@ -216,8 +219,6 @@ private extension NewsTableViewCell {
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
-		let layout = getCollectionLayout()
-		collectionView.collectionViewLayout = layout
 		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
 		collectionView.backgroundColor = .white
 		collectionView.dataSource = self
@@ -248,30 +249,30 @@ private extension NewsTableViewCell {
 	}
 	
 	/// Генерирует Сomposition Layout для нашей коллекции
-	func getCollectionLayout() -> UICollectionViewCompositionalLayout {
+	func getCollectionLayout(isMultiple: Bool) -> UICollectionViewCompositionalLayout {
 		
 		let itemSize = NSCollectionLayoutSize(
 		  widthDimension: .fractionalWidth(1.0),
 		  heightDimension: .fractionalHeight(1.0))
 		
 		let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
-		fullPhotoItem.contentInsets = NSDirectionalEdgeInsets(
-		  top: 2,
-		  leading: 2,
-		  bottom: 2,
-		  trailing: 2)
 		
 		let groupSize = NSCollectionLayoutSize(
-		  widthDimension: .fractionalWidth(1.0),
+			widthDimension: .fractionalWidth(isMultiple ? 0.95 : 1.0),
 		  heightDimension: .fractionalWidth(2/3))
 		
 		let group = NSCollectionLayoutGroup.horizontal(
 		  layoutSize: groupSize,
 		  subitem: fullPhotoItem,
 		  count: 1)
+		group.contentInsets = NSDirectionalEdgeInsets(
+		  top: 5,
+		  leading: 5,
+		  bottom: 5,
+		  trailing: 5)
 		
 		let section = NSCollectionLayoutSection(group: group)
-		section.orthogonalScrollingBehavior = .paging
+		section.orthogonalScrollingBehavior = .continuous
 		let layout = UICollectionViewCompositionalLayout(section: section)
 		return layout
 	}
