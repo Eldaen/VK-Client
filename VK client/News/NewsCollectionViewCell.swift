@@ -24,7 +24,6 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 		contentView.addSubview(newsImage)
 		newsImage.image = image
 		setupConstraints()
-		self.contentView.backgroundColor = .red
 	}
 	
 	/// Констрейнт высоты
