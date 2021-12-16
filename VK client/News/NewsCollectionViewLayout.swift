@@ -75,7 +75,7 @@ final class NewsCollectionViewLayout: UICollectionViewLayout {
             // кладём в массив данные о положениях и размерах всех наших ячеек
             cacheAttributes[indexPath] = attributes
         }
-        self.totalCellsHeight = lastY
+        //self.totalCellsHeight = lastY
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {

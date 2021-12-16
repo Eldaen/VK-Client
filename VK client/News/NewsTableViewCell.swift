@@ -44,9 +44,10 @@ final class NewsTableViewCell: UITableViewCell {
 	}()
 	
 	private let collectionView: UICollectionView = {
-		let layout = NewsCollectionViewLayout()
+		let layout = UICollectionViewFlowLayout()
 		let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collection.translatesAutoresizingMaskIntoConstraints = false
+		collection.alwaysBounceVertical = false
 		return collection
 	}()
 	
@@ -97,9 +98,6 @@ final class NewsTableViewCell: UITableViewCell {
 	
 	/// Значение высоты коллекции
 	var collectionHeightValue: CGFloat = 270
-	
-	/// Обновлённая высота
-	var newHeight: NSLayoutConstraint?
     
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
@@ -119,7 +117,6 @@ final class NewsTableViewCell: UITableViewCell {
 	/// Добавляет в collectionView свежезагруженные картинки
 	func updateCollection(with images: [UIImage]) {
 		collection = images
-		countHeight(images: images)
 		collectionView.reloadData()
 	}
 	
@@ -136,11 +133,7 @@ final class NewsTableViewCell: UITableViewCell {
 extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collection.count > 4 {
-            return 4
-        } else {
-            return collection.count
-        }
+		return collection.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -149,27 +142,6 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 		else {
             return UICollectionViewCell()
         }
-        
-        // TODO: надо это куда-то в модель перенести
-        // если есть больше 4х картинок, то нужно показать что их больше
-        // для этого сделаем полупрозрачную вьюху, положем её поверх картинки и ещё текст добавим
-//        if indexPath.row == 3 && collection.count > 4 {
-//            let frameCV = collectionView.frame
-//            let cellSize = CGRect(x: 0, y: 0, width: frameCV.width / 2,
-//                              height: frameCV.height / 2)
-//            
-//            let newView = UIView(frame: cellSize)
-//            newView.backgroundColor = .white.withAlphaComponent(0.8)
-//
-//            let extraImagesCount = UILabel(frame: cellSize)
-//            extraImagesCount.textAlignment = .center
-//            extraImagesCount.text = "+" + String( collection.count - 3 )
-//            extraImagesCount.font = UIFont.boldSystemFont(ofSize: 48.0)
-//            extraImagesCount.textColor = .black
-//
-//            cell.newsImage.addSubview(newView)
-//            newView.addSubview(extraImagesCount)
-//        }
         
         // находим нужную модель ячейки коллекции в массиве collection и потом в нашу новую ячейку коллекции передаэм готовую картинку
         let collectionCell = collection[indexPath.row]
@@ -190,20 +162,6 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 		empty = nil
 		model = nil
 		collection = []
-	}
-	
-	func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-		if let newHeight = newHeight {
-			newHeight.isActive = false
-		}
-		collectionHeight?.isActive = false
-
-		newHeight = collectionView.heightAnchor.constraint(equalToConstant: collectionHeightValue)
-		newHeight?.isActive = true
-		
-		if let cell = cell as? NewsCollectionViewCell {
-			cell.setNewHeight(collectionHeightValue)
-		}
 	}
 }
 
@@ -258,6 +216,8 @@ private extension NewsTableViewCell {
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
+		let layout = getCollectionLayout()
+		collectionView.collectionViewLayout = layout
 		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
 		collectionView.backgroundColor = .white
 		collectionView.dataSource = self
@@ -287,18 +247,33 @@ private extension NewsTableViewCell {
 		self.collectionView.reloadData()
 	}
 	
-	/// Cчитаем высоту коллекции, если там одна картинка
-	func countHeight(images: [UIImage]) {
-		if images.count == 1 {
-			let image = images[0]
-			let ratio = image.size.height / image.size.width
-			
-			if ratio < 1 {
-				collectionHeightValue = self.collectionView.frame.width * ratio
-			} else {
-				collectionHeightValue = self.collectionView.frame.width / ratio
-			}
-		}
+	/// Генерирует Сomposition Layout для нашей коллекции
+	func getCollectionLayout() -> UICollectionViewCompositionalLayout {
+		
+		let itemSize = NSCollectionLayoutSize(
+		  widthDimension: .fractionalWidth(1.0),
+		  heightDimension: .fractionalHeight(1.0))
+		
+		let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
+		fullPhotoItem.contentInsets = NSDirectionalEdgeInsets(
+		  top: 2,
+		  leading: 2,
+		  bottom: 2,
+		  trailing: 2)
+		
+		let groupSize = NSCollectionLayoutSize(
+		  widthDimension: .fractionalWidth(1.0),
+		  heightDimension: .fractionalWidth(2/3))
+		
+		let group = NSCollectionLayoutGroup.horizontal(
+		  layoutSize: groupSize,
+		  subitem: fullPhotoItem,
+		  count: 1)
+		
+		let section = NSCollectionLayoutSection(group: group)
+		section.orthogonalScrollingBehavior = .paging
+		let layout = UICollectionViewCompositionalLayout(section: section)
+		return layout
 	}
 }
 
