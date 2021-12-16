@@ -112,6 +112,15 @@ final class FriendProfileViewController: UIViewController {
 	/// Отступы между фото
     private let cellsOffset: CGFloat = 10.0
 	
+	enum Section {
+	  case main
+	}
+	
+	typealias DataSource = UICollectionViewDiffableDataSource<Section, FriendCollectionImageModel>
+	
+	/// Cоздаём DataSource для коллекции
+	private lazy var dataSource = makeDataSource()
+	
 	// MARK: - Init
 	init(model: FriendsProfileViewModelType) {
 		self.viewModel = model
@@ -143,28 +152,28 @@ final class FriendProfileViewController: UIViewController {
 			self?.collectionView.reloadData()
 		}
     }
+	
+	/// Создаём DataSource для нашей коллекции
+	func makeDataSource() -> DataSource {
+		let dataSource = DataSource(
+			collectionView: collectionView,
+			cellProvider: { [weak self] (collectionView, indexPath, _) -> UICollectionViewCell? in
+				
+				guard let id = self?.identifier else { return nil }
+				guard let cell = collectionView.dequeueReusableCell( withReuseIdentifier: id,
+																	 for: indexPath) as? PhotoCollectionViewCell else {
+					return nil
+				}
+				
+				self?.viewModel.configureCell(cell: cell, indexPath: indexPath)
+				return cell
+			})
+		return dataSource
+	}
 }
 
-// MARK: UICollectionViewDataSource, UICollectionViewDelegate
-extension FriendProfileViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return viewModel.storedImages.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? PhotoCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-		viewModel.configureCell(cell: cell, indexPath: indexPath)
-        return cell
-    }
+// MARK: UICollectionViewDelegate
+extension FriendProfileViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
@@ -199,7 +208,6 @@ private extension FriendProfileViewController {
 	func setupCollectionView() {
 		collectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
 		collectionView.backgroundColor = .white
-		collectionView.dataSource = self
 		collectionView.delegate = self
 		
 		self.view.addSubview(collectionView)
