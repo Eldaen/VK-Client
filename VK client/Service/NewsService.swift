@@ -11,8 +11,13 @@ import UIKit
 protocol NewsLoader: Loader {
 	
 	/// Загружает список групп пользователя
-	func loadNews(completion: @escaping ([NewsTableViewCellModel]) -> Void)
+	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void)
 	
+	///   Отправляет запрос на лайк поста
+	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
+	
+	/// Отправляет запрос на отмену лайка поста
+	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
 }
 
 /// Сервис по загрузке данных новостей из сети
@@ -28,7 +33,7 @@ final class NewsService: NewsLoader {
 		self.persistence = persistence
 	}
 	
-	func loadNews(completion: @escaping ([NewsTableViewCellModel]) -> Void) {
+	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
 		let params = [
 			"filters" : "posts",
 			"return_banned" : "0",
@@ -95,27 +100,68 @@ final class NewsService: NewsLoader {
 	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
 		var imageLinks: [String] = []
 		
-	mainLoop: for model in array {
-			let types = ["z", "k", "l", "x", "m"]
-			
+		for model in array {
 			for size in model.sizes {
 				if size.type == sizeType {
 					imageLinks.append(size.url)
-					break mainLoop
 				}
 			}
+		}
+		
+		if imageLinks.isEmpty {
+			let types = ["z", "k", "l", "x", "m"]
 			
 		outerLoop: for type in types {
-			for size in model.sizes {
-				if size.type == type {
-					imageLinks.append(size.url)
-					break outerLoop
+			for model in array {
+				for size in model.sizes {
+					if size.type == type {
+						imageLinks.append(size.url)
+						break outerLoop
+					}
 				}
 			}
 		}
 		}
 		
 		return imageLinks
+	}
+	
+	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
+		
+		let params = [
+			"type" : "post",
+			"item_id" : "\(id)",
+			"owner_id" : "\(owner)",
+		]
+		
+		networkManager.request(method: .setLike,
+							   httpMethod: .post,
+							   params: params) { (result: Result<LikesResponse, Error>) in
+			switch result {
+			case .success(let response):
+				completion(response.response.likes)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
+		let params = [
+			"type" : "post",
+			"item_id" : "\(id)",
+		]
+		
+		networkManager.request(method: .removeLike,
+							   httpMethod: .post,
+							   params: params) { (result: Result<BoolResponse, Error>) in
+			switch result {
+			case .success(let response):
+				completion(response.response)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
 	}
 }
 
@@ -138,75 +184,20 @@ private extension NewsService {
 			}
 			
 			let date = getDate(post.date)
-			let sourceID = post.sourceID
+			let sourceId = post.sourceID
 			let text = post.text
 			let views = post.views
 			let postId = post.postId
 			
-			// Выясняем, от группы или от пользователя новость
-			if sourceID < 0 {
-				for group in groups {
-					if group.id == sourceID.magnitude {
-						source = group
-					}
-				}
-			} else {
-				for user in users {
-					if user.id == sourceID {
-						source = user
-					}
-				}
-			}
-			
-			// Вытаскиваем нужные картинки
-			var imageLinksArray: [String]? = []
-			
-			// Превью, если видео
-			var videoImages: [String] = []
-			
-			// Если есть фото, то нам нужны фото
-			if let images = post.photos?.items {
-				imageLinksArray = sortImage(by: "z", from: images)
-			}
-			
-			// Если есть прикреплённые фото, то их тоже достанем
-			if let attachments = post.attachments {
-				var images = [ApiImage]()
-				
-				for attachment in attachments {
-					if let image = attachment.photo {
-						images.append(image)
-					}
-					
-					if let link = attachment.link {
-						if let photo = link.photo {
-							images.append(photo)
-						}
-					}
-					
-					if let video = attachment.video {
-						if let photo = video.photo?.first?.url {
-							videoImages.append(photo)
-						}
-					}
-				}
-			
-				imageLinksArray = sortImage(by: "z", from: images)
-				
-				if let imagesArray = imageLinksArray {
-					if imagesArray.isEmpty {
-						imageLinksArray = videoImages
-					}
-				}
-				
-			}
-			
+			source = getSource(groups: groups, users: users, sourceId: sourceId)
+			let imageLinksArray = getImages(post: post)
+			 
 			let newsModel = NewsTableViewCellModel(
 				source: source,
 				postDate: date.description,
 				postText: text ?? "",
-				newsImageNames: imageLinksArray ?? [],
-				postId: postId,
+				newsImageNames: imageLinksArray,
+				postId: postId ?? 0,
 				likesModel: post.likes,
 				views: views
 			)
@@ -225,6 +216,73 @@ private extension NewsService {
 		dateFormatter.timeZone = .current
 		let localDate = dateFormatter.string(from: date)
 		return localDate
+	}
+	
+	/// Возвращает модель источника новости
+	func getSource(groups: [GroupModel], users: [UserModel], sourceId: Int) -> NewsSourceProtocol {
+		if sourceId < 0 {
+			for group in groups {
+				if group.id == sourceId.magnitude || group.id == sourceId {
+					let source = group
+					source.id = -source.id
+					return source
+				}
+			}
+		} else {
+			for user in users {
+				if user.id == sourceId {
+					return user
+				}
+			}
+		}
+		return UserModel()
+	}
+	
+	/// Вытаскивает из модели нужные ссылки на картинки
+	func getImages(post: NewsModel) -> [String] {
+		// Вытаскиваем нужные картинки
+		var imageLinksArray: [String]? = []
+		
+		// Превью, если видео
+		var videoImages: [String] = []
+		
+		// Если есть фото, то нам нужны фото
+		if let images = post.photos?.items {
+			imageLinksArray = sortImage(by: "z", from: images)
+		}
+		
+		// Если есть прикреплённые фото, то их тоже достанем
+		if let attachments = post.attachments {
+			var images = [ApiImage]()
+			
+			for attachment in attachments {
+				if let image = attachment.photo {
+					images.append(image)
+				}
+				
+				if let link = attachment.link {
+					if let photo = link.photo {
+						images.append(photo)
+					}
+				}
+				
+				if let video = attachment.video {
+					if let photo = video.photo?.first?.url {
+						videoImages.append(photo)
+					}
+				}
+			}
+			
+			imageLinksArray = sortImage(by: "z", from: images)
+			
+			if let imagesArray = imageLinksArray {
+				if imagesArray.isEmpty {
+					imageLinksArray = videoImages
+				}
+			}
+			
+		}
+		return imageLinksArray ?? []
 	}
 }
 

@@ -13,7 +13,6 @@ final class NewsController: MyCustomUIViewController {
 	private let tableView: UITableView = {
 		let tableView = UITableView()
 		tableView.backgroundColor = .white
-		tableView.separatorStyle = .none
 		tableView.translatesAutoresizingMaskIntoConstraints = false
 		return tableView
 	}()
@@ -65,13 +64,6 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		return cell
 	}
 	
-	// Добавляем футер с лайк контролом
-//	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//		
-//		let footer = getFooter(for: section)
-//		return footer
-//	}
-	
 	// добавляем заголовок, чтобы визуально разграничить новости
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		
@@ -84,10 +76,6 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	
 	// правим высоту хэдера со стандартной до нужной
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		5
-	}
-	
-	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		5
 	}
 	
@@ -109,29 +97,6 @@ private extension NewsController {
 		tableView.delegate = self
 		
 		self.view.addSubview(tableView)
-	}
-	
-	/// Возвращает футер для новости
-	func getFooter(for section: Int) -> UIView {
-		
-		let footer = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 20))
-		
-		let likeControl = LikeControl(frame: CGRect(x: 5, y: 0, width: 100, height: 20))
-		likeControl.tintColor = .red
-		
-		let likes = viewModel.news[section].likesModel?.count
-		likeControl.setLikes(with: likes ?? 0)
-		
-		let views = UILabel(frame: CGRect(x: footer.frame.size.width - 50, y: 0, width: 50, height: 20))
-		views.font = UIFont.systemFont(ofSize: 18)
-		
-		let viewCount = viewModel.news[section].views?.count
-		views.text =  "\(viewCount ?? 0)"
-		
-		footer.addSubview(likeControl)
-		footer.addSubview(views)
-		
-		return footer
 	}
 }
 

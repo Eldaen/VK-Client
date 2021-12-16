@@ -81,6 +81,10 @@
 		D0D2F0B92748EB7A008E9AB4 /* GroupsMyResponse.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0B82748EB7A008E9AB4 /* GroupsMyResponse.swift.swift */; };
 		D0D2F0BB2748EBD0008E9AB4 /* GroupsMyMainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0BA2748EBD0008E9AB4 /* GroupsMyMainResponse.swift */; };
 		D0EFE7D127635A8C00A8E66E /* AttachmentsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D027635A8C00A8E66E /* AttachmentsModel.swift */; };
+		D0EFE7D327673B9300A8E66E /* LikesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D227673B9300A8E66E /* LikesResponse.swift */; };
+		D0EFE7D5276795F200A8E66E /* news.json in Resources */ = {isa = PBXBuildFile; fileRef = D0EFE7D4276795F200A8E66E /* news.json */; };
+		D0EFE7D72767A94600A8E66E /* NewsTableViewCellModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D62767A94600A8E66E /* NewsTableViewCellModelType.swift */; };
+		D0EFE7D9276887C900A8E66E /* demoNewsTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D8276887C900A8E66E /* demoNewsTableViewCellModel.swift */; };
 		D0F2B1132761E64A00C70517 /* demoNewsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F2B1122761E64A00C70517 /* demoNewsService.swift */; };
 		D0F2B1162761E89E00C70517 /* NewsMainRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F2B1152761E89E00C70517 /* NewsMainRequest.swift */; };
 		D0F2B1182761EF2900C70517 /* NewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F2B1172761EF2900C70517 /* NewsModel.swift */; };
@@ -157,6 +161,10 @@
 		D0D2F0B82748EB7A008E9AB4 /* GroupsMyResponse.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsMyResponse.swift.swift; sourceTree = "<group>"; };
 		D0D2F0BA2748EBD0008E9AB4 /* GroupsMyMainResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsMyMainResponse.swift; sourceTree = "<group>"; };
 		D0EFE7D027635A8C00A8E66E /* AttachmentsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsModel.swift; sourceTree = "<group>"; };
+		D0EFE7D227673B9300A8E66E /* LikesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesResponse.swift; sourceTree = "<group>"; };
+		D0EFE7D4276795F200A8E66E /* news.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = news.json; sourceTree = "<group>"; };
+		D0EFE7D62767A94600A8E66E /* NewsTableViewCellModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCellModelType.swift; sourceTree = "<group>"; };
+		D0EFE7D8276887C900A8E66E /* demoNewsTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoNewsTableViewCellModel.swift; sourceTree = "<group>"; };
 		D0F2B1122761E64A00C70517 /* demoNewsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoNewsService.swift; sourceTree = "<group>"; };
 		D0F2B1152761E89E00C70517 /* NewsMainRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsMainRequest.swift; sourceTree = "<group>"; };
 		D0F2B1172761EF2900C70517 /* NewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModel.swift; sourceTree = "<group>"; };
@@ -231,6 +239,8 @@
 				D03B188C275192BA00C483B3 /* groups.json */,
 				D03B18962754F26800C483B3 /* friends.json */,
 				D0F2B1122761E64A00C70517 /* demoNewsService.swift */,
+				D0EFE7D4276795F200A8E66E /* news.json */,
+				D0EFE7D8276887C900A8E66E /* demoNewsTableViewCellModel.swift */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -395,6 +405,7 @@
 				D0800D14272698DA00347AB7 /* NewsCollectionViewCellModel.swift */,
 				D03B1873274F850900C483B3 /* NewsViewModel.swift */,
 				D0F2B11D2761F7DA00C70517 /* NewsSourceProtocol.swift */,
+				D0EFE7D62767A94600A8E66E /* NewsTableViewCellModelType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -471,6 +482,7 @@
 				D0F2B1192761F1FB00C70517 /* LikesModel.swift */,
 				D0F2B11B2761F24900C70517 /* PhotosResponse.swift.swift */,
 				D0EFE7D027635A8C00A8E66E /* AttachmentsModel.swift */,
+				D0EFE7D227673B9300A8E66E /* LikesResponse.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -553,6 +565,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D06313CD270B148000D0E12C /* Assets.xcassets in Resources */,
+				D0EFE7D5276795F200A8E66E /* news.json in Resources */,
 				D095CAE6275F45B3002F66CC /* GoogleService-Info.plist in Resources */,
 				D03B188D275192BA00C483B3 /* groups.json in Resources */,
 				D03B18972754F26800C483B3 /* friends.json in Resources */,
@@ -629,6 +642,7 @@
 			files = (
 				D03B18892751738D00C483B3 /* demoGroupService.swift in Sources */,
 				D0800D13272698BF00347AB7 /* NewsTableViewCellModel.swift in Sources */,
+				D0EFE7D9276887C900A8E66E /* demoNewsTableViewCellModel.swift in Sources */,
 				D0F2B11A2761F1FB00C70517 /* LikesModel.swift in Sources */,
 				D03B1878274FAABB00C483B3 /* SearchGroupsViewModel.swift in Sources */,
 				D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */,
@@ -669,6 +683,7 @@
 				D050CD052716DF890076D78E /* MyGroupsController.swift in Sources */,
 				D0800D20272BF0A200347AB7 /* PhotoCollectionViewCell.swift in Sources */,
 				D0800D15272698DA00347AB7 /* NewsCollectionViewCellModel.swift in Sources */,
+				D0EFE7D327673B9300A8E66E /* LikesResponse.swift in Sources */,
 				D050CD162716E2A50076D78E /* GroupsService.swift in Sources */,
 				D050CD0A2716E12B0076D78E /* SearchGroupsController.swift in Sources */,
 				D0F2B11C2761F24900C70517 /* PhotosResponse.swift.swift in Sources */,
@@ -686,6 +701,7 @@
 				D03B1874274F850900C483B3 /* NewsViewModel.swift in Sources */,
 				D050CD1C271A07BA0076D78E /* LikeControl.swift in Sources */,
 				D0D2F0AB27478C53008E9AB4 /* Loader.swift in Sources */,
+				D0EFE7D72767A94600A8E66E /* NewsTableViewCellModelType.swift in Sources */,
 				D0D2F0BB2748EBD0008E9AB4 /* GroupsMyMainResponse.swift in Sources */,
 				D0D2F0B22747D1EB008E9AB4 /* Sizes.swift in Sources */,
 				D0D2F0AD2747CD17008E9AB4 /* ApiImage.swift in Sources */,

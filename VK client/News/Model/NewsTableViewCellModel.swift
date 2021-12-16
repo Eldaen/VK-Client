@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct NewsTableViewCellModel {
+struct NewsTableViewCellModel: NewsTableViewCellModelType {
     var source: NewsSourceProtocol
 	var likesModel: LikesModel?
 	var views: Views?

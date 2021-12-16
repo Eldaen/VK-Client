@@ -44,9 +44,10 @@ final class NewsTableViewCell: UITableViewCell {
 	}()
 	
 	private let collectionView: UICollectionView = {
-		let layout = NewsCollectionViewLayout()
+		let layout = UICollectionViewFlowLayout()
 		let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collection.translatesAutoresizingMaskIntoConstraints = false
+		collection.alwaysBounceVertical = false
 		return collection
 	}()
 	
@@ -56,18 +57,28 @@ final class NewsTableViewCell: UITableViewCell {
 		return view
 	}()
 	
+	private let footerHorizontalStack: UIStackView = {
+		let stack = UIStackView()
+		stack.axis = .horizontal
+		stack.distribution = .equalSpacing
+		stack.contentMode = .center
+		stack.translatesAutoresizingMaskIntoConstraints = false
+		return stack
+	}()
+	
 	private let likesControl: LikeControl = {
-		let likeControl = LikeControl(frame: CGRect(x: 5, y: 0, width: 100, height: 20))
+		let likeControl = LikeControl(frame: .zero)
 		likeControl.tintColor = .red
 		return likeControl
 	}()
 	
 	private let viewsLabel: UILabel = {
-		let views = UILabel(frame: CGRect(x: 105, y: 0, width: 100, height: 20))
-		views.font = UIFont.systemFont(ofSize: 18)
+		let views = UILabel()
+		views.font = UIFont.systemFont(ofSize: 14)
 		return views
 	}()
 	
+	/// Массив картинок для отображения
     private var collection: [UIImage] = []
 	
 	/// Стандартная высота ячейки коллекции
@@ -77,15 +88,21 @@ final class NewsTableViewCell: UITableViewCell {
 	private var empty: NSLayoutConstraint?
 	
 	/// Модель новости, которую отображаем
-	private var model: NewsTableViewCellModel?
+	private var model: NewsTableViewCellModelType?
 	
 	/// Вью модель
 	var likesResponder: NewsViewModelType?
+	
+	/// Констрейнт высоты коллекции
+	var collectionHeight: NSLayoutConstraint?
+	
+	/// Значение высоты коллекции
+	var collectionHeightValue: CGFloat = 270
     
     /// Конфигурирует ячейку NewsTableViewCell
     /// - Parameters:
     ///   - model: Модель новости, которую нужно отобразить
-    func configure (with model: NewsTableViewCellModel) {
+    func configure (with model: NewsTableViewCellModelType) {
 		setupCell()
 		setupCollectionView()
 		setupFooter()
@@ -93,13 +110,14 @@ final class NewsTableViewCell: UITableViewCell {
 		updateCellData(with: model)
 		self.model = model
 		
+		selectionStyle = .none
 		likesControl.setLikesResponder(responder: self)
     }
 	
 	/// Добавляет в collectionView свежезагруженные картинки
 	func updateCollection(with images: [UIImage]) {
-		self.collection = images
-		self.collectionView.reloadData()
+		collection = images
+		collectionView.reloadData()
 	}
 	
 	/// Устанавливает картинку профиля, после того как она загрузится
@@ -115,11 +133,7 @@ final class NewsTableViewCell: UITableViewCell {
 extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collection.count > 4 {
-            return 4
-        } else {
-            return collection.count
-        }
+		return collection.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -128,27 +142,6 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 		else {
             return UICollectionViewCell()
         }
-        
-        // TODO: надо это куда-то в модель перенести
-        // если есть больше 4х картинок, то нужно показать что их больше
-        // для этого сделаем полупрозрачную вьюху, положем её поверх картинки и ещё текст добавим
-//        if indexPath.row == 3 && collection.count > 4 {
-//            let frameCV = collectionView.frame
-//            let cellSize = CGRect(x: 0, y: 0, width: frameCV.width / 2,
-//                              height: frameCV.height / 2)
-//            
-//            let newView = UIView(frame: cellSize)
-//            newView.backgroundColor = .white.withAlphaComponent(0.8)
-//
-//            let extraImagesCount = UILabel(frame: cellSize)
-//            extraImagesCount.textAlignment = .center
-//            extraImagesCount.text = "+" + String( collection.count - 3 )
-//            extraImagesCount.font = UIFont.boldSystemFont(ofSize: 48.0)
-//            extraImagesCount.textColor = .black
-//
-//            cell.newsImage.addSubview(newView)
-//            newView.addSubview(extraImagesCount)
-//        }
         
         // находим нужную модель ячейки коллекции в массиве collection и потом в нашу новую ячейку коллекции передаэм готовую картинку
         let collectionCell = collection[indexPath.row]
@@ -167,6 +160,8 @@ extension NewsTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
 	override func prepareForReuse() {
 		standard = nil
 		empty = nil
+		model = nil
+		collection = []
 	}
 }
 
@@ -195,14 +190,19 @@ private extension NewsTableViewCell {
 			collectionView.topAnchor.constraint(equalTo: postText.bottomAnchor, constant: 10),
 			collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			collectionView.heightAnchor.constraint(equalToConstant: 300),
+			collectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
 			
 			footerView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
-			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
+			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 			footerView.heightAnchor.constraint(equalToConstant: 30),
+			
+			footerHorizontalStack.widthAnchor.constraint(equalTo: footerView.widthAnchor),
 		])
+		
+		collectionHeight = collectionView.heightAnchor.constraint(equalToConstant: collectionHeightValue)
+		collectionHeight?.isActive = true
 	}
 	
 	func setupCell() {
@@ -216,6 +216,8 @@ private extension NewsTableViewCell {
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
+		let layout = getCollectionLayout()
+		collectionView.collectionViewLayout = layout
 		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
 		collectionView.backgroundColor = .white
 		collectionView.dataSource = self
@@ -226,12 +228,13 @@ private extension NewsTableViewCell {
 	
 	/// Конфигурируем футер
 	func setupFooter() {
-		footerView.addSubview(likesControl)
-		footerView.addSubview(viewsLabel)
+		footerHorizontalStack.addArrangedSubview(likesControl)
+		footerHorizontalStack.addArrangedSubview(viewsLabel)
+		footerView.addSubview(footerHorizontalStack)
 	}
 	
 	/// обновляет данные ячейки
-	func updateCellData(with model: NewsTableViewCellModel) {
+	func updateCellData(with model: NewsTableViewCellModelType) {
 		userImage.image = UIImage(named: model.source.image)
 		userName.text = model.source.name
 		postDate.text = model.postDate
@@ -243,6 +246,35 @@ private extension NewsTableViewCell {
 		
 		self.collectionView.reloadData()
 	}
+	
+	/// Генерирует Сomposition Layout для нашей коллекции
+	func getCollectionLayout() -> UICollectionViewCompositionalLayout {
+		
+		let itemSize = NSCollectionLayoutSize(
+		  widthDimension: .fractionalWidth(1.0),
+		  heightDimension: .fractionalHeight(1.0))
+		
+		let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize)
+		fullPhotoItem.contentInsets = NSDirectionalEdgeInsets(
+		  top: 2,
+		  leading: 2,
+		  bottom: 2,
+		  trailing: 2)
+		
+		let groupSize = NSCollectionLayoutSize(
+		  widthDimension: .fractionalWidth(1.0),
+		  heightDimension: .fractionalWidth(2/3))
+		
+		let group = NSCollectionLayoutGroup.horizontal(
+		  layoutSize: groupSize,
+		  subitem: fullPhotoItem,
+		  count: 1)
+		
+		let section = NSCollectionLayoutSection(group: group)
+		section.orthogonalScrollingBehavior = .paging
+		let layout = UICollectionViewCompositionalLayout(section: section)
+		return layout
+	}
 }
 
 // MARK: - CanLike protocol extension
@@ -250,16 +282,22 @@ private extension NewsTableViewCell {
 extension NewsTableViewCell: CanLike {
 	
 	///  Отправляет запрос на лайк поста
-	func likeOccured() {
-		if let id = model?.postID {
-			likesResponder?.setLike(id)
+	func setLike() {
+		if let id = model?.postID,
+		   let ownerId = model?.source.id {
+			likesResponder?.setLike(post: id, owner: ownerId) { [weak self] result in
+				self?.likesControl.setLikes(with: result)
+			}
 		}
 	}
 	
 	/// Отправляет запрос на отмену лайка
 	func removeLike() {
-		if let id = model?.postID {
-			likesResponder?.removeLike(id)
+		if let id = model?.postID,
+		   let ownerId = model?.source.id {
+			likesResponder?.setLike(post: id, owner: ownerId) { [weak self] result in
+				self?.likesControl.setLikes(with: result)
+			}
 		}
 	}
 }

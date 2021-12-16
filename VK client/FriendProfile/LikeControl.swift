@@ -9,16 +9,21 @@ import UIKit
 
 /// Протокол описывающий класс, который будет что-то делать с фактом нажатия кноки лайк
 protocol CanLike {
-	func likeOccured()
+	func setLike()
 	func removeLike()
 }
 
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
 final class LikeControl: UIControl {
+	
+	override var intrinsicContentSize: CGSize {
+		return CGSize(width: 50, height: 30)
+	}
     
-	var likesCount: Int = 0 
-	private var myLike: Int = 0
+	var likesCount: Int = 0
 	var responder: CanLike?
+	
+	private var myLike: Bool = false
 	
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let recognizer = UITapGestureRecognizer(target: self,
@@ -40,19 +45,19 @@ final class LikeControl: UIControl {
         
         // Задали imageVue картинку heart с цветом red
         let imageEmpty = UIImage(systemName: "heart")
-        likesImageEmpty.frame = CGRect(x: 5, y: 1, width: 22, height: 18)
+        likesImageEmpty.frame = CGRect(x: 5, y: 5, width: 24, height: 21)
         likesImageEmpty.image = imageEmpty
         likesImageEmpty.tintColor = .red
         
         // Задали imageVue картинку heart.fill с цветом red
         let imageFill = UIImage(systemName: "heart.fill")
-        likesImageFill.frame = CGRect(x: 5, y: 1, width: 22, height: 18)
+        likesImageFill.frame = CGRect(x: 5, y: 5, width: 24, height: 21)
         likesImageFill.image = imageFill
         likesImageFill.tintColor = .red
             
         
         //Настраиваем Label
-        likesLabel.frame = CGRect(x: 30, y: 4, width: 50, height: 12)
+        likesLabel.frame = CGRect(x: 30, y: 8, width: 50, height: 12)
         likesLabel.text = String(likesCount)
         likesLabel.textAlignment = .left
         likesLabel.textColor = .red
@@ -80,11 +85,11 @@ final class LikeControl: UIControl {
     
     /// Меняет вью с одной картинкой на вью с другой
     @objc func onClick() {
-        if myLike == 0 {
+        if myLike == false {
             self.likesLabel.text = "\(likesCount + 1)"
             likesCount += 1
-			myLike = 1
-			responder?.likeOccured()
+			myLike = true
+			responder?.setLike()
             
             UIView.transition(from: likesImageEmpty,
                               to: likesImageFill,
@@ -93,7 +98,7 @@ final class LikeControl: UIControl {
         } else {
             self.likesLabel.text = "\(likesCount - 1)"
             likesCount -= 1
-			myLike = 0
+			myLike = false
 			responder?.removeLike()
             
             UIView.transition(from: likesImageFill,
@@ -103,6 +108,11 @@ final class LikeControl: UIControl {
         }
         likesLabel.text = String(likesCount)
     }
+	
+	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+		let frame = self.bounds.insetBy(dx: -20, dy: -20)
+		return frame.contains(point) ? self : nil
+	}
     
   // MARK: - Init
     override init(frame: CGRect) {

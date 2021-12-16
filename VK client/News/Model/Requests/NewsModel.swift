@@ -7,7 +7,8 @@
 
 /// Модель новости из ответа АПИ
 struct NewsModel: Codable {
-	let sourceID, date, postId: Int
+	let sourceID, date: Int
+	let postId: Int?
 	let postType, text: String?
 	let likes: LikesModel?
 	let views: Views?
