@@ -17,7 +17,7 @@ protocol FriendsProfileViewModelType {
 	var profileImage: UIImage { get set }
 	
 	/// Ссылки на картинки пользователя
-	var storedImages: [String] { get }
+	var cellModels: [FriendCollectionImageModel] { get }
 	
 	/// Загруженные модели картинок
 	var storedModels: [ApiImage] { get }
@@ -37,7 +37,7 @@ protocol FriendsProfileViewModelType {
 final class FriendsProfileViewModel: FriendsProfileViewModelType {
 	var friend: UserModel
 	var profileImage: UIImage
-	var storedImages: [String] = []
+	var cellModels: [FriendCollectionImageModel] = []
 	var storedModels: [ApiImage] = []
 	var loader: UserLoader
 	
@@ -48,7 +48,7 @@ final class FriendsProfileViewModel: FriendsProfileViewModelType {
 	}
 	
 	func configureCell(cell: PhotoCollectionViewCell, indexPath: IndexPath) {
-		loader.loadImage(url: storedImages[indexPath.item]) { image in
+		loader.loadImage(url: cellModels[indexPath.item].url) { image in
 			cell.configure(with: image)
 		}
 	}
@@ -58,7 +58,9 @@ final class FriendsProfileViewModel: FriendsProfileViewModelType {
 			self?.storedModels = images
 			
 			if let imagesLinks = self?.loader.sortImage(by: "m", from: images) {
-				self?.storedImages = imagesLinks
+				for url in imagesLinks {
+					self?.cellModels.append(FriendCollectionImageModel(image: url))
+				}
 			}
 			completion()
 		}

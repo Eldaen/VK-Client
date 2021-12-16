@@ -117,6 +117,7 @@ final class FriendProfileViewController: UIViewController {
 	}
 	
 	typealias DataSource = UICollectionViewDiffableDataSource<Section, FriendCollectionImageModel>
+	typealias Snapshot = NSDiffableDataSourceSnapshot<Section, FriendCollectionImageModel>
 	
 	/// Cоздаём DataSource для коллекции
 	private lazy var dataSource = makeDataSource()
@@ -145,10 +146,11 @@ final class FriendProfileViewController: UIViewController {
 		friendName.text = viewModel.friend.name
 		
 		viewModel.fetchPhotos { [weak self] in
-			guard let count = self?.viewModel.storedImages.count else {
+			guard let count = self?.viewModel.cellModels.count else {
 				return
 			}
 			self?.photosCount.text = String(count)
+			self?.applySnapshot()
 			self?.collectionView.reloadData()
 		}
     }
@@ -169,6 +171,14 @@ final class FriendProfileViewController: UIViewController {
 				return cell
 			})
 		return dataSource
+	}
+	
+	/// Cоздаём Snapshot нашего DataSource
+	func applySnapshot(animatingDifferences: Bool = true) {
+	  var snapshot = Snapshot()
+		snapshot.appendSections([.main])
+		snapshot.appendItems(viewModel.cellModels)
+	  dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
 	}
 }
 
