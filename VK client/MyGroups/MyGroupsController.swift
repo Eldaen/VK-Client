@@ -34,6 +34,12 @@ final class MyGroupsController: MyCustomUIViewController {
 		return searchBar
 	}()
 	
+	typealias DataSource = UITableViewDiffableDataSource<Int, GroupModel>
+	typealias Snapshot = NSDiffableDataSourceSnapshot<Int, GroupModel>
+	
+	/// Cоздаём DataSource для коллекции
+	private lazy var dataSource = makeDataSource()
+	
 	// MARK: - Init
 	init(model: MyGroupsViewModelType) {
 		self.viewModel = model
@@ -55,27 +61,38 @@ final class MyGroupsController: MyCustomUIViewController {
 		setupConstraints()
 		
 		viewModel.fetchGroups { [weak self] in
-			self?.tableView.reloadData()
+			self?.applySnapshot()
 		}
     }
-}
-
-// MARK: - UITableViewDataSource, UITableViewDelegate
-extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
-
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		// #warning Incomplete implementation, return the number of rows
-		return viewModel.filteredGroups.count
+	
+	// MARK: - DataSource
+	
+	/// Создаёт DataSource для таблицы
+	func makeDataSource() -> DataSource {
+		let dataSource = DataSource(tableView: tableView) { [weak self] (tableView, indexPath, itemIdentifier) in
+				
+				guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupsCell",
+																	 for: indexPath) as? MyGroupsCell else {
+					return nil
+				}
+				
+				self?.viewModel.configureCell(cell: cell, index: indexPath.item)
+				return cell
+			}
+		return dataSource
 	}
 	
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupsCell", for: indexPath) as? MyGroupsCell else {
-			return UITableViewCell()
-		}
-
-		viewModel.configureCell(cell: cell, index: indexPath.row)
-		return cell
+	/// Cоздаём Snapshot для DataSource
+	func applySnapshot(animatingDifferences: Bool = true) {
+		var snapshot = Snapshot()
+		snapshot.appendSections([1])
+		snapshot.appendItems(viewModel.filteredGroups)
+		dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
 	}
+}
+
+// MARK: - UITableViewDelegate
+extension MyGroupsController: UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
@@ -125,7 +142,6 @@ private extension MyGroupsController {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 80
 		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: "MyGroupsCell")
-		tableView.dataSource = self
 		tableView.delegate = self
 		tableView.tableHeaderView = searchBar
 		
@@ -174,7 +190,7 @@ extension MyGroupsController: MyGroupsDelegate {
 	func groupDidSelect(name: String, id: Int) {
 		viewModel.addFirebaseUser(name: name, id: id)
 		viewModel.fetchGroups() { [weak self] in
-			self?.tableView.reloadData()
+			self?.applySnapshot()
 		}
 	}
 }
@@ -184,15 +200,15 @@ extension MyGroupsController: UISearchBarDelegate {
 	
 	/// Основной метод, который осуществляет поиск
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		viewModel.search(searchText) {
-			self.tableView.reloadData()
+		viewModel.search(searchText) { [weak self] in
+			self?.applySnapshot()
 		}
 	}
 	
 	/// Отменяет поиск
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		viewModel.cancelSearch() {
-			self.tableView.reloadData()
+		viewModel.cancelSearch() { [weak self] in
+			self?.applySnapshot()
 		}
 	}
 }

@@ -159,6 +159,8 @@ final class FriendProfileViewController: UIViewController {
 		}
     }
 	
+	// MARK: - DataSource
+	
 	/// Создаём DataSource для нашей коллекции
 	func makeDataSource() -> DataSource {
 		let dataSource = DataSource(
@@ -179,10 +181,10 @@ final class FriendProfileViewController: UIViewController {
 	
 	/// Cоздаём Snapshot нашего DataSource
 	func applySnapshot(animatingDifferences: Bool = true) {
-	  var snapshot = Snapshot()
+		var snapshot = Snapshot()
 		snapshot.appendSections([.main])
 		snapshot.appendItems(viewModel.cellModels)
-	  dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+		dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
 	}
 }
 
