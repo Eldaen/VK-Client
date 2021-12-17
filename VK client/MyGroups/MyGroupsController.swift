@@ -102,10 +102,7 @@ extension MyGroupsController: UITableViewDelegate {
 			}
 			
 			viewModel.leaveGroup(id: id, index: indexPath.row) { [weak self] result in
-				if result == true {
-					self?.tableView.deleteRows(at: [indexPath], with: .fade)
-					self?.viewModel.fetchGroups { }
-				} else {
+				if result == false {
 					self?.showLeavingError()
 				}
 			}
