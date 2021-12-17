@@ -65,4 +65,10 @@ final class FriendsProfileViewModel: FriendsProfileViewModelType {
 			completion()
 		}
 	}
+	
+	func getFriendsCount(completion: @escaping (Int) -> Void) {
+		loader.getFriendsCount { count in
+			completion(count)
+		}
+	}
 }

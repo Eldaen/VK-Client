@@ -29,7 +29,6 @@ final class FriendProfileViewController: UIViewController {
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(ofSize: 15)
 		label.textColor = .black
-		label.text = "300"
 		return label
 	}()
 	
@@ -143,7 +142,13 @@ final class FriendProfileViewController: UIViewController {
         // заполняем статичные данные
 		userAvatar.image = viewModel.profileImage
         photosCount.text = "0"
+		friendsCount.text = "0"
 		friendName.text = viewModel.friend.name
+		
+		
+		viewModel.loader.getFriendsCount { [weak self] count in
+			self?.friendsCount.text = String(count)
+		}
 		
 		viewModel.fetchPhotos { [weak self] in
 			guard let count = self?.viewModel.cellModels.count else {
@@ -151,7 +156,6 @@ final class FriendProfileViewController: UIViewController {
 			}
 			self?.photosCount.text = String(count)
 			self?.applySnapshot()
-			self?.collectionView.reloadData()
 		}
     }
 	
