@@ -34,7 +34,7 @@ final class MyGroupsController: MyCustomUIViewController {
 		return searchBar
 	}()
 	
-	typealias DataSource = UITableViewDiffableDataSource<Int, GroupModel>
+	typealias DataSource = MyGroupsDataSource
 	typealias Snapshot = NSDiffableDataSourceSnapshot<Int, GroupModel>
 	
 	/// Cоздаём DataSource для коллекции
@@ -70,15 +70,16 @@ final class MyGroupsController: MyCustomUIViewController {
 	/// Создаёт DataSource для таблицы
 	func makeDataSource() -> DataSource {
 		let dataSource = DataSource(tableView: tableView) { [weak self] (tableView, indexPath, itemIdentifier) in
-				
-				guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupsCell",
-																	 for: indexPath) as? MyGroupsCell else {
-					return nil
-				}
-				
-				self?.viewModel.configureCell(cell: cell, index: indexPath.item)
-				return cell
+			
+			guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupsCell",
+														   for: indexPath) as? MyGroupsCell else {
+				return nil
 			}
+			
+			self?.viewModel.configureCell(cell: cell, index: indexPath.item)
+			return cell
+		}
+		dataSource.viewModel = viewModel
 		return dataSource
 	}
 	
@@ -87,27 +88,12 @@ final class MyGroupsController: MyCustomUIViewController {
 		var snapshot = Snapshot()
 		snapshot.appendSections([1])
 		snapshot.appendItems(viewModel.filteredGroups)
-		dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+		dataSource.apply(snapshot)
 	}
 }
 
 // MARK: - UITableViewDelegate
 extension MyGroupsController: UITableViewDelegate {
-
-	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-		if editingStyle == .delete {
-			guard let cell = tableView.cellForRow(at: indexPath) as? MyGroupsCell,
-				  let id = cell.id else {
-				return
-			}
-			
-			viewModel.leaveGroup(id: id, index: indexPath.row) { [weak self] result in
-				if result == false {
-					self?.showLeavingError()
-				}
-			}
-		}
-	}
 	
 	func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
 		return "Покинуть"
