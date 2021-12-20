@@ -42,6 +42,7 @@ final class NewsController: MyCustomUIViewController {
         super.viewDidLoad()
         setupTableView()
         tableView.reloadData()
+		tableView.separatorStyle = .none
 		
 		viewModel.fetchNews { [weak self] in
 			self?.tableView.reloadData()
@@ -68,12 +69,16 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		switch indexPath.item {
 		case 0:
 			type = .author
-			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsAuthorCell else {
+			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: "AuthorCell", for: indexPath) as? NewsAuthorCell else {
 				return UITableViewCell()
 			}
 			cell = authorCell
 		case 1:
 			type = .text
+			guard let textCell = tableView.dequeueReusableCell(withIdentifier: "TextCell", for: indexPath) as? NewsTextCell else {
+				return UITableViewCell()
+			}
+			cell = textCell
 		case 2:
 			type = .collection
 		case 3:
@@ -115,7 +120,8 @@ private extension NewsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		
-		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: "NewsCell")
+		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: "AuthorCell")
+		tableView.register(NewsTextCell.self, forCellReuseIdentifier: "TextCell")
 		tableView.showsVerticalScrollIndicator = false
 		tableView.dataSource = self
 		tableView.delegate = self

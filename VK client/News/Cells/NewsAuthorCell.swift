@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// Протокол ячейки автора новости
+/// Протокол ячейки автора новости для NewsController
 protocol AuthorCellType {
 	
 	/// Конфигурирует ячейку данными для отображения
@@ -18,7 +18,7 @@ protocol AuthorCellType {
 }
 
 /// Ячейка для отображения новостей пользователя в контроллере NewsController
-final class NewsAuthorCell: UITableViewCell {
+final class NewsAuthorCell: UITableViewCell, AuthorCellType {
 
 	private let userImage: UIImageView = {
 		let image = UIImageView()

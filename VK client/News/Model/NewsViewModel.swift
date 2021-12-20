@@ -49,8 +49,11 @@ final class NewsViewModel: NewsViewModelType {
 			loadPorfileImage(profile: news[index].source) { image in
 				authorCell.updateProfileImage(with: image)
 			}
+		case .text:
+			guard let textCell = cell as? NewsTextCell else { return }
+			textCell.configure(with: news[index])
 		default:
-			var cell = NewsAuthorCell()
+			return
 		}
 		
 		//cell.configure(with: news[index])
