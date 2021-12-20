@@ -88,6 +88,9 @@
 		D0EFE7E82770AFB000A8E66E /* NewsTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7E72770AFB000A8E66E /* NewsTextCell.swift */; };
 		D0EFE7EA2770B22800A8E66E /* NewsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7E92770B22800A8E66E /* NewsCollectionCell.swift */; };
 		D0EFE80C2770CA0D00A8E66E /* NewsFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE80B2770CA0D00A8E66E /* NewsFooterCell.swift */; };
+		D0EFE7DC276B9FB200A8E66E /* FriendCollectionImageModel.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7DB276B9FB200A8E66E /* FriendCollectionImageModel.swift.swift */; };
+		D0EFE7DF276BB06A00A8E66E /* FriendsCountMainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7DE276BB06A00A8E66E /* FriendsCountMainResponse.swift */; };
+		D0EFE7E1276BB08800A8E66E /* FriendsCountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7E0276BB08800A8E66E /* FriendsCountResponse.swift */; };
 		D0F2B1132761E64A00C70517 /* demoNewsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F2B1122761E64A00C70517 /* demoNewsService.swift */; };
 		D0F2B1162761E89E00C70517 /* NewsMainRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F2B1152761E89E00C70517 /* NewsMainRequest.swift */; };
 		D0F2B1182761EF2900C70517 /* NewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F2B1172761EF2900C70517 /* NewsModel.swift */; };
@@ -171,6 +174,9 @@
 		D0EFE7E72770AFB000A8E66E /* NewsTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTextCell.swift; sourceTree = "<group>"; };
 		D0EFE7E92770B22800A8E66E /* NewsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionCell.swift; sourceTree = "<group>"; };
 		D0EFE80B2770CA0D00A8E66E /* NewsFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFooterCell.swift; sourceTree = "<group>"; };
+		D0EFE7DB276B9FB200A8E66E /* FriendCollectionImageModel.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCollectionImageModel.swift.swift; sourceTree = "<group>"; };
+		D0EFE7DE276BB06A00A8E66E /* FriendsCountMainResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCountMainResponse.swift; sourceTree = "<group>"; };
+		D0EFE7E0276BB08800A8E66E /* FriendsCountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCountResponse.swift; sourceTree = "<group>"; };
 		D0F2B1122761E64A00C70517 /* demoNewsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoNewsService.swift; sourceTree = "<group>"; };
 		D0F2B1152761E89E00C70517 /* NewsMainRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsMainRequest.swift; sourceTree = "<group>"; };
 		D0F2B1172761EF2900C70517 /* NewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModel.swift; sourceTree = "<group>"; };
@@ -284,6 +290,8 @@
 		D050CCFE2716DDFF0076D78E /* FriendProfile */ = {
 			isa = PBXGroup;
 			children = (
+				D0EFE7DD276BB04300A8E66E /* Requests */,
+				D0EFE7DA276B9F8B00A8E66E /* Models */,
 				D0800D1D272BF08300347AB7 /* Cells */,
 				D050CCFF2716DE2A0076D78E /* FriendProfileViewController.swift */,
 				D050CD1B271A07BA0076D78E /* LikeControl.swift */,
@@ -491,6 +499,15 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		D0EFE7DD276BB04300A8E66E /* Requests */ = {
+			isa = PBXGroup;
+			children = (
+				D0EFE7DE276BB06A00A8E66E /* FriendsCountMainResponse.swift */,
+				D0EFE7E0276BB08800A8E66E /* FriendsCountResponse.swift */,
+			);
+			path = Requests;
+			sourceTree = "<group>";
+		};
 		D0F2B1142761E88500C70517 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
@@ -668,6 +685,7 @@
 				D01D8C3E27469330002CDC5E /* VkFriendsMainResponse.swift in Sources */,
 				D0615C9027352C540098F5D7 /* CloudView.swift in Sources */,
 				D050CD6627247A010076D78E /* NewsService.swift in Sources */,
+				D0EFE7DF276BB06A00A8E66E /* FriendsCountMainResponse.swift in Sources */,
 				D03B187A274FC5B200C483B3 /* FriendsViewModel.swift in Sources */,
 				D050CD142716E2990076D78E /* UserService.swift in Sources */,
 				D03B188B275173B600C483B3 /* demoUserService.swift in Sources */,
@@ -726,6 +744,7 @@
 				D0D2F0AD2747CD17008E9AB4 /* ApiImage.swift in Sources */,
 				D050CCFD2716D8AE0076D78E /* FriendsTableViewCell.swift in Sources */,
 				D0EFE7EA2770B22800A8E66E /* NewsCollectionCell.swift in Sources */,
+				D0EFE7E1276BB08800A8E66E /* FriendsCountResponse.swift in Sources */,
 				D050CD6C27258ED10076D78E /* NewsCollectionViewLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

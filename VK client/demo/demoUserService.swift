@@ -8,7 +8,6 @@
 import UIKit.UIImage
 
 class demoUserService: UserLoader {
-	
 	var networkManager: NetworkManager
 	var cache: ImageCache
 	var persistence: PersistenceManager
@@ -95,6 +94,10 @@ class demoUserService: UserLoader {
 			]),
 		]
 		completion(images)
+	}
+	
+	func getFriendsCount(completion: @escaping (Int) -> Void) {
+		completion(135)
 	}
 	
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {

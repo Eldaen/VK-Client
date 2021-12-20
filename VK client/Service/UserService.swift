@@ -15,6 +15,9 @@ protocol UserLoader: Loader {
 	
 	/// Загружает все фото пользователя
 	func loadUserPhotos(for id: String, completion: @escaping ([ApiImage]) -> Void)
+	
+	/// Запрашивает кол-во друзей пользователя
+	func getFriendsCount(completion: @escaping (Int) -> Void)
 }
 
 /// Сервис для загрузки данных пользователей из сети
@@ -126,11 +129,25 @@ final class UserService: UserLoader {
 		}
 	}
 	
+	/// Запрашивает кол-во друзей пользователя
+	func getFriendsCount(completion: @escaping (Int) -> Void) {
+		networkManager.request(method: .friendsGet,
+							   httpMethod: .get,
+							   params: [:]) { (result: Result<FriendsCountMainResponse, Error>) in
+			switch result {
+			case .success(let friendsResponse):
+				completion(friendsResponse.response.count)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
 	/// Загружает все фото пользователя
 	func loadUserPhotos(for id: String, completion: @escaping ([ApiImage]) -> Void) {
 		let params = [
 			"owner_id" : id,
-			"count": "40",
+			"count": "50",
 		]
 		networkManager.request(method: .photosGetAll,
 							   httpMethod: .get,
@@ -143,61 +160,5 @@ final class UserService: UserLoader {
 				break
 			}
 		}
-	}
-	
-	// MARK: - Пришлось устроить дублирование кода из-за Демо режима.
-	// До него всё было в экстеншне протокола Loader, но в демо не получается заменить эти функции, так что так
-	
-	/// Загружает картинку и возвращает её, если получилось
-	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
-		guard let imageUrl = URL(string: url) else { return }
-		
-		// если есть в кэше, то грузить не нужно
-		if let image = cache[imageUrl] {
-			completion(image)
-			return
-		}
-		
-		// Проверим наличие в файлах
-		if let image = loadImageFromDiskWith(imageName: imageUrl.absoluteString) {
-			completion(image)
-			return
-		}
-		
-		// Если нигде нет, то грузим
-		networkManager.loadImage(url: imageUrl) { [weak self] result in
-			switch result {
-			case .success(let data):
-				guard let image = UIImage(data: data) else {
-					return
-				}
-				
-				// Если пришлось загружать, то добавим в кэш
-				self?.cache[imageUrl] = image
-				
-				// И в файлы сохраним
-				DispatchQueue.global(qos: .background).async {
-					self?.saveImage(imageName: imageUrl.absoluteString, image: image)
-				}
-				
-				completion(image)
-			case .failure(let error):
-				debugPrint("Error: \(error.localizedDescription)")
-			}
-		}
-	}
-	
-	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
-		var imageLinks: [String] = []
-		
-		for model in array {
-			for size in model.sizes {
-				if size.type == sizeType {
-					imageLinks.append(size.url)
-				}
-			}
-		}
-		return imageLinks
 	}
 }
