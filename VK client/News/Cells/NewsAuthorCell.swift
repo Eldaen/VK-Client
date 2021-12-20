@@ -42,15 +42,6 @@ final class NewsAuthorCell: UITableViewCell, NewsAuthorCellType {
 		return label
 	}()
 	
-	/// Массив картинок для отображения
-	private var collection: [UIImage] = []
-	
-	/// Стандартная высота ячейки коллекции
-	private var standard: NSLayoutConstraint?
-	
-	/// Ячейка коллекции, если картинок нет
-	private var empty: NSLayoutConstraint?
-	
 	/// Модель новости, которую отображаем
 	private var model: NewsTableViewCellModelType?
 	
