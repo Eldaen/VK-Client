@@ -9,6 +9,14 @@ import UIKit
 
 /// Контроллер новостей пользователя
 final class NewsController: MyCustomUIViewController {
+	
+	/// Типы ячеек, из которых состоит секция новости
+	enum NewsCells {
+		case author
+		case text
+		case collection
+		case footer
+	}
     
 	private let tableView: UITableView = {
 		let tableView = UITableView()
@@ -49,17 +57,33 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 1
+		return 4
 	}
 	
 	// отрисовываем ячейки
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsTableViewCell else {
+		var cell: UITableViewCell = UITableViewCell()
+		var type: NewsCells
+		
+		switch indexPath.item {
+		case 0:
+			type = .author
+			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsAuthorCell else {
+				return UITableViewCell()
+			}
+			cell = authorCell
+		case 1:
+			type = .text
+		case 2:
+			type = .collection
+		case 3:
+			type = .footer
+		default:
 			return UITableViewCell()
 		}
 		
 		// конфигурируем ячейку
-		viewModel.configureCell(cell: cell, index: indexPath.section)
+		viewModel.configureCell(cell: cell, index: indexPath.section, type: type)
 		
 		return cell
 	}
@@ -91,7 +115,7 @@ private extension NewsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		
-		tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsCell")
+		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: "NewsCell")
 		tableView.showsVerticalScrollIndicator = false
 		tableView.dataSource = self
 		tableView.delegate = self

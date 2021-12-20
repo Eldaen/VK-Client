@@ -17,7 +17,7 @@ protocol NewsViewModelType {
 	var loader: NewsLoader { get }
 	
 	/// Конфигурирует ячейку новости данными, которые получили из сервиса
-	func configureCell(cell: NewsTableViewCell, index: Int)
+	func configureCell(cell: UITableViewCell, index: Int, type: NewsController.NewsCells)
 	
 	/// Скачиваем из сети список новостей для пользователя
 	func fetchNews(completion: @escaping () -> Void)
@@ -39,18 +39,28 @@ final class NewsViewModel: NewsViewModelType {
 		self.loader = loader
 	}
 	
-	func configureCell(cell: NewsTableViewCell, index: Int) {
-		cell.configure(with: news[index])
-		cell.likesResponder = self
+	func configureCell(cell: UITableViewCell/* NewsTableViewCell */, index: Int, type: NewsController.NewsCells) {
 		
-		if !news.isEmpty {
-			loadImages(array: news[index].newsImageNames) { images in
-				cell.updateCollection(with: images)
-			}
+		switch type {
+		case .author:
+			guard let authorCell = cell as? NewsAuthorCell else { return }
+			authorCell.configure(with: news[index])
 			
 			loadPorfileImage(profile: news[index].source) { image in
-				cell.updateProfileImage(with: image)
+				authorCell.updateProfileImage(with: image)
 			}
+		default:
+			var cell = NewsAuthorCell()
+		}
+		
+		//cell.configure(with: news[index])
+		//cell.likesResponder = self
+		
+		if !news.isEmpty {
+//			loadImages(array: news[index].newsImageNames) { images in
+//				cell.updateCollection(with: images)
+//			}
+		
 		}
 	}
 	
