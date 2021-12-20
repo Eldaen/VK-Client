@@ -37,7 +37,6 @@ final class NewsService: NewsLoader {
 		let params = [
 			"filters" : "posts",
 			"return_banned" : "0",
-			"max_photos" : "4",
 		]
 		
 		networkManager.request(method: .newsGet,

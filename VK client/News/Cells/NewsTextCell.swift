@@ -8,14 +8,14 @@
 import UIKit
 
 /// Протокол типа ячейки с текстом для NewsController
-protocol TextCellType {
+protocol NewsTextCellType {
 	
 	/// Конфигурирует ячейку данными для отображения
 	func configure (with model: NewsTableViewCellModelType)
 }
 
 /// Ячейка для отображения новостей пользователя в контроллере NewsController
-final class NewsTextCell: UITableViewCell, TextCellType {
+final class NewsTextCell: UITableViewCell, NewsTextCellType {
 	
 	private let postText: UITextView = {
 		let text = UITextView()

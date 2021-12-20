@@ -39,31 +39,30 @@ final class NewsViewModel: NewsViewModelType {
 		self.loader = loader
 	}
 	
-	func configureCell(cell: UITableViewCell/* NewsTableViewCell */, index: Int, type: NewsController.NewsCells) {
+	func configureCell(cell: UITableViewCell, index: Int, type: NewsController.NewsCells) {
 		
 		switch type {
 		case .author:
-			guard let authorCell = cell as? NewsAuthorCell else { return }
+			guard let authorCell = cell as? NewsAuthorCellType else { return }
 			authorCell.configure(with: news[index])
 			
 			loadPorfileImage(profile: news[index].source) { image in
 				authorCell.updateProfileImage(with: image)
 			}
 		case .text:
-			guard let textCell = cell as? NewsTextCell else { return }
+			guard let textCell = cell as? NewsTextCellType else { return }
 			textCell.configure(with: news[index])
-		default:
-			return
-		}
-		
-		//cell.configure(with: news[index])
-		//cell.likesResponder = self
-		
-		if !news.isEmpty {
-//			loadImages(array: news[index].newsImageNames) { images in
-//				cell.updateCollection(with: images)
-//			}
-		
+		case .collection:
+			guard let collectionCell = cell as? NewCollectionCellType else { return }
+			collectionCell.configure(with: news[index])
+			
+			loadImages(array: news[index].newsImageNames) { images in
+				collectionCell.updateCollection(with: images)
+			}
+		case .footer:
+			guard var footerCell = cell as? NewsFooterCellType else { return }
+			footerCell.configure(with: news[index])
+			footerCell.likesResponder = self
 		}
 	}
 	

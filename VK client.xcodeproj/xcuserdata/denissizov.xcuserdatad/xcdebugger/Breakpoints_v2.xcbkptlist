@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
          <BreakpointContent
             uuid = "D7C67A60-6B97-4B94-8869-F00A4C7253A9"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             nameForDebugger = "Constraint"
             ignoreCount = "0"
             continueAfterRunningActions = "No"

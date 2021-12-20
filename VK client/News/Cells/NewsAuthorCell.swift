@@ -8,7 +8,7 @@
 import UIKit
 
 /// Протокол ячейки автора новости для NewsController
-protocol AuthorCellType {
+protocol NewsAuthorCellType {
 	
 	/// Конфигурирует ячейку данными для отображения
 	func configure (with model: NewsTableViewCellModelType)
@@ -18,7 +18,7 @@ protocol AuthorCellType {
 }
 
 /// Ячейка для отображения новостей пользователя в контроллере NewsController
-final class NewsAuthorCell: UITableViewCell, AuthorCellType {
+final class NewsAuthorCell: UITableViewCell, NewsAuthorCellType {
 
 	private let userImage: UIImageView = {
 		let image = UIImageView()
@@ -83,7 +83,7 @@ private extension NewsAuthorCell {
 		NSLayoutConstraint.activate([
 			userImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
 			userImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-			userImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+			userImage.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
 			userImage.widthAnchor.constraint(equalToConstant: 60),
 			userImage.heightAnchor.constraint(equalToConstant: 60),
 			

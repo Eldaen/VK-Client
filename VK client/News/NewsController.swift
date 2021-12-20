@@ -69,20 +69,32 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		switch indexPath.item {
 		case 0:
 			type = .author
-			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: "AuthorCell", for: indexPath) as? NewsAuthorCell else {
+			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: "AuthorCell",
+																 for: indexPath) as? NewsAuthorCell else {
 				return UITableViewCell()
 			}
 			cell = authorCell
 		case 1:
 			type = .text
-			guard let textCell = tableView.dequeueReusableCell(withIdentifier: "TextCell", for: indexPath) as? NewsTextCell else {
+			guard let textCell = tableView.dequeueReusableCell(withIdentifier: "TextCell",
+															   for: indexPath) as? NewsTextCell else {
 				return UITableViewCell()
 			}
 			cell = textCell
 		case 2:
 			type = .collection
+			guard let collectionCell = tableView.dequeueReusableCell(withIdentifier: "CollectionCell",
+																	 for: indexPath) as? NewsCollectionCell else {
+				return UITableViewCell()
+			}
+			cell = collectionCell
 		case 3:
 			type = .footer
+			guard let footerCell = tableView.dequeueReusableCell(withIdentifier: "FooterCell",
+																 for: indexPath) as? NewsFooterCell else {
+				return UITableViewCell()
+			}
+			cell = footerCell
 		default:
 			return UITableViewCell()
 		}
@@ -101,6 +113,14 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		header.backgroundColor = .gray
 		
 		return header
+	}
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		if indexPath.item == 2 {
+			return 270
+		} else {
+			return UITableView.automaticDimension
+		}
 	}
 	
 	// правим высоту хэдера со стандартной до нужной
@@ -122,6 +142,8 @@ private extension NewsController {
 		
 		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: "AuthorCell")
 		tableView.register(NewsTextCell.self, forCellReuseIdentifier: "TextCell")
+		tableView.register(NewsCollectionCell.self, forCellReuseIdentifier: "CollectionCell")
+		tableView.register(NewsFooterCell.self, forCellReuseIdentifier: "FooterCell")
 		tableView.showsVerticalScrollIndicator = false
 		tableView.dataSource = self
 		tableView.delegate = self
