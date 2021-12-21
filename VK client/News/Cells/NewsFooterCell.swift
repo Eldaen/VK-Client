@@ -29,8 +29,9 @@ final class NewsFooterCell: UITableViewCell, NewsFooterCellType {
 	private let footerHorizontalStack: UIStackView = {
 		let stack = UIStackView()
 		stack.axis = .horizontal
-		stack.distribution = .equalSpacing
+		stack.distribution = .fillEqually
 		stack.contentMode = .center
+		stack.spacing = 20
 		stack.translatesAutoresizingMaskIntoConstraints = false
 		return stack
 	}()
@@ -52,8 +53,9 @@ final class NewsFooterCell: UITableViewCell, NewsFooterCellType {
 	}()
 	
 	private let viewsLabel: UILabel = {
-		let views = UILabel()
+		let views = UILabel(frame: .zero)
 		views.font = UIFont.systemFont(ofSize: 14)
+		views.translatesAutoresizingMaskIntoConstraints = false
 		return views
 	}()
 
@@ -90,7 +92,11 @@ private extension NewsFooterCell {
 			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 			footerView.heightAnchor.constraint(equalToConstant: 30),
 			
-			footerHorizontalStack.widthAnchor.constraint(equalTo: footerView.widthAnchor),
+			footerHorizontalStack.leadingAnchor.constraint(equalTo: footerView.leadingAnchor),
+			footerHorizontalStack.trailingAnchor.constraint(lessThanOrEqualTo: viewsLabel.leadingAnchor, constant: -10),
+			
+			viewsLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -10),
+			viewsLabel.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
 		])
 	}
 	
@@ -103,7 +109,7 @@ private extension NewsFooterCell {
 		footerHorizontalStack.addArrangedSubview(likesControl)
 		footerHorizontalStack.addArrangedSubview(commentsControl)
 		footerHorizontalStack.addArrangedSubview(repostsControl)
-		footerHorizontalStack.addArrangedSubview(viewsLabel)
+		footerView.addSubview(viewsLabel)
 		footerView.addSubview(footerHorizontalStack)
 	}
 	
