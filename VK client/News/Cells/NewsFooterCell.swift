@@ -46,6 +46,11 @@ final class NewsFooterCell: UITableViewCell, NewsFooterCellType {
 		return comments
 	}()
 	
+	private let repostsControl: RepostsControl = {
+		let reposts = RepostsControl(frame: .zero)
+		return reposts
+	}()
+	
 	private let viewsLabel: UILabel = {
 		let views = UILabel()
 		views.font = UIFont.systemFont(ofSize: 14)
@@ -97,6 +102,7 @@ private extension NewsFooterCell {
 	func setupFooter() {
 		footerHorizontalStack.addArrangedSubview(likesControl)
 		footerHorizontalStack.addArrangedSubview(commentsControl)
+		footerHorizontalStack.addArrangedSubview(repostsControl)
 		footerHorizontalStack.addArrangedSubview(viewsLabel)
 		footerView.addSubview(footerHorizontalStack)
 	}
@@ -105,6 +111,7 @@ private extension NewsFooterCell {
 	func updateCellData(with model: NewsTableViewCellModelType) {
 		likesControl.setLikes(with: model.likesModel?.count ?? 0)
 		commentsControl.setComments(with: 125)
+		repostsControl.setReposts(with: 21)
 		viewsLabel.text = "🔍 \(model.views?.count ?? 0)"
 	}
 }
