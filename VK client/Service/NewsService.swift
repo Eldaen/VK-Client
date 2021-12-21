@@ -266,8 +266,9 @@ private extension NewsService {
 				}
 				
 				if let video = attachment.video {
-					if let photo = video.photo?.first {
-						let size = Sizes(url: photo.url, type: "x", height: photo.height, width: photo.width)
+					if let photo = video.firstFrame?.first,
+					   let photo = video.photo?.last {
+						let size = Sizes(url: photo.url, type: "z", height: photo.height, width: photo.width)
 						videoImages.append(size)
 					}
 				}
