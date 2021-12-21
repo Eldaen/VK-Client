@@ -40,4 +40,6 @@ struct Video: Codable {
 /// Модель картинки превью для приложения вида Видео
 struct VideoPreview: Codable {
 	let url: String
+	let width: Int
+	let height: Int
 }

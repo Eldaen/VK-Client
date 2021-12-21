@@ -136,6 +136,9 @@ private extension NewsCollectionCell {
 	/// Генерирует Сomposition Layout для нашей коллекции
 	func getCollectionLayout(isMultiple: Bool) -> UICollectionViewCompositionalLayout {
 		
+		let image = collection.first ?? UIImage()
+		let aspectRatio = image.size.height / image.size.width
+		
 		let itemSize = NSCollectionLayoutSize(
 		  widthDimension: .fractionalWidth(1.0),
 		  heightDimension: .fractionalHeight(1.0))
@@ -144,7 +147,7 @@ private extension NewsCollectionCell {
 		
 		let groupSize = NSCollectionLayoutSize(
 			widthDimension: .fractionalWidth(isMultiple ? 0.95 : 1.0),
-		  heightDimension: .fractionalWidth(2/3))
+		  heightDimension: .fractionalWidth(aspectRatio))
 		
 		let group = NSCollectionLayoutGroup.horizontal(
 		  layoutSize: groupSize,

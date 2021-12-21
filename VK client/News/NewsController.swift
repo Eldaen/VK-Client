@@ -117,7 +117,13 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		if indexPath.item == 2 {
-			return 270
+			if let height = viewModel.news[indexPath.section].newsImageModels.first?.height,
+			   let width = viewModel.news[indexPath.section].newsImageModels.first?.width {
+				let aspectRatio = Double(height) / Double(width)
+				return tableView.bounds.width * CGFloat(aspectRatio)
+			} else {
+				return 0
+			}
 		} else {
 			return UITableView.automaticDimension
 		}

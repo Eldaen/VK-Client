@@ -15,6 +15,6 @@ protocol NewsTableViewCellModelType {
 	var postID: Int { get }
 	var postDate: String { get }
 	var postText: String { get }
-	var newsImageNames: [String] { get }
+	var newsImageModels: [Sizes] { get }
 	var collection: [UIImage] { get }
 }

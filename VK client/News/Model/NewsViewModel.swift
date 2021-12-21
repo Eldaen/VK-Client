@@ -56,7 +56,7 @@ final class NewsViewModel: NewsViewModelType {
 			guard let collectionCell = cell as? NewCollectionCellType else { return }
 			collectionCell.configure(with: news[index])
 			
-			loadImages(array: news[index].newsImageNames) { images in
+			loadImages(array: news[index].newsImageModels) { images in
 				collectionCell.updateCollection(with: images)
 			}
 		case .footer:
@@ -73,7 +73,7 @@ final class NewsViewModel: NewsViewModelType {
 		}
 	}
 	
-	func loadImages(array: [String], completion: @escaping ([UIImage]) -> Void) {
+	func loadImages(array: [Sizes], completion: @escaping ([UIImage]) -> Void) {
 		var images = [UIImage]()
 		let imageGroup = DispatchGroup()
 		
@@ -81,7 +81,7 @@ final class NewsViewModel: NewsViewModelType {
 		DispatchQueue.global().async(group: imageGroup) { [weak self] in
 			for imageName in array {
 				imageGroup.enter()
-				self?.loader.loadImage(url: imageName) { image in
+				self?.loader.loadImage(url: imageName.url) { image in
 					images.append(image)
 					imageGroup.leave()
 				}

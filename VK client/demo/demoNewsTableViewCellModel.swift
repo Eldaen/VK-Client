@@ -14,7 +14,7 @@ struct demoNewsTableViewCellModel: Codable, NewsTableViewCellModelType {
 	var postID: Int = 0
 	var postDate: String = "0"
 	var postText: String = "Text"
-	var newsImageNames: [String] = []
+	var newsImageModels: [Sizes] = []
 	var collection: [UIImage] = [] //
 	
 	enum CodingKeys: String, CodingKey {
@@ -22,6 +22,6 @@ struct demoNewsTableViewCellModel: Codable, NewsTableViewCellModelType {
 		case views
 		case postDate
 		case postText
-		case newsImageNames
+		case newsImageModels
 	}
 }
