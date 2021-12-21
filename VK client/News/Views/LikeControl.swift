@@ -14,31 +14,22 @@ protocol CanLike {
 }
 
 /// Контрол для отображения вьюшки с лайками и возможность лайкнуть
-final class LikeControl: UIControl {
+final class LikeControl: NewsControl {
 	
 	override var intrinsicContentSize: CGSize {
 		return CGSize(width: 50, height: 30)
 	}
     
-	var likesCount: Int = 0
 	var responder: CanLike?
 	
 	private var myLike: Bool = false
-	
-    lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-        let recognizer = UITapGestureRecognizer(target: self,
-                                                action: #selector(onClick))
-        recognizer.numberOfTapsRequired = 1    // Количество нажатий, необходимое для распознавания
-        recognizer.numberOfTouchesRequired = 1 // Количество пальцев, которые должны коснуться экрана для распознавания
-        return recognizer
-    }()
     
     private var likesImageEmpty: UIImageView = UIImageView()
     private var likesImageFill: UIImageView = UIImageView()
     private var likesLabel: UILabel = UILabel()
     private var bgView: UIView = UIView()
     
-    private func setupView() {
+	override func setupView() {
         
         // Чтобы вьюха была без фона и не мешала
         self.backgroundColor = .clear
@@ -58,7 +49,7 @@ final class LikeControl: UIControl {
         
         //Настраиваем Label
         likesLabel.frame = CGRect(x: 30, y: 8, width: 50, height: 12)
-        likesLabel.text = String(likesCount)
+        likesLabel.text = String(count)
         likesLabel.textAlignment = .left
         likesLabel.textColor = .red
         likesLabel.font = UIFont.systemFont(ofSize: 16)
@@ -71,23 +62,16 @@ final class LikeControl: UIControl {
         self.addSubview(bgView)
     }
 	
-	/// Обновляет текущее кол-во лайков
-	func setLikes(with value: Int) {
-		likesCount = value
-		likesLabel.text = "\(value)"
-		likesLabel.layoutIfNeeded()
-	}
-	
 	/// Отправляет в ячейку информацию о том, что кто-то что-то лайкнул
 	func setLikesResponder(responder: CanLike) {
 		self.responder = responder
 	}
     
     /// Меняет вью с одной картинкой на вью с другой
-    @objc func onClick() {
+    @objc override func onClick() {
         if myLike == false {
-            self.likesLabel.text = "\(likesCount + 1)"
-            likesCount += 1
+            self.likesLabel.text = "\(count + 1)"
+            count += 1
 			myLike = true
 			responder?.setLike()
             
@@ -96,8 +80,8 @@ final class LikeControl: UIControl {
                               duration: 0.2,
                               options: .transitionCrossDissolve)
         } else {
-            self.likesLabel.text = "\(likesCount - 1)"
-            likesCount -= 1
+            self.likesLabel.text = "\(count - 1)"
+            count -= 1
 			myLike = false
 			responder?.removeLike()
             
@@ -106,7 +90,7 @@ final class LikeControl: UIControl {
                               duration: 0.2,
                               options: .transitionCrossDissolve)
         }
-        likesLabel.text = String(likesCount)
+        likesLabel.text = String(count)
     }
 	
 	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

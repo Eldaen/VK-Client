@@ -109,9 +109,11 @@ private extension NewsFooterCell {
 	
 	/// обновляет данные ячейки
 	func updateCellData(with model: NewsTableViewCellModelType) {
-		likesControl.setLikes(with: model.likesModel?.count ?? 0)
-		commentsControl.setComments(with: 125)
-		repostsControl.setReposts(with: 21)
+		likesControl.setCount(with: model.likesModel?.count ?? 0)
+		commentsControl.setCount(with: 125)
+		commentsControl.setImage(with: "bubble.left")
+		repostsControl.setCount(with: 21)
+		repostsControl.setImage(with: "arrowshape.turn.up.right")
 		viewsLabel.text = "🔍 \(model.views?.count ?? 0)"
 	}
 }
@@ -125,7 +127,7 @@ extension NewsFooterCell: CanLike {
 		if let id = model?.postID,
 		   let ownerId = model?.source.id {
 			likesResponder?.setLike(post: id, owner: ownerId) { [weak self] result in
-				self?.likesControl.setLikes(with: result)
+				self?.likesControl.setCount(with: result)
 			}
 		}
 	}
@@ -135,7 +137,7 @@ extension NewsFooterCell: CanLike {
 		if let id = model?.postID,
 		   let ownerId = model?.source.id {
 			likesResponder?.setLike(post: id, owner: ownerId) { [weak self] result in
-				self?.likesControl.setLikes(with: result)
+				self?.likesControl.setCount(with: result)
 			}
 		}
 	}
