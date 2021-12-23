@@ -66,6 +66,13 @@ final class LikeControl: NewsControl {
 	func setLikesResponder(responder: CanLike) {
 		self.responder = responder
 	}
+	
+	/// Задаёт кол-во лайков счётчику
+	override func setCount(with value: Int) {
+		count = value
+		likesLabel.text = "\(value)"
+		likesLabel.layoutIfNeeded()
+	}
     
     /// Меняет вью с одной картинкой на вью с другой
     @objc override func onClick() {

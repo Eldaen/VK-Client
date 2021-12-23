@@ -72,8 +72,9 @@ final class NewsFooterCell: UITableViewCell, NewsFooterCellType {
 		setupCell()
 		setupFooter()
 		setupConstraints()
-		updateCellData(with: model)
+		
 		self.model = model
+		updateCellData(with: model)
 		
 		selectionStyle = .none
 		likesControl.setLikesResponder(responder: self)
@@ -94,6 +95,7 @@ private extension NewsFooterCell {
 			
 			footerHorizontalStack.leadingAnchor.constraint(equalTo: footerView.leadingAnchor),
 			footerHorizontalStack.trailingAnchor.constraint(lessThanOrEqualTo: viewsLabel.leadingAnchor, constant: -10),
+			footerHorizontalStack.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
 			
 			viewsLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -10),
 			viewsLabel.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
