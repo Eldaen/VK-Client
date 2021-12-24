@@ -26,6 +26,12 @@ final class FriendsViewController: MyCustomUIViewController {
 		return tableView
 	}()
 	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
+	}()
+	
 	/// Вью модель контроллера Friends
 	private var viewModel: FriendsViewModelType
 	
@@ -78,7 +84,11 @@ final class FriendsViewController: MyCustomUIViewController {
 		setupTableView()
 		setupConstraints()
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchFriends { [weak self] in
+			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
 	}
@@ -256,5 +266,11 @@ private extension FriendsViewController {
 			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
 			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 		])
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		self.view.addSubview(spinner)
+		spinner.center = self.view.center
 	}
 }
