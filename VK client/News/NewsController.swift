@@ -135,7 +135,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 				let aspectRatio = Double(height) / Double(width)
 				return tableView.bounds.width * CGFloat(aspectRatio)
 			} else {
-				return 0
+				return UITableView.automaticDimension
 			}
 		} else {
 			return UITableView.automaticDimension
