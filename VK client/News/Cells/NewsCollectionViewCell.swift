@@ -19,6 +19,9 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 		return image
 	}()
 	
+	/// ReuseIdentifier для ячейки коллекции новостей
+	let reuseIdentifier = "NewsCollectionViewCell"
+	
 	/// Конфигурирует ячейку
 	func configure(with image: UIImage) {
 		contentView.addSubview(newsImage)

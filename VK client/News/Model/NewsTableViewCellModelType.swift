@@ -17,4 +17,5 @@ protocol NewsTableViewCellModelType {
 	var postText: String { get }
 	var newsImageModels: [Sizes] { get }
 	var collection: [UIImage] { get }
+	var link: Link? { get }
 }
