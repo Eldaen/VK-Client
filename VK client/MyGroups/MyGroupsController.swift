@@ -34,6 +34,12 @@ final class MyGroupsController: MyCustomUIViewController {
 		return searchBar
 	}()
 	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
+	}()
+	
 	// MARK: - Init
 	init(model: MyGroupsViewModelType) {
 		self.viewModel = model
@@ -54,7 +60,11 @@ final class MyGroupsController: MyCustomUIViewController {
 		setupTableView()
 		setupConstraints()
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchGroups { [weak self] in
+			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
     }
@@ -164,6 +174,12 @@ private extension MyGroupsController {
 		
 		// Показываем UIAlertController
 		present(alert, animated: true, completion: nil)
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		self.view.addSubview(spinner)
+		spinner.center = self.view.center
 	}
 }
 

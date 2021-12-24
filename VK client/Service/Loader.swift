@@ -127,7 +127,7 @@ extension Loader {
 				cache[imageUrl] = image
 				
 				// И в файлы сохраним
-				DispatchQueue.global(qos: .background).async {
+				DispatchQueue.global().async {
 					saveImage(imageName: imageUrl.absoluteString, image: image)
 				}
 				
