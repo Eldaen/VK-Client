@@ -101,6 +101,12 @@ final class FriendProfileViewController: UIViewController {
 		return collection
 	}()
 	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
+	}()
+	
 	/// Вью модель для контроллера профиля пользователя
 	var viewModel: FriendsProfileViewModelType
 	
@@ -135,7 +141,11 @@ final class FriendProfileViewController: UIViewController {
 		photosCount.text = "0"
 		friendName.text = viewModel.friend.name
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchPhotos { [weak self] in
+			self?.spinner.stopAnimating()
 			guard let count = self?.viewModel.storedImages.count else {
 				return
 			}
@@ -246,6 +256,17 @@ private extension FriendProfileViewController {
 			collectionView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
 		])
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		
+		/// Смещение вниз индикатора загрузки от центра
+		let spinnerYoffset = 1.3
+		
+		self.view.addSubview(spinner)
+		spinner.center.x = self.view.center.x
+		spinner.center.y = self.view.center.y * spinnerYoffset
 	}
 }
 
