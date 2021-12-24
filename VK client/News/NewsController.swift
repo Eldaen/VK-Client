@@ -16,13 +16,26 @@ final class NewsController: MyCustomUIViewController {
 		case text
 		case collection
 		case footer
+		case link
 	}
+	
+	/// Количество ячеек в секции новости
+	private let cellsCount: Int = 4
+	
+	/// Количество ячеек в секции новости, если есть ссылка
+	private let cellsWithLink: Int = 5
     
 	private let tableView: UITableView = {
 		let tableView = UITableView()
 		tableView.backgroundColor = .white
 		tableView.translatesAutoresizingMaskIntoConstraints = false
 		return tableView
+	}()
+	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
 	}()
 	
 	private var viewModel: NewsViewModelType
@@ -44,7 +57,11 @@ final class NewsController: MyCustomUIViewController {
         tableView.reloadData()
 		tableView.separatorStyle = .none
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchNews { [weak self] in
+			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
     }
@@ -54,49 +71,53 @@ final class NewsController: MyCustomUIViewController {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return viewModel.news.count // одна секция - одна новость
+		return viewModel.news.count
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 4
+		if checkLink(for: section) {
+			return cellsWithLink
+		} else {
+			return cellsCount
+		}
 	}
 	
 	// отрисовываем ячейки
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		var cell: UITableViewCell = UITableViewCell()
-		var type: NewsCells
+		guard let type = getCellType(for: indexPath) else { return UITableViewCell () }
 		
-		switch indexPath.item {
-		case 0:
-			type = .author
-			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: "AuthorCell",
+		switch type {
+		case .author:
+			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: NewsAuthorCell.reuseIdentifier,
 																 for: indexPath) as? NewsAuthorCell else {
 				return UITableViewCell()
 			}
 			cell = authorCell
-		case 1:
-			type = .text
-			guard let textCell = tableView.dequeueReusableCell(withIdentifier: "TextCell",
+		case .text:
+			guard let textCell = tableView.dequeueReusableCell(withIdentifier: NewsTextCell.reuseIdentifier,
 															   for: indexPath) as? NewsTextCell else {
 				return UITableViewCell()
 			}
 			cell = textCell
-		case 2:
-			type = .collection
-			guard let collectionCell = tableView.dequeueReusableCell(withIdentifier: "CollectionCell",
+		case .collection:
+			guard let collectionCell = tableView.dequeueReusableCell(withIdentifier: NewsCollectionCell.reuseIdentifier,
 																	 for: indexPath) as? NewsCollectionCell else {
 				return UITableViewCell()
 			}
 			cell = collectionCell
-		case 3:
-			type = .footer
-			guard let footerCell = tableView.dequeueReusableCell(withIdentifier: "FooterCell",
+		case .footer:
+			guard let footerCell = tableView.dequeueReusableCell(withIdentifier: NewsFooterCell.reuseIdentifier,
 																 for: indexPath) as? NewsFooterCell else {
 				return UITableViewCell()
 			}
 			cell = footerCell
-		default:
-			return UITableViewCell()
+		case .link:
+			guard let linkCell = tableView.dequeueReusableCell(withIdentifier: NewsLinkCell.reuseIdentifier,
+															   for: indexPath) as? NewsLinkCell else {
+				return UITableViewCell()
+			}
+			cell = linkCell
 		}
 		
 		// конфигурируем ячейку
@@ -122,7 +143,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 				let aspectRatio = Double(height) / Double(width)
 				return tableView.bounds.width * CGFloat(aspectRatio)
 			} else {
-				return 0
+				return UITableView.automaticDimension
 			}
 		} else {
 			return UITableView.automaticDimension
@@ -146,15 +167,49 @@ private extension NewsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		
-		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: "AuthorCell")
-		tableView.register(NewsTextCell.self, forCellReuseIdentifier: "TextCell")
-		tableView.register(NewsCollectionCell.self, forCellReuseIdentifier: "CollectionCell")
-		tableView.register(NewsFooterCell.self, forCellReuseIdentifier: "FooterCell")
+		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: NewsAuthorCell.reuseIdentifier)
+		tableView.register(NewsTextCell.self, forCellReuseIdentifier: NewsTextCell.reuseIdentifier)
+		tableView.register(NewsCollectionCell.self, forCellReuseIdentifier: NewsCollectionCell.reuseIdentifier)
+		tableView.register(NewsFooterCell.self, forCellReuseIdentifier: NewsFooterCell.reuseIdentifier)
+		tableView.register(NewsLinkCell.self, forCellReuseIdentifier: NewsLinkCell.reuseIdentifier)
 		tableView.showsVerticalScrollIndicator = false
 		tableView.dataSource = self
 		tableView.delegate = self
 		
 		self.view.addSubview(tableView)
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		self.view.addSubview(spinner)
+		spinner.center = self.view.center
+	}
+	
+	/// Проверяет наличие ссылки в новости
+	func checkLink(for section: Int) -> Bool {
+		return (viewModel.news[section].link) != nil
+	}
+	
+	func getCellType(for item: IndexPath) -> NewsCells? {
+		switch item.item {
+		case 0:
+			return .author
+		case 1:
+			return .text
+		case 2:
+			return .collection
+		case 3:
+			if checkLink(for: item.section) {
+				return .link
+			} else {
+				return .footer
+			}
+		case 4:
+			return .footer
+		default:
+			print("Some News Table view issue")
+			return nil
+		}
 	}
 }
 

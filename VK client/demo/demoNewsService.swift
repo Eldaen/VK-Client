@@ -39,16 +39,12 @@ final class demoNewsService: NewsLoader {
 					var model = data
 					model.source.name = "Cизов Денис"
 					model.source.image = "petia"
-					
-//					for image in model.newsImageNames {
-//						model.collection.append(UIImage(named: image) ?? UIImage())
-//					}
 					news.append(model)
 				}
 				
 				completion(news)
 			} catch {
-				print(error)
+				print("Demo error: \(error)")
 			}
 		}
 	}

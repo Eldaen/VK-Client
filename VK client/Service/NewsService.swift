@@ -176,6 +176,7 @@ private extension NewsService {
 		let users = newsResponse.response.profiles
 		var news: [NewsTableViewCellModel] = []
 		var source: NewsSourceProtocol = UserModel()
+		var link: Link? = nil
 		
 		for post in items {
 			if post.postType == nil {
@@ -190,6 +191,11 @@ private extension NewsService {
 			
 			source = getSource(groups: groups, users: users, sourceId: sourceId)
 			let imageLinksArray = getImages(post: post)
+			if let postLink = checkForLinks(post.attachments) {
+				link = postLink
+			} else {
+				link = nil
+			}
 			 
 			let newsModel = NewsTableViewCellModel(
 				source: source,
@@ -198,7 +204,8 @@ private extension NewsService {
 				newsImageModels: imageLinksArray,
 				postId: postId ?? 0,
 				likesModel: post.likes,
-				views: views
+				views: views,
+				link: link
 			)
 			news.append(newsModel)
 		}
@@ -284,6 +291,19 @@ private extension NewsService {
 			
 		}
 		return imageLinksArray ?? [Sizes]()
+	}
+	
+	/// Проверяет массив AttachmentsModel на наличие ссылок
+	func checkForLinks(_ array: [AttachmentsModel]?) -> Link? {
+		guard let array = array else { return nil }
+		
+		for attach in array {
+			if let link = attach.link {
+				return link
+			}
+		}
+		
+		return nil
 	}
 }
 

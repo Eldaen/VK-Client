@@ -101,10 +101,14 @@ final class FriendProfileViewController: UIViewController {
 		return collection
 	}()
 	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
+	}()
+	
 	/// Вью модель для контроллера профиля пользователя
 	var viewModel: FriendsProfileViewModelType
-	
-	private let identifier = "PhotoCollectionViewCell"
 	
 	/// Количество колонок
 	private let cellsCount: CGFloat = 3.0
@@ -135,7 +139,11 @@ final class FriendProfileViewController: UIViewController {
 		photosCount.text = "0"
 		friendName.text = viewModel.friend.name
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchPhotos { [weak self] in
+			self?.spinner.stopAnimating()
 			guard let count = self?.viewModel.storedImages.count else {
 				return
 			}
@@ -158,7 +166,10 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
 	}
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? PhotoCollectionViewCell else {
+		guard let cell = collectionView.dequeueReusableCell(
+			withReuseIdentifier: PhotoCollectionViewCell.reuseIdentifier,
+			for: indexPath
+		) as? PhotoCollectionViewCell else {
 			return UICollectionViewCell()
 		}
 		
@@ -197,7 +208,10 @@ private extension FriendProfileViewController {
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
-		collectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
+		collectionView.register(
+			PhotoCollectionViewCell.self,
+			forCellWithReuseIdentifier: PhotoCollectionViewCell.reuseIdentifier
+		)
 		collectionView.backgroundColor = .white
 		collectionView.dataSource = self
 		collectionView.delegate = self
@@ -246,6 +260,17 @@ private extension FriendProfileViewController {
 			collectionView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
 		])
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		
+		/// Смещение вниз индикатора загрузки от центра
+		let spinnerYoffset = 1.3
+		
+		self.view.addSubview(spinner)
+		spinner.center.x = self.view.center.x
+		spinner.center.y = self.view.center.y * spinnerYoffset
 	}
 }
 

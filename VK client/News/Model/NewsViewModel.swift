@@ -63,6 +63,9 @@ final class NewsViewModel: NewsViewModelType {
 			guard var footerCell = cell as? NewsFooterCellType else { return }
 			footerCell.configure(with: news[index])
 			footerCell.likesResponder = self
+		case .link:
+			guard let linkCell = cell as? NewsLinkCellType else { return }
+			linkCell.configure(with: news[index])
 		}
 	}
 	

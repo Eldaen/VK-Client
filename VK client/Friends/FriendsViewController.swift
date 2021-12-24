@@ -26,6 +26,12 @@ final class FriendsViewController: MyCustomUIViewController {
 		return tableView
 	}()
 	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
+	}()
+	
 	/// Вью модель контроллера Friends
 	private var viewModel: FriendsViewModelType
 	
@@ -78,7 +84,11 @@ final class FriendsViewController: MyCustomUIViewController {
 		setupTableView()
 		setupConstraints()
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchFriends { [weak self] in
+			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
 	}
@@ -163,14 +173,14 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+		if let cell = tableView.dequeueReusableCell(withIdentifier: FriendsTableViewCell.reuseIdentifier,
 													for: indexPath) as? FriendsTableViewCell {
 			cell.animate()
 		}
 	}
 	
 	func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+		if let cell = tableView.dequeueReusableCell(withIdentifier: FriendsTableViewCell.reuseIdentifier,
 													for: indexPath) as? FriendsTableViewCell {
 			cell.animate()
 		}
@@ -193,7 +203,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+		guard let cell = tableView.dequeueReusableCell(withIdentifier: FriendsTableViewCell.reuseIdentifier,
 													   for: indexPath) as? FriendsTableViewCell else {
 			return UITableViewCell()
 		}
@@ -236,7 +246,7 @@ private extension FriendsViewController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 70
-		tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: "FriendsTableViewCell")
+		tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: FriendsTableViewCell.reuseIdentifier)
 		tableView.showsVerticalScrollIndicator = false
 		tableView.sectionHeaderTopPadding = 0
 		tableView.sectionIndexColor = .black
@@ -256,5 +266,11 @@ private extension FriendsViewController {
 			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
 			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 		])
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		self.view.addSubview(spinner)
+		spinner.center = self.view.center
 	}
 }

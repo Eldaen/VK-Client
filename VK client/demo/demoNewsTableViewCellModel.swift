@@ -15,7 +15,8 @@ struct demoNewsTableViewCellModel: Codable, NewsTableViewCellModelType {
 	var postDate: String = "0"
 	var postText: String = "Text"
 	var newsImageModels: [Sizes] = []
-	var collection: [UIImage] = [] //
+	var collection: [UIImage] = []
+	var link: Link?
 	
 	enum CodingKeys: String, CodingKey {
 		case likesModel

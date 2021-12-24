@@ -34,6 +34,12 @@ final class MyGroupsController: MyCustomUIViewController {
 		return searchBar
 	}()
 	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
+	}()
+	
 	// MARK: - Init
 	init(model: MyGroupsViewModelType) {
 		self.viewModel = model
@@ -54,7 +60,11 @@ final class MyGroupsController: MyCustomUIViewController {
 		setupTableView()
 		setupConstraints()
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchGroups { [weak self] in
+			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
     }
@@ -69,9 +79,11 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupsCell", for: indexPath) as? MyGroupsCell else {
-			return UITableViewCell()
-		}
+		guard let cell = tableView.dequeueReusableCell(
+			withIdentifier: MyGroupsCell.reuseIdentifier,
+			for: indexPath) as? MyGroupsCell else {
+				return UITableViewCell()
+			}
 
 		viewModel.configureCell(cell: cell, index: indexPath.row)
 		return cell
@@ -124,7 +136,7 @@ private extension MyGroupsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 80
-		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: "MyGroupsCell")
+		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: MyGroupsCell.reuseIdentifier)
 		tableView.dataSource = self
 		tableView.delegate = self
 		tableView.tableHeaderView = searchBar
@@ -164,6 +176,12 @@ private extension MyGroupsController {
 		
 		// Показываем UIAlertController
 		present(alert, animated: true, completion: nil)
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		self.view.addSubview(spinner)
+		spinner.center = self.view.center
 	}
 }
 

@@ -73,7 +73,7 @@ extension NewsCollectionCell: UICollectionViewDataSource, UICollectionViewDelega
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCollectionViewCell",
+		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.reuseIdentifier,
 															for: indexPath) as? NewsCollectionViewCell
 		else {
 			return UICollectionViewCell()
@@ -118,7 +118,10 @@ private extension NewsCollectionCell {
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
-		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
+		collectionView.register(
+			NewsCollectionViewCell.self,
+			forCellWithReuseIdentifier: NewsCollectionViewCell.reuseIdentifier
+		)
 		collectionView.backgroundColor = .white
 		collectionView.dataSource = self
 		collectionView.delegate = self
@@ -161,6 +164,7 @@ private extension NewsCollectionCell {
 		
 		let section = NSCollectionLayoutSection(group: group)
 		section.orthogonalScrollingBehavior = .continuous
+		
 		let layout = UICollectionViewCompositionalLayout(section: section)
 		return layout
 	}
