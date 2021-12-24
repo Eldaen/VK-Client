@@ -86,6 +86,17 @@ extension NewsCollectionCell: UICollectionViewDataSource, UICollectionViewDelega
 		return cell
 	}
 	
+	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+		guard let link = collectionView.dequeueReusableSupplementaryView(
+			ofKind: kind,
+			withReuseIdentifier: LinkView.reuseIdentifier, for: indexPath
+		) as? LinkView else {
+			return UICollectionReusableView()
+		}
+		link.label.text = "LINK for index \(indexPath.section)"
+		return link
+	}
+	
 	func collectionView(_ collectionView: UICollectionView,
 						layout collectionViewLayout: UICollectionViewLayout,
 						minimumInteritemSpacingForSectionAt section: Int
@@ -119,6 +130,7 @@ private extension NewsCollectionCell {
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
 		collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: "NewsCollectionViewCell")
+		collectionView.register(LinkView.self, forSupplementaryViewOfKind: "Link", withReuseIdentifier: LinkView.reuseIdentifier)
 		collectionView.backgroundColor = .white
 		collectionView.dataSource = self
 		collectionView.delegate = self
@@ -159,10 +171,29 @@ private extension NewsCollectionCell {
 		  bottom: 5,
 		  trailing: 5)
 		
+		group.supplementaryItems = [createLinkItem()]
+		
 		let section = NSCollectionLayoutSection(group: group)
 		section.orthogonalScrollingBehavior = .continuous
+		
 		let layout = UICollectionViewCompositionalLayout(section: section)
 		return layout
+	}
+	
+	/// Cоздаёт SupplementaryView для ссылки из новости
+	private func createLinkItem() -> NSCollectionLayoutSupplementaryItem {
+		let bottomAnchor = NSCollectionLayoutAnchor(edges: [.bottom, .leading, .trailing], fractionalOffset: CGPoint(x: 0, y: 0.3))
+		
+		let item = NSCollectionLayoutSupplementaryItem(
+			layoutSize: .init(
+				widthDimension: .fractionalWidth(1.05),
+				heightDimension: .estimated(20)
+			),
+			elementKind: "Link",
+			containerAnchor: bottomAnchor
+		)
+		
+		return item
 	}
 }
 
