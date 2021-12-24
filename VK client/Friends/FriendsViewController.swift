@@ -173,14 +173,14 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+		if let cell = tableView.dequeueReusableCell(withIdentifier: FriendsTableViewCell.reuseIdentifier,
 													for: indexPath) as? FriendsTableViewCell {
 			cell.animate()
 		}
 	}
 	
 	func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+		if let cell = tableView.dequeueReusableCell(withIdentifier: FriendsTableViewCell.reuseIdentifier,
 													for: indexPath) as? FriendsTableViewCell {
 			cell.animate()
 		}
@@ -203,7 +203,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell",
+		guard let cell = tableView.dequeueReusableCell(withIdentifier: FriendsTableViewCell.reuseIdentifier,
 													   for: indexPath) as? FriendsTableViewCell else {
 			return UITableViewCell()
 		}
@@ -246,7 +246,7 @@ private extension FriendsViewController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 70
-		tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: "FriendsTableViewCell")
+		tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: FriendsTableViewCell.reuseIdentifier)
 		tableView.showsVerticalScrollIndicator = false
 		tableView.sectionHeaderTopPadding = 0
 		tableView.sectionIndexColor = .black

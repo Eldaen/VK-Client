@@ -110,8 +110,6 @@ final class FriendProfileViewController: UIViewController {
 	/// Вью модель для контроллера профиля пользователя
 	var viewModel: FriendsProfileViewModelType
 	
-	private let identifier = "PhotoCollectionViewCell"
-	
 	/// Количество колонок
 	private let cellsCount: CGFloat = 3.0
 	
@@ -168,7 +166,10 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
 	}
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? PhotoCollectionViewCell else {
+		guard let cell = collectionView.dequeueReusableCell(
+			withReuseIdentifier: PhotoCollectionViewCell.reuseIdentifier,
+			for: indexPath
+		) as? PhotoCollectionViewCell else {
 			return UICollectionViewCell()
 		}
 		
@@ -207,7 +208,10 @@ private extension FriendProfileViewController {
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view
 	func setupCollectionView() {
-		collectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
+		collectionView.register(
+			PhotoCollectionViewCell.self,
+			forCellWithReuseIdentifier: PhotoCollectionViewCell.reuseIdentifier
+		)
 		collectionView.backgroundColor = .white
 		collectionView.dataSource = self
 		collectionView.delegate = self

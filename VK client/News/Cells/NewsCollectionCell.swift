@@ -73,7 +73,7 @@ extension NewsCollectionCell: UICollectionViewDataSource, UICollectionViewDelega
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCollectionViewCell",
+		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.reuseIdentifier,
 															for: indexPath) as? NewsCollectionViewCell
 		else {
 			return UICollectionViewCell()

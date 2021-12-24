@@ -61,7 +61,7 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchGroupsCell",
+		guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchGroupsCell.reuseIdentifier,
 													   for: indexPath) as? SearchGroupsCell
 		else {
 			return UITableViewCell()
@@ -126,7 +126,7 @@ private extension SearchGroupsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 80
-		tableView.register(SearchGroupsCell.self, forCellReuseIdentifier: "SearchGroupsCell")
+		tableView.register(SearchGroupsCell.self, forCellReuseIdentifier: SearchGroupsCell.reuseIdentifier)
 		tableView.dataSource = self
 		tableView.delegate = self
 		
