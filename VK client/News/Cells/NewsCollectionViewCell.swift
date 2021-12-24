@@ -26,16 +26,6 @@ final class NewsCollectionViewCell: UICollectionViewCell {
 		setupConstraints()
 	}
 	
-	/// Констрейнт высоты
-	private var heightConstraint: NSLayoutConstraint?
-	
-	/// Выставляет новую высоту для contentView
-	func setNewHeight(_ value: CGFloat) {
-		heightConstraint = contentView.heightAnchor.constraint(equalToConstant: value)
-		heightConstraint?.isActive = true
-		newsImage.layoutIfNeeded()
-	}
-	
 	private func setupConstraints() {
 		NSLayoutConstraint.activate([
 			newsImage.topAnchor.constraint(equalTo: contentView.topAnchor),

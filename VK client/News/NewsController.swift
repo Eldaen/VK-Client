@@ -9,6 +9,14 @@ import UIKit
 
 /// Контроллер новостей пользователя
 final class NewsController: MyCustomUIViewController {
+	
+	/// Типы ячеек, из которых состоит секция новости
+	enum NewsCells {
+		case author
+		case text
+		case collection
+		case footer
+	}
     
 	private let tableView: UITableView = {
 		let tableView = UITableView()
@@ -34,6 +42,7 @@ final class NewsController: MyCustomUIViewController {
         super.viewDidLoad()
         setupTableView()
         tableView.reloadData()
+		tableView.separatorStyle = .none
 		
 		viewModel.fetchNews { [weak self] in
 			self?.tableView.reloadData()
@@ -49,17 +58,49 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 1
+		return 4
 	}
 	
 	// отрисовываем ячейки
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsTableViewCell else {
+		var cell: UITableViewCell = UITableViewCell()
+		var type: NewsCells
+		
+		switch indexPath.item {
+		case 0:
+			type = .author
+			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: "AuthorCell",
+																 for: indexPath) as? NewsAuthorCell else {
+				return UITableViewCell()
+			}
+			cell = authorCell
+		case 1:
+			type = .text
+			guard let textCell = tableView.dequeueReusableCell(withIdentifier: "TextCell",
+															   for: indexPath) as? NewsTextCell else {
+				return UITableViewCell()
+			}
+			cell = textCell
+		case 2:
+			type = .collection
+			guard let collectionCell = tableView.dequeueReusableCell(withIdentifier: "CollectionCell",
+																	 for: indexPath) as? NewsCollectionCell else {
+				return UITableViewCell()
+			}
+			cell = collectionCell
+		case 3:
+			type = .footer
+			guard let footerCell = tableView.dequeueReusableCell(withIdentifier: "FooterCell",
+																 for: indexPath) as? NewsFooterCell else {
+				return UITableViewCell()
+			}
+			cell = footerCell
+		default:
 			return UITableViewCell()
 		}
 		
 		// конфигурируем ячейку
-		viewModel.configureCell(cell: cell, index: indexPath.section)
+		viewModel.configureCell(cell: cell, index: indexPath.section, type: type)
 		
 		return cell
 	}
@@ -72,6 +113,20 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		header.backgroundColor = .gray
 		
 		return header
+	}
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		if indexPath.item == 2 {
+			if let height = viewModel.news[indexPath.section].newsImageModels.first?.height,
+			   let width = viewModel.news[indexPath.section].newsImageModels.first?.width {
+				let aspectRatio = Double(height) / Double(width)
+				return tableView.bounds.width * CGFloat(aspectRatio)
+			} else {
+				return 0
+			}
+		} else {
+			return UITableView.automaticDimension
+		}
 	}
 	
 	// правим высоту хэдера со стандартной до нужной
@@ -91,7 +146,10 @@ private extension NewsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		
-		tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsCell")
+		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: "AuthorCell")
+		tableView.register(NewsTextCell.self, forCellReuseIdentifier: "TextCell")
+		tableView.register(NewsCollectionCell.self, forCellReuseIdentifier: "CollectionCell")
+		tableView.register(NewsFooterCell.self, forCellReuseIdentifier: "FooterCell")
 		tableView.showsVerticalScrollIndicator = false
 		tableView.dataSource = self
 		tableView.delegate = self

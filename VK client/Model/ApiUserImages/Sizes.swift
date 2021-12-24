@@ -9,4 +9,6 @@
 struct Sizes: Codable {
 	let url: String
 	let type: String
+	let height: Int
+	let width: Int
 }

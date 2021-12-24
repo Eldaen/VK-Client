@@ -9,7 +9,7 @@ import UIKit
 
 /// Контроллер профиля пользователя
 final class FriendProfileViewController: UIViewController {
-    
+	
 	private let userAvatar: UIImageView = {
 		let avatar = UIImageView()
 		avatar.translatesAutoresizingMaskIntoConstraints = false
@@ -100,17 +100,17 @@ final class FriendProfileViewController: UIViewController {
 		
 		return collection
 	}()
-    
+	
 	/// Вью модель для контроллера профиля пользователя
 	var viewModel: FriendsProfileViewModelType
 	
-    private let identifier = "PhotoCollectionViewCell"
-    
-    /// Количество колонок
-    private let cellsCount: CGFloat = 3.0
+	private let identifier = "PhotoCollectionViewCell"
+	
+	/// Количество колонок
+	private let cellsCount: CGFloat = 3.0
 	
 	/// Отступы между фото
-    private let cellsOffset: CGFloat = 10.0
+	private let cellsOffset: CGFloat = 10.0
 	
 	// MARK: - Init
 	init(model: FriendsProfileViewModelType) {
@@ -123,16 +123,16 @@ final class FriendProfileViewController: UIViewController {
 	}
 
 	// MARK: - View controller life cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		self.title = "Профиль"
 		setupView()
 		setupCollectionView()
 		setupConstaints()
 		
-        // заполняем статичные данные
+		// заполняем статичные данные
 		userAvatar.image = viewModel.profileImage
-        photosCount.text = "0"
+		photosCount.text = "0"
 		friendName.text = viewModel.friend.name
 		
 		viewModel.fetchPhotos { [weak self] in
@@ -142,43 +142,43 @@ final class FriendProfileViewController: UIViewController {
 			self?.photosCount.text = String(count)
 			self?.collectionView.reloadData()
 		}
-    }
+	}
 }
 
 // MARK: UICollectionViewDataSource, UICollectionViewDelegate
 extension FriendProfileViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+	
+	func numberOfSections(in collectionView: UICollectionView) -> Int {
+		return 1
+	}
 
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return viewModel.storedImages.count
-    }
+	}
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? PhotoCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
+	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? PhotoCollectionViewCell else {
+			return UICollectionViewCell()
+		}
+		
 		viewModel.configureCell(cell: cell, indexPath: indexPath)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		return cell
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let frameCV = collectionView.frame
+		let frameCV = collectionView.frame
 
-        let cellWidth = frameCV.width / cellsCount
-        let cellHeight = cellWidth
+		let cellWidth = frameCV.width / cellsCount
+		let cellHeight = cellWidth
 
-        // считаем размеры ячеек с учётом отступов, чтобы всё ровненько было
-        let spacing = ( cellsCount + 1 ) * cellsOffset / cellsCount
-        return CGSize(width: cellWidth - spacing, height: cellHeight - ( cellsOffset * 2) )
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		// считаем размеры ячеек с учётом отступов, чтобы всё ровненько было
+		let spacing = ( cellsCount + 1 ) * cellsOffset / cellsCount
+		return CGSize(width: cellWidth - spacing, height: cellHeight - ( cellsOffset * 2) )
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let galleryController = GalleryViewController(
 			model: Assembly.instance.getGalleryViewModel(
 				loader: viewModel.loader,
@@ -186,10 +186,10 @@ extension FriendProfileViewController: UICollectionViewDataSource, UICollectionV
 				images: viewModel.storedModels
 			)
 		)
-        
-        // переход на подробный просмотр
-        self.navigationController?.pushViewController(galleryController, animated: true)
-    }
+		
+		// переход на подробный просмотр
+		self.navigationController?.pushViewController(galleryController, animated: true)
+	}
 }
 
 // MARK: - Private methods

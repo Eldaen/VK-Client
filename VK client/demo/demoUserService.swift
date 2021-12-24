@@ -8,7 +8,6 @@
 import UIKit.UIImage
 
 class demoUserService: UserLoader {
-	
 	var networkManager: NetworkManager
 	var cache: ImageCache
 	var persistence: PersistenceManager
@@ -42,59 +41,63 @@ class demoUserService: UserLoader {
 	func loadUserPhotos(for id: String, completion: @escaping ([ApiImage]) -> Void) {
 		let images = [
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 			ApiImage(sizes: [
-				Sizes(url: "vasia", type: "x"),
-				Sizes(url: "vasia", type: "m")
+				Sizes(url: "vasia", type: "x", height: 320, width: 240),
+				Sizes(url: "vasia", type: "m", height: 320, width: 240)
 			]),
 		]
 		completion(images)
+	}
+	
+	func getFriendsCount(completion: @escaping (Int) -> Void) {
+		completion(135)
 	}
 	
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {

@@ -37,7 +37,6 @@ final class NewsService: NewsLoader {
 		let params = [
 			"filters" : "posts",
 			"return_banned" : "0",
-			"max_photos" : "4",
 		]
 		
 		networkManager.request(method: .newsGet,
@@ -97,25 +96,25 @@ final class NewsService: NewsLoader {
 	}
 	
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
-		var imageLinks: [String] = []
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [Sizes] {
+		var sizes: [Sizes] = []
 		
 		for model in array {
 			for size in model.sizes {
 				if size.type == sizeType {
-					imageLinks.append(size.url)
+					sizes.append(size)
 				}
 			}
 		}
 		
-		if imageLinks.isEmpty {
+		if sizes.isEmpty {
 			let types = ["z", "k", "l", "x", "m"]
 			
 		outerLoop: for type in types {
 			for model in array {
 				for size in model.sizes {
 					if size.type == type {
-						imageLinks.append(size.url)
+						sizes.append(size)
 						break outerLoop
 					}
 				}
@@ -123,7 +122,7 @@ final class NewsService: NewsLoader {
 		}
 		}
 		
-		return imageLinks
+		return sizes
 	}
 	
 	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
@@ -196,7 +195,7 @@ private extension NewsService {
 				source: source,
 				postDate: date.description,
 				postText: text ?? "",
-				newsImageNames: imageLinksArray,
+				newsImageModels: imageLinksArray,
 				postId: postId ?? 0,
 				likesModel: post.likes,
 				views: views
@@ -239,12 +238,12 @@ private extension NewsService {
 	}
 	
 	/// Вытаскивает из модели нужные ссылки на картинки
-	func getImages(post: NewsModel) -> [String] {
+	func getImages(post: NewsModel) -> [Sizes] {
 		// Вытаскиваем нужные картинки
-		var imageLinksArray: [String]? = []
+		var imageLinksArray: [Sizes]? = []
 		
 		// Превью, если видео
-		var videoImages: [String] = []
+		var videoImages: [Sizes] = []
 		
 		// Если есть фото, то нам нужны фото
 		if let images = post.photos?.items {
@@ -267,8 +266,10 @@ private extension NewsService {
 				}
 				
 				if let video = attachment.video {
-					if let photo = video.photo?.first?.url {
-						videoImages.append(photo)
+					if let photo = video.firstFrame?.first,
+					   let photo = video.photo?.last {
+						let size = Sizes(url: photo.url, type: "z", height: photo.height, width: photo.width)
+						videoImages.append(size)
 					}
 				}
 			}
@@ -282,7 +283,7 @@ private extension NewsService {
 			}
 			
 		}
-		return imageLinksArray ?? []
+		return imageLinksArray ?? [Sizes]()
 	}
 }
 

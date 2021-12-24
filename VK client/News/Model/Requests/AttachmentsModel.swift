@@ -30,14 +30,18 @@ struct Link: Codable {
 
 /// Модель для доступа к приложению  к посту вида Видео
 struct Video: Codable {
+	let firstFrame: [VideoPreview]?
 	let photo: [VideoPreview]?
 	
 	enum CodingKeys: String, CodingKey {
-		case photo = "first_frame"
+		case firstFrame = "first_frame"
+		case photo = "image"
 	}
 }
 
 /// Модель картинки превью для приложения вида Видео
 struct VideoPreview: Codable {
 	let url: String
+	let width: Int
+	let height: Int
 }

@@ -17,7 +17,7 @@ protocol NewsViewModelType {
 	var loader: NewsLoader { get }
 	
 	/// Конфигурирует ячейку новости данными, которые получили из сервиса
-	func configureCell(cell: NewsTableViewCell, index: Int)
+	func configureCell(cell: UITableViewCell, index: Int, type: NewsController.NewsCells)
 	
 	/// Скачиваем из сети список новостей для пользователя
 	func fetchNews(completion: @escaping () -> Void)
@@ -39,18 +39,30 @@ final class NewsViewModel: NewsViewModelType {
 		self.loader = loader
 	}
 	
-	func configureCell(cell: NewsTableViewCell, index: Int) {
-		cell.configure(with: news[index])
-		cell.likesResponder = self
+	func configureCell(cell: UITableViewCell, index: Int, type: NewsController.NewsCells) {
 		
-		if !news.isEmpty {
-			loadImages(array: news[index].newsImageNames) { images in
-				cell.updateCollection(with: images)
-			}
+		switch type {
+		case .author:
+			guard let authorCell = cell as? NewsAuthorCellType else { return }
+			authorCell.configure(with: news[index])
 			
 			loadPorfileImage(profile: news[index].source) { image in
-				cell.updateProfileImage(with: image)
+				authorCell.updateProfileImage(with: image)
 			}
+		case .text:
+			guard let textCell = cell as? NewsTextCellType else { return }
+			textCell.configure(with: news[index])
+		case .collection:
+			guard let collectionCell = cell as? NewCollectionCellType else { return }
+			collectionCell.configure(with: news[index])
+			
+			loadImages(array: news[index].newsImageModels) { images in
+				collectionCell.updateCollection(with: images)
+			}
+		case .footer:
+			guard var footerCell = cell as? NewsFooterCellType else { return }
+			footerCell.configure(with: news[index])
+			footerCell.likesResponder = self
 		}
 	}
 	
@@ -61,7 +73,7 @@ final class NewsViewModel: NewsViewModelType {
 		}
 	}
 	
-	func loadImages(array: [String], completion: @escaping ([UIImage]) -> Void) {
+	func loadImages(array: [Sizes], completion: @escaping ([UIImage]) -> Void) {
 		var images = [UIImage]()
 		let imageGroup = DispatchGroup()
 		
@@ -69,7 +81,7 @@ final class NewsViewModel: NewsViewModelType {
 		DispatchQueue.global().async(group: imageGroup) { [weak self] in
 			for imageName in array {
 				imageGroup.enter()
-				self?.loader.loadImage(url: imageName) { image in
+				self?.loader.loadImage(url: imageName.url) { image in
 					images.append(image)
 					imageGroup.leave()
 				}
