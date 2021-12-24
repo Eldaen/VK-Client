@@ -17,12 +17,21 @@ final class NewsController: MyCustomUIViewController {
 		case collection
 		case footer
 	}
+	
+	/// Количество ячеек в секции новости
+	private let cellsCount: Int = 4
     
 	private let tableView: UITableView = {
 		let tableView = UITableView()
 		tableView.backgroundColor = .white
 		tableView.translatesAutoresizingMaskIntoConstraints = false
 		return tableView
+	}()
+	
+	private let spinner: UIActivityIndicatorView = {
+		let spinner = UIActivityIndicatorView(style: .medium)
+		spinner.color = .black
+		return spinner
 	}()
 	
 	private var viewModel: NewsViewModelType
@@ -44,7 +53,11 @@ final class NewsController: MyCustomUIViewController {
         tableView.reloadData()
 		tableView.separatorStyle = .none
 		
+		setupSpinner()
+		spinner.startAnimating()
+		
 		viewModel.fetchNews { [weak self] in
+			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
     }
@@ -58,7 +71,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 4
+		return cellsCount
 	}
 	
 	// отрисовываем ячейки
@@ -155,6 +168,12 @@ private extension NewsController {
 		tableView.delegate = self
 		
 		self.view.addSubview(tableView)
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	func setupSpinner() {
+		self.view.addSubview(spinner)
+		spinner.center = self.view.center
 	}
 }
 

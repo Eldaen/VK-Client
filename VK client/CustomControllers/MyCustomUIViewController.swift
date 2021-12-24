@@ -24,7 +24,7 @@ private extension MyCustomUIViewController {
 		
 		// Создаём контроллер
 		let alter = UIAlertController(title: "Выход",
-									  message: "Вы уверены что хотите выйти?", preferredStyle: .alert)
+									  message: "Вы уверены, что хотите выйти?", preferredStyle: .alert)
 		
 		let actionYes = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
 			self?.routeToEntry()

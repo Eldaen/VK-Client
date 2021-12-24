@@ -46,7 +46,6 @@ final class LikeControl: NewsControl {
         likesImageFill.image = imageFill
         likesImageFill.tintColor = .red
             
-        
         //Настраиваем Label
         likesLabel.frame = CGRect(x: 30, y: 8, width: 50, height: 12)
         likesLabel.text = String(count)
