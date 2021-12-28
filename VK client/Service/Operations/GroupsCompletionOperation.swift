@@ -7,8 +7,14 @@
 
 import Foundation
 
-class GroupsCompletionOperation: Operation {
-	var completion: ([GroupModel]) -> Void
+final class GroupsCompletionOperation: Operation {
+	
+	private(set) var success: Bool = false
+	
+	private(set) var groups: [GroupModel] = []
+	
+	/// Блок кода, который нужно выполнить при успешном парсинге данных групп
+	private var completion: ([GroupModel]) -> Void
 	
 	init(_ completion: @escaping ([GroupModel]) -> Void) {
 		self.completion = completion
@@ -20,6 +26,8 @@ class GroupsCompletionOperation: Operation {
 		}
 		
 		if let groups = parsedData.outputData?.response.items {
+			success = true
+			self.groups = groups
 			completion(groups)
 		} else {
 			print("Did not parse anything")

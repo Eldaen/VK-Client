@@ -8,7 +8,7 @@
 import Foundation
 
 /// Операция парсинга данных из JSON в модель
-class GroupsDataParseOperation: Operation {
+final class GroupsDataParseOperation: Operation {
 	
 	private(set) var outputData: GroupsMyMainResponse?
 	private let decoder = JSONDecoder()

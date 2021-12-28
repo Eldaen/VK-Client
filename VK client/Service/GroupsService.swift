@@ -71,35 +71,16 @@ final class GroupsService: GroupsLoader {
 		let getData = GroupsDataOperation(method: .groupsGet, params: params)
 		let parseData = GroupsDataParseOperation()
 		let completionOperation = GroupsCompletionOperation(completion)
+		let updateRealm = UpdateRealmDataOperation(manager: persistence, cacheHandler: self, cacheKey: cacheKey)
 		
 		parseData.addDependency(getData)
 		completionOperation.addDependency(parseData)
+		updateRealm.addDependency(completionOperation)
 		
 		operationQueue.addOperation(getData)
 		operationQueue.addOperation(parseData)
 		OperationQueue.main.addOperation(completionOperation)
-		
-		
-		
-//		networkManager.request(method: .groupsGet,
-//							   httpMethod: .get,
-//							   params: params) { [weak self] (result: Result<GroupsMyMainResponse, Error>) in
-//			switch result {
-//			case .success(let groupsResponse):
-//				let items = groupsResponse.response.items
-//				self?.persistence.delete(GroupModel.self) { _ in }
-//				self?.persistence.create(items) { _ in }
-//				
-//				// Ставим дату просрочки данных
-//				if let cacheKey = self?.cacheKey {
-//					self?.setExpiry(key: cacheKey, time: 10 * 60)
-//				}
-//				
-//				completion(groupsResponse.response.items)
-//			case .failure(let error):
-//				debugPrint("Error: \(error.localizedDescription)")
-//			}
-//		}
+		operationQueue.addOperation(updateRealm)
 	}
 	
 	/// Ищет группы, подходящие под текстовый запрос

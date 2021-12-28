@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 /// Операция по работе с сетью для GroupsService
-class GroupsDataOperation: AsyncOperation {
+final class GroupsDataOperation: AsyncOperation {
 	
 	/// Методы для доступа к API
 	enum apiMethods: String {

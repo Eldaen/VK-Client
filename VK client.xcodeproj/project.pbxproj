@@ -106,6 +106,7 @@
 		D0F3CBAF277B0398004653AE /* GroupsDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */; };
 		D0F3CBB1277B0918004653AE /* ParseDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */; };
 		D0F3CBB3277B0C82004653AE /* GroupsCompletionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */; };
+		D0F3CBB5277B1409004653AE /* UpdateRealmDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB4277B1409004653AE /* UpdateRealmDataOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -200,6 +201,7 @@
 		D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDataOperation.swift; sourceTree = "<group>"; };
 		D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseDataOperation.swift; sourceTree = "<group>"; };
 		D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsCompletionOperation.swift; sourceTree = "<group>"; };
+		D0F3CBB4277B1409004653AE /* UpdateRealmDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRealmDataOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -567,6 +569,7 @@
 				D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */,
 				D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */,
 				D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */,
+				D0F3CBB4277B1409004653AE /* UpdateRealmDataOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -788,6 +791,7 @@
 				D0D2F0B02747D107008E9AB4 /* UserImagesResponse.swift.swift in Sources */,
 				D095CB01275F97D2002F66CC /* FirebaseGroup.swift in Sources */,
 				D0EFE7E82770AFB000A8E66E /* NewsTextCell.swift in Sources */,
+				D0F3CBB5277B1409004653AE /* UpdateRealmDataOperation.swift in Sources */,
 				D050CD0C2716E13A0076D78E /* SearchGroupsCell.swift in Sources */,
 				D03B1876274F94DB00C483B3 /* MyGroupsViewModel.swift in Sources */,
 				D03B187D2750D39300C483B3 /* FriendsProfileViewModel.swift in Sources */,
