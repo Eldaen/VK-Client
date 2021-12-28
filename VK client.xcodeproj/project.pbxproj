@@ -101,6 +101,11 @@
 		D0F3CBA1277605C5004653AE /* NewsLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBA0277605C5004653AE /* NewsLinkCell.swift */; };
 		D0F3CBA52776186D004653AE /* UICollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBA42776186D004653AE /* UICollectionReusableView.swift */; };
 		D0F3CBA7277618E2004653AE /* UITableReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBA6277618E2004653AE /* UITableReusableView.swift */; };
+		D0F3CBAA277B00FD004653AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D0F3CBA9277B00FD004653AE /* Alamofire */; };
+		D0F3CBAD277B029C004653AE /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBAC277B029C004653AE /* AsyncOperation.swift */; };
+		D0F3CBAF277B0398004653AE /* GroupsDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */; };
+		D0F3CBB1277B0918004653AE /* ParseDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */; };
+		D0F3CBB3277B0C82004653AE /* GroupsCompletionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -191,6 +196,10 @@
 		D0F3CBA0277605C5004653AE /* NewsLinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsLinkCell.swift; sourceTree = "<group>"; };
 		D0F3CBA42776186D004653AE /* UICollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionReusableView.swift; sourceTree = "<group>"; };
 		D0F3CBA6277618E2004653AE /* UITableReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableReusableView.swift; sourceTree = "<group>"; };
+		D0F3CBAC277B029C004653AE /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
+		D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDataOperation.swift; sourceTree = "<group>"; };
+		D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseDataOperation.swift; sourceTree = "<group>"; };
+		D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsCompletionOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +219,7 @@
 				C85E6A9DEC55DF5F8FEC9276 /* Pods_VK_client.framework in Frameworks */,
 				D095CAF3275F45E3002F66CC /* FirebaseDynamicLinks in Frameworks */,
 				D095CAED275F45E3002F66CC /* FirebaseAuth in Frameworks */,
+				D0F3CBAA277B00FD004653AE /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +353,7 @@
 		D050CD122716E2830076D78E /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				D0F3CBAB277B0283004653AE /* Operations */,
 				D050CD132716E2990076D78E /* UserService.swift */,
 				D050CD152716E2A50076D78E /* GroupsService.swift */,
 				D050CD6527247A010076D78E /* NewsService.swift */,
@@ -549,6 +560,17 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D0F3CBAB277B0283004653AE /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				D0F3CBAC277B029C004653AE /* AsyncOperation.swift */,
+				D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */,
+				D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */,
+				D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -580,6 +602,7 @@
 				D095CAF8275F45E3002F66CC /* FirebaseMessaging */,
 				D095CAFA275F45E3002F66CC /* FirebasePerformance */,
 				D095CAFC275F45E3002F66CC /* FirebaseStorage */,
+				D0F3CBA9277B00FD004653AE /* Alamofire */,
 			);
 			productName = "test-gu";
 			productReference = D06313C0270B147E00D0E12C /* VK client.app */;
@@ -611,6 +634,7 @@
 			mainGroup = D06313B7270B147E00D0E12C;
 			packageReferences = (
 				D095CAE7275F45E3002F66CC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D0F3CBA8277B00FD004653AE /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = D06313C1270B147E00D0E12C /* Products */;
 			projectDirPath = "";
@@ -710,7 +734,9 @@
 				D080897D2735500000A6394B /* CustomTabBarController.swift in Sources */,
 				D0D2F0B52747D658008E9AB4 /* UserImagesMainResponse.swift in Sources */,
 				D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */,
+				D0F3CBB3277B0C82004653AE /* GroupsCompletionOperation.swift in Sources */,
 				D01D8C3E27469330002CDC5E /* VkFriendsMainResponse.swift in Sources */,
+				D0F3CBB1277B0918004653AE /* ParseDataOperation.swift in Sources */,
 				D0615C9027352C540098F5D7 /* CloudView.swift in Sources */,
 				D050CD6627247A010076D78E /* NewsService.swift in Sources */,
 				D0EFE7DF276BB06A00A8E66E /* FriendsCountMainResponse.swift in Sources */,
@@ -742,6 +768,7 @@
 				D050CD072716DFA10076D78E /* MyGroupsCell.swift in Sources */,
 				D0F2B1132761E64A00C70517 /* demoNewsService.swift in Sources */,
 				D03B1872274E2F4700C483B3 /* ImageCache.swift in Sources */,
+				D0F3CBAD277B029C004653AE /* AsyncOperation.swift in Sources */,
 				D0800D1B27283B0800347AB7 /* CustomSearchBar.swift in Sources */,
 				D050CD112716E1CF0076D78E /* GroupModel.swift in Sources */,
 				D03B18932754D56400C483B3 /* PersistenceManager.swift in Sources */,
@@ -756,6 +783,7 @@
 				D050CD0F2716E1C50076D78E /* UserModel.swift in Sources */,
 				D050CD68272488910076D78E /* NewsCollectionViewCell.swift in Sources */,
 				D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */,
+				D0F3CBAF277B0398004653AE /* GroupsDataOperation.swift in Sources */,
 				D0EFE8142771D93B00A8E66E /* RepostsControl.swift in Sources */,
 				D0D2F0B02747D107008E9AB4 /* UserImagesResponse.swift.swift in Sources */,
 				D095CB01275F97D2002F66CC /* FirebaseGroup.swift in Sources */,
@@ -995,6 +1023,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		D0F3CBA8277B00FD004653AE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1052,6 +1088,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D095CAE7275F45E3002F66CC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		D0F3CBA9277B00FD004653AE /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0F3CBA8277B00FD004653AE /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
