@@ -52,8 +52,7 @@ final class GroupsService: GroupsLoader {
 
 		if checkExpiry(key: cacheKey) {
 			var groups: [GroupModel] = []
-
-			persistence.read(GroupModel.self) { result in
+			self.persistence.read(GroupModel.self) { result in
 				groups = Array(result)
 			}
 
@@ -80,7 +79,9 @@ final class GroupsService: GroupsLoader {
 		operationQueue.addOperation(getData)
 		operationQueue.addOperation(parseData)
 		OperationQueue.main.addOperation(completionOperation)
-		operationQueue.addOperation(updateRealm)
+		
+		// Realm редиска и не хочет работать из другого потка, если был инициализирован в мейне
+		OperationQueue.main.addOperation(updateRealm)
 	}
 	
 	/// Ищет группы, подходящие под текстовый запрос
