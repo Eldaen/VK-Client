@@ -76,12 +76,10 @@ final class GroupsService: GroupsLoader {
 		completionOperation.addDependency(parseData)
 		updateRealm.addDependency(completionOperation)
 		
-		operationQueue.addOperation(getData)
-		operationQueue.addOperation(parseData)
-		OperationQueue.main.addOperation(completionOperation)
+		operationQueue.addOperations([getData, parseData], waitUntilFinished: false)
 		
 		// Realm редиска и не хочет работать из другого потка, если был инициализирован в мейне
-		OperationQueue.main.addOperation(updateRealm)
+		OperationQueue.main.addOperations([completionOperation, updateRealm], waitUntilFinished: false)
 	}
 	
 	/// Ищет группы, подходящие под текстовый запрос
