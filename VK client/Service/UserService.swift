@@ -6,6 +6,7 @@
 //
 
 import UIKit.UIImage
+import PromiseKit
 
 /// Протокол загрузки данных пользователей
 protocol UserLoader: Loader {
@@ -107,7 +108,7 @@ final class UserService: UserLoader {
 		
 		networkManager.request(method: .friendsGet,
 							   httpMethod: .get,
-							   params: params) { [weak self] (result: Result<VkFriendsMainResponse, Error>) in
+							   params: params) { [weak self] (result: Swift.Result<VkFriendsMainResponse, Error>) in
 			switch result {
 			case .success(let friendsResponse):
 				let friends = friendsResponse.response.items
@@ -133,7 +134,7 @@ final class UserService: UserLoader {
 	func getFriendsCount(completion: @escaping (Int) -> Void) {
 		networkManager.request(method: .friendsGet,
 							   httpMethod: .get,
-							   params: [:]) { (result: Result<FriendsCountMainResponse, Error>) in
+							   params: [:]) { (result: Swift.Result<FriendsCountMainResponse, Error>) in
 			switch result {
 			case .success(let friendsResponse):
 				completion(friendsResponse.response.count)
@@ -151,7 +152,7 @@ final class UserService: UserLoader {
 		]
 		networkManager.request(method: .photosGetAll,
 							   httpMethod: .get,
-							   params: params) { (result: Result<UserImagesMainResponse, Error>) in
+							   params: params) { (result: Swift.Result<UserImagesMainResponse, Error>) in
 			switch result {
 			case .success(let imagesResponse):
 				let imagesModels = imagesResponse.response.items
@@ -159,6 +160,55 @@ final class UserService: UserLoader {
 			case .failure(_):
 				break
 			}
+		}
+	}
+}
+
+// MARK: Private methods for Promises
+private extension UserService {
+	
+	/// Возможные ошибки в промисах загрузки друзей
+	enum LoadingErrors: Error {
+		case noToken
+		case incorrectUrl
+	}
+	
+	/// Подготавливает URL для загрузки друзей
+	/// - Returns: Promise с URL для загрузки друзей текущего пользователя
+	func getUrl() -> Promise<URL> {
+		var queryItems = [URLQueryItem]()
+		
+		guard let token = Session.instance.token else {
+			return Promise { resolver in
+				resolver.reject(LoadingErrors.noToken)
+			}
+		}
+		
+		let params = [
+			"order" : "name",
+			"fields" : "photo_100",
+		]
+		
+		// добавляем общие для всех параметры
+		queryItems.append(URLQueryItem(name: "access_token", value: token))
+		queryItems.append(URLQueryItem(name: "v", value: "5.131"))
+		
+		for (param, value) in params {
+			queryItems.append(URLQueryItem(name: param, value: value))
+		}
+		
+		var urlComponents = URLComponents()
+		urlComponents.scheme = "https"
+		urlComponents.host = "api.vk.com"
+		urlComponents.path = "/method/friends.get"
+		urlComponents.queryItems = queryItems
+		
+		return Promise { resolver in
+			guard let url = urlComponents.url else {
+				resolver.reject(LoadingErrors.incorrectUrl)
+				return
+			}
+			resolver.fulfill(url)
 		}
 	}
 }

@@ -78,6 +78,7 @@
 		D0D2F0B52747D658008E9AB4 /* UserImagesMainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0B42747D658008E9AB4 /* UserImagesMainResponse.swift */; };
 		D0D2F0B92748EB7A008E9AB4 /* GroupsMyResponse.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0B82748EB7A008E9AB4 /* GroupsMyResponse.swift.swift */; };
 		D0D2F0BB2748EBD0008E9AB4 /* GroupsMyMainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0BA2748EBD0008E9AB4 /* GroupsMyMainResponse.swift */; };
+		D0E93FFA278860FD005A2879 /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = D0E93FF9278860FD005A2879 /* PromiseKit */; };
 		D0EFE7D127635A8C00A8E66E /* AttachmentsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D027635A8C00A8E66E /* AttachmentsModel.swift */; };
 		D0EFE7D327673B9300A8E66E /* LikesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D227673B9300A8E66E /* LikesResponse.swift */; };
 		D0EFE7D5276795F200A8E66E /* news.json in Resources */ = {isa = PBXBuildFile; fileRef = D0EFE7D4276795F200A8E66E /* news.json */; };
@@ -214,6 +215,7 @@
 				D095CAE9275F45E3002F66CC /* FirebaseAnalytics in Frameworks */,
 				D095CAF9275F45E3002F66CC /* FirebaseMessaging in Frameworks */,
 				D095CAEB275F45E3002F66CC /* FirebaseAppCheck in Frameworks */,
+				D0E93FFA278860FD005A2879 /* PromiseKit in Frameworks */,
 				D095CAFD275F45E3002F66CC /* FirebaseStorage in Frameworks */,
 				D095CAF7275F45E3002F66CC /* FirebaseInstallations in Frameworks */,
 				D095CAF5275F45E3002F66CC /* FirebaseFunctions in Frameworks */,
@@ -606,6 +608,7 @@
 				D095CAFA275F45E3002F66CC /* FirebasePerformance */,
 				D095CAFC275F45E3002F66CC /* FirebaseStorage */,
 				D0F3CBA9277B00FD004653AE /* Alamofire */,
+				D0E93FF9278860FD005A2879 /* PromiseKit */,
 			);
 			productName = "test-gu";
 			productReference = D06313C0270B147E00D0E12C /* VK client.app */;
@@ -638,6 +641,7 @@
 			packageReferences = (
 				D095CAE7275F45E3002F66CC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D0F3CBA8277B00FD004653AE /* XCRemoteSwiftPackageReference "Alamofire" */,
+				D0E93FF8278860FD005A2879 /* XCRemoteSwiftPackageReference "PromiseKit" */,
 			);
 			productRefGroup = D06313C1270B147E00D0E12C /* Products */;
 			projectDirPath = "";
@@ -1027,6 +1031,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		D0E93FF8278860FD005A2879 /* XCRemoteSwiftPackageReference "PromiseKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mxcl/PromiseKit";
+			requirement = {
+				kind = exactVersion;
+				version = 6.16.2;
+			};
+		};
 		D0F3CBA8277B00FD004653AE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -1092,6 +1104,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D095CAE7275F45E3002F66CC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		D0E93FF9278860FD005A2879 /* PromiseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0E93FF8278860FD005A2879 /* XCRemoteSwiftPackageReference "PromiseKit" */;
+			productName = PromiseKit;
 		};
 		D0F3CBA9277B00FD004653AE /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
