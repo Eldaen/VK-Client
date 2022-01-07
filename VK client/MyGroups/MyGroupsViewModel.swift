@@ -114,7 +114,8 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 		}
 	}
 
-func search(_ text: String, completion: @escaping () -> Void) {		filteredGroups = []
+func search(_ text: String, completion: @escaping () -> Void) {
+	filteredGroups = []
 	
 	// Если строка поиска пустая, то показываем все группы
 	if text == "" {

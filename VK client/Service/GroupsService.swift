@@ -30,6 +30,14 @@ final class GroupsService: GroupsLoader {
 	internal var cache: ImageCache
 	internal var persistence: PersistenceManager
 	
+	/// Очередь операций для загрузки данных групп
+	let operationQueue: OperationQueue = {
+		let operationQueue = OperationQueue()
+		operationQueue.name = "groupsLoadQueue"
+		operationQueue.qualityOfService = .utility
+		return operationQueue
+	}()
+	
 	/// Ключ для сохранения данных о просрочке в Userdefaults
 	let cacheKey = "groupsExpiry"
 	
@@ -41,15 +49,10 @@ final class GroupsService: GroupsLoader {
 	
 	/// Загружает список групп пользователя
 	func loadGroups(completion: @escaping ([GroupModel]) -> Void) {
-		let params = [
-			"order" : "name",
-			"extended" : "1",
-		]
-		
+
 		if checkExpiry(key: cacheKey) {
 			var groups: [GroupModel] = []
-
-			persistence.read(GroupModel.self) { result in
+			self.persistence.read(GroupModel.self) { result in
 				groups = Array(result)
 			}
 
@@ -59,25 +62,24 @@ final class GroupsService: GroupsLoader {
 			}
 		}
 		
-		networkManager.request(method: .groupsGet,
-							   httpMethod: .get,
-							   params: params) { [weak self] (result: Result<GroupsMyMainResponse, Error>) in
-			switch result {
-			case .success(let groupsResponse):
-				let items = groupsResponse.response.items
-				self?.persistence.delete(GroupModel.self) { _ in }
-				self?.persistence.create(items) { _ in }
-				
-				// Ставим дату просрочки данных
-				if let cacheKey = self?.cacheKey {
-					self?.setExpiry(key: cacheKey, time: 10 * 60)
-				}
-				
-				completion(groupsResponse.response.items)
-			case .failure(let error):
-				debugPrint("Error: \(error.localizedDescription)")
-			}
-		}
+		let params = [
+			"order" : "name",
+			"extended" : "1",
+		]
+		
+		let getData = GroupsDataOperation(method: .groupsGet, params: params)
+		let parseData = GroupsDataParseOperation()
+		let completionOperation = GroupsCompletionOperation(completion)
+		let updateRealm = UpdateRealmDataOperation(manager: persistence, cacheHandler: self, cacheKey: cacheKey)
+		
+		parseData.addDependency(getData)
+		completionOperation.addDependency(parseData)
+		updateRealm.addDependency(completionOperation)
+		
+		operationQueue.addOperations([getData, parseData], waitUntilFinished: false)
+		
+		// Realm редиска и не хочет работать из другого потка, если был инициализирован в мейне
+		OperationQueue.main.addOperations([completionOperation, updateRealm], waitUntilFinished: false)
 	}
 	
 	/// Ищет группы, подходящие под текстовый запрос
