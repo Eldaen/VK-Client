@@ -1,5 +1,5 @@
 //
-//  ParseDataOperation.swift
+//  GroupsDataParseOperation.swift
 //  VK client
 //
 //  Created by Денис Сизов on 28.12.2021.

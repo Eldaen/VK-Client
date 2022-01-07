@@ -104,7 +104,7 @@
 		D0F3CBAA277B00FD004653AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D0F3CBA9277B00FD004653AE /* Alamofire */; };
 		D0F3CBAD277B029C004653AE /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBAC277B029C004653AE /* AsyncOperation.swift */; };
 		D0F3CBAF277B0398004653AE /* GroupsDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */; };
-		D0F3CBB1277B0918004653AE /* ParseDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */; };
+		D0F3CBB1277B0918004653AE /* GroupsDataParseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB0277B0918004653AE /* GroupsDataParseOperation.swift */; };
 		D0F3CBB3277B0C82004653AE /* GroupsCompletionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */; };
 		D0F3CBB5277B1409004653AE /* UpdateRealmDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB4277B1409004653AE /* UpdateRealmDataOperation.swift */; };
 /* End PBXBuildFile section */
@@ -199,7 +199,7 @@
 		D0F3CBA6277618E2004653AE /* UITableReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableReusableView.swift; sourceTree = "<group>"; };
 		D0F3CBAC277B029C004653AE /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDataOperation.swift; sourceTree = "<group>"; };
-		D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseDataOperation.swift; sourceTree = "<group>"; };
+		D0F3CBB0277B0918004653AE /* GroupsDataParseOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDataParseOperation.swift; sourceTree = "<group>"; };
 		D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsCompletionOperation.swift; sourceTree = "<group>"; };
 		D0F3CBB4277B1409004653AE /* UpdateRealmDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRealmDataOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -567,7 +567,7 @@
 			children = (
 				D0F3CBAC277B029C004653AE /* AsyncOperation.swift */,
 				D0F3CBAE277B0398004653AE /* GroupsDataOperation.swift */,
-				D0F3CBB0277B0918004653AE /* ParseDataOperation.swift */,
+				D0F3CBB0277B0918004653AE /* GroupsDataParseOperation.swift */,
 				D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */,
 				D0F3CBB4277B1409004653AE /* UpdateRealmDataOperation.swift */,
 			);
@@ -739,7 +739,7 @@
 				D050CCFB2716D89A0076D78E /* FriendsViewController.swift in Sources */,
 				D0F3CBB3277B0C82004653AE /* GroupsCompletionOperation.swift in Sources */,
 				D01D8C3E27469330002CDC5E /* VkFriendsMainResponse.swift in Sources */,
-				D0F3CBB1277B0918004653AE /* ParseDataOperation.swift in Sources */,
+				D0F3CBB1277B0918004653AE /* GroupsDataParseOperation.swift in Sources */,
 				D0615C9027352C540098F5D7 /* CloudView.swift in Sources */,
 				D050CD6627247A010076D78E /* NewsService.swift in Sources */,
 				D0EFE7DF276BB06A00A8E66E /* FriendsCountMainResponse.swift in Sources */,
