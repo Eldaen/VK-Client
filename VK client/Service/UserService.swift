@@ -110,6 +110,10 @@ final class UserService: UserLoader {
 			.done(on: DispatchQueue.main) { sections in
 				self.setExpiry(key: self.cacheKey, time: 10 * 60)
 				completion(sections)
+				
+				if let models = self.friendsArray {
+					self.persistence.create(models) { _ in }
+				}
 			}.catch { error in
 				print(error)
 			}
@@ -213,11 +217,14 @@ private extension UserService {
 		}
 	}
 	
+	/// Декодирует Data в массив UserModel
+	/// - Returns: Promise с массивом [UserModel]
 	func getParsedData(_ data: Data) -> Promise<[UserModel]> {
 		
 		return Promise { resolver in
 			do {
 				let friends = try JSONDecoder().decode(VkFriendsMainResponse.self, from: data).response.items
+				friendsArray = friends
 				resolver.fulfill(friends)
 			} catch {
 				resolver.reject(LoadingErrors.failedToDecode)
@@ -225,11 +232,9 @@ private extension UserService {
 		}
 	}
 	
+	/// Сортирует друзей в секции
+	/// - Returns: Promise с массивом [FriendsSection]
 	func getFriends(_ models: [UserModel]) -> Promise<[FriendsSection]> {
-		
-		// Поленился делать ещё один промис для записи в БД, пусть будет тут
-		self.persistence.create(models) { _ in }
-		
 		return Promise { resolver in
 			let sections = formFriendsArray(from: models)
 			resolver.fulfill(sections)
