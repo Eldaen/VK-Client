@@ -7,6 +7,8 @@
 
 import UIKit.UIImage
 import PromiseKit
+import Foundation
+import Alamofire
 
 /// Протокол загрузки данных пользователей
 protocol UserLoader: Loader {
@@ -87,11 +89,6 @@ final class UserService: UserLoader {
 	
 	/// Загружает список друзей
 	func loadFriends(completion: @escaping ([FriendsSection]) -> Void) {
-		let params = [
-			"order" : "name",
-			"fields" : "photo_100",
-		]
-		
 		if checkExpiry(key: cacheKey) {
 			var friends: [UserModel] = []
 			
@@ -106,28 +103,16 @@ final class UserService: UserLoader {
 			}
 		}
 		
-		networkManager.request(method: .friendsGet,
-							   httpMethod: .get,
-							   params: params) { [weak self] (result: Swift.Result<VkFriendsMainResponse, Error>) in
-			switch result {
-			case .success(let friendsResponse):
-				let friends = friendsResponse.response.items
-				self?.persistence.create(friends) { _ in }
-				
-				guard let sections = self?.formFriendsArray(from: friends) else {
-					return
-				}
-				
-				// Ставим дату просрочки данных
-				if let cacheKey = self?.cacheKey {
-					self?.setExpiry(key: cacheKey, time: 10 * 60)
-				}
-				
+		getUrl()
+			.then(on: DispatchQueue.global(), getData(_:))
+			.then(getParsedData(_:))
+			.then(getFriends(_:))
+			.done(on: DispatchQueue.main) { sections in
+				self.setExpiry(key: self.cacheKey, time: 10 * 60)
 				completion(sections)
-			case .failure(let error):
-				debugPrint("Error: \(error.localizedDescription)")
+			}.catch { error in
+				print(error)
 			}
-		}
 	}
 	
 	/// Запрашивает кол-во друзей пользователя
@@ -171,6 +156,8 @@ private extension UserService {
 	enum LoadingErrors: Error {
 		case noToken
 		case incorrectUrl
+		case noData
+		case failedToDecode
 	}
 	
 	/// Подготавливает URL для загрузки друзей
@@ -209,6 +196,43 @@ private extension UserService {
 				return
 			}
 			resolver.fulfill(url)
+		}
+	}
+	
+	/// Загружает данные по предоставленному URL
+	/// - Returns: Promise с Data
+	func getData(_ url: URL) -> Promise<Data> {
+		return Promise { resolver in
+			URLSession.shared.dataTask(with: url) { (data, ResponseCacher, error) in
+				guard let data = data else {
+					resolver.reject(LoadingErrors.noData)
+					return
+				}
+				resolver.fulfill(data)
+			}.resume()
+		}
+	}
+	
+	func getParsedData(_ data: Data) -> Promise<[UserModel]> {
+		
+		return Promise { resolver in
+			do {
+				let friends = try JSONDecoder().decode(VkFriendsMainResponse.self, from: data).response.items
+				resolver.fulfill(friends)
+			} catch {
+				resolver.reject(LoadingErrors.failedToDecode)
+			}
+		}
+	}
+	
+	func getFriends(_ models: [UserModel]) -> Promise<[FriendsSection]> {
+		
+		// Поленился делать ещё один промис для записи в БД, пусть будет тут
+		self.persistence.create(models) { _ in }
+		
+		return Promise { resolver in
+			let sections = formFriendsArray(from: models)
+			resolver.fulfill(sections)
 		}
 	}
 }
