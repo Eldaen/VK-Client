@@ -35,10 +35,10 @@ extension Loader {
 	/// Сохраняет картинку в файловую систему и удаляет текущую, если она есть с таким названием
 	func saveImage(imageName: String, image: UIImage) {
 		
-		guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+		guard let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return }
 		
 		let fileName = SHA256.hash(data: Data(imageName.utf8)).description
-		let fileURL = documentsDirectory.appendingPathComponent(fileName)
+		let fileURL = cachesDirectory.appendingPathComponent(fileName)
 		
 		guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
 			return

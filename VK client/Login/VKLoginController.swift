@@ -7,7 +7,6 @@
 
 import WebKit
 import UIKit
-import SwiftUI
 
 final class VKLoginController: UIViewController {
 	
