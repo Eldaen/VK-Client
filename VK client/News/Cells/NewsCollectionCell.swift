@@ -106,7 +106,6 @@ private extension NewsCollectionCell {
 	
 	func setupConstraints() {
 		NSLayoutConstraint.activate([
-			collectionView.topAnchor.constraint(equalTo: contentView.bottomAnchor),
 			collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 			collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -114,6 +113,9 @@ private extension NewsCollectionCell {
 		
 		collectionHeight = collectionView.heightAnchor.constraint(equalTo: contentView.heightAnchor)
 		collectionHeight?.isActive = true
+		
+		let top = collectionView.topAnchor.constraint(equalTo: contentView.bottomAnchor)
+		top.priority = .init(rawValue: 999)
 	}
 	
 	/// Конфигурируем нашу collectionView и добавляем в основную view

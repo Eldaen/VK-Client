@@ -76,7 +76,6 @@ private extension NewsAuthorCell {
 			userImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
 			userImage.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
 			userImage.widthAnchor.constraint(equalToConstant: 60),
-			userImage.heightAnchor.constraint(equalToConstant: 60),
 			
 			userName.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 10),
 			userName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -85,6 +84,10 @@ private extension NewsAuthorCell {
 			postDate.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 10),
 			postDate.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 10),
 		])
+		
+		let avatarHeight = userImage.heightAnchor.constraint(equalToConstant: 60)
+		avatarHeight.priority = .init(rawValue: 999)
+		avatarHeight.isActive = true
 	}
 	
 	func setupCell() {
