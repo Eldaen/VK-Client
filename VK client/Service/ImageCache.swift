@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CryptoKit
 
 /// Протокол для класса, который будет кэшировать изображения по URL
 protocol ImageCache: AnyObject {
@@ -42,6 +43,49 @@ final class ImageCacheService {
 	init(countLimit: Int = 40) {
 		self.countLimit = countLimit
 	}
+	
+	/// Загружает и возвращаетк артинку из файловой системы по имени, если нашлась
+	func loadImageFromDiskWith(imageName: String) -> UIImage? {
+		
+		let imageName = SHA256.hash(data: Data(imageName.utf8)).description
+		let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+		
+		let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+		let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+		
+		if let dirPath = paths.first {
+			let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(imageName)
+			let image = UIImage(contentsOfFile: imageUrl.path)
+			return image
+		}
+		
+		return nil
+	}
+	
+	/// Сохраняет картинку в файловую систему и удаляет текущую, если она есть с таким названием
+	func saveImage(imageName: String, image: UIImage) {
+		
+		guard let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return }
+		
+		let fileName = SHA256.hash(data: Data(imageName.utf8)).description
+		let fileURL = cachesDirectory.appendingPathComponent(fileName)
+		
+		guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
+			return
+		}
+		
+		//Если файл есть, то удаляем
+		if FileManager.default.fileExists(atPath: fileURL.path) {
+			try? FileManager.default.removeItem(atPath: fileURL.path)
+		}
+		
+		// Пробуем записать, если не получилось, то ничего страшного
+		do {
+			try data.write(to: fileURL)
+		} catch {
+			print(error)
+		}
+	}
 }
 
 //MARK: - ImageCache
@@ -49,6 +93,8 @@ extension ImageCacheService: ImageCache {
 	
 	func getImage(for url: URL) -> UIImage? {
 		if let image = imageCache.object(forKey: url as AnyObject) as? UIImage {
+			return image
+		} else if let image = loadImageFromDiskWith(imageName: url.absoluteString){
 			return image
 		} else {
 			return nil
@@ -61,6 +107,10 @@ extension ImageCacheService: ImageCache {
 		}
 		
 		imageCache.setObject(image as AnyObject, forKey: url as AnyObject)
+		
+		DispatchQueue.global(qos: .background).async { [weak self] in
+			self?.saveImage(imageName: url.absoluteString, image: image)
+		}
 	}
 	
 	func deleteImage(for url: URL) {
