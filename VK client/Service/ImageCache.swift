@@ -39,9 +39,13 @@ final class ImageCacheService {
 	
 	/// Максимальное кол-во хранимых изображений, в стандартных настройках - 40
 	let countLimit: Int
+	
+	/// Время жизни картинок в кеше
+	let expiryTime: TimeInterval
 
-	init(countLimit: Int = 40) {
+	init(countLimit: Int = 40, expiryTime: TimeInterval = 2 * 60 * 60) {
 		self.countLimit = countLimit
+		self.expiryTime = expiryTime
 	}
 	
 	/// Загружает и возвращаетк артинку из файловой системы по имени, если нашлась
@@ -53,8 +57,16 @@ final class ImageCacheService {
 		let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
 		let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
 		
-		if let dirPath = paths.first {
+		if let dirPath = paths.first,
+		   let info = try? FileManager.default.attributesOfItem(atPath: dirPath),
+		   let modificationDate = info[FileAttributeKey.modificationDate] as? Date {
 			let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(imageName)
+			let lifeTime = Date().timeIntervalSince(modificationDate)
+			
+			guard lifeTime <= expiryTime else {
+				return nil
+			}
+			
 			let image = UIImage(contentsOfFile: imageUrl.path)
 			return image
 		}
