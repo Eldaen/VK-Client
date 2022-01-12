@@ -42,28 +42,33 @@ final class ImageCacheService {
 	
 	/// Время жизни картинок в кеше
 	let expiryTime: TimeInterval
+	
+	/// Имя папки для сохранения картинок
+	let folderName = "Images"
 
-	init(countLimit: Int = 40, expiryTime: TimeInterval = 2 * 60 * 60) {
+	init(countLimit: Int = 40, expiryTime: TimeInterval = 60 * 60) {
 		self.countLimit = countLimit
 		self.expiryTime = expiryTime
+		
+		DispatchQueue.global(qos: .background).async { [weak self] in
+			self?.deleteExpired()
+		}
 	}
 	
 	/// Загружает и возвращаетк артинку из файловой системы по имени, если нашлась
-	func loadImageFromDiskWith(imageName: String) -> UIImage? {
+	private func loadImageFromDiskWith(imageName: String) -> UIImage? {
 		
 		let imageName = SHA256.hash(data: Data(imageName.utf8)).description
-		let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+		let cacheDirectory = FileManager.SearchPathDirectory.cachesDirectory
 		
 		let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
-		let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+		let paths = NSSearchPathForDirectoriesInDomains(cacheDirectory, userDomainMask, true)
 		
-		if let dirPath = paths.first,
-		   let info = try? FileManager.default.attributesOfItem(atPath: dirPath),
-		   let modificationDate = info[FileAttributeKey.modificationDate] as? Date {
-			let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(imageName)
-			let lifeTime = Date().timeIntervalSince(modificationDate)
+		if let dirPath = paths.first {
+			let cacheFolder = URL(fileURLWithPath: dirPath).appendingPathComponent(folderName, isDirectory: true)
+			let imageUrl = cacheFolder.appendingPathComponent(imageName)
 			
-			guard lifeTime <= expiryTime else {
+			if checkExpiry(for: imageUrl) {
 				return nil
 			}
 			
@@ -75,12 +80,27 @@ final class ImageCacheService {
 	}
 	
 	/// Сохраняет картинку в файловую систему и удаляет текущую, если она есть с таким названием
-	func saveImage(imageName: String, image: UIImage) {
+	private func saveImage(imageName: String, image: UIImage) {
+		guard
+			let cachesUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first,
+			let cachesDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first,
+			let docURL = URL(string: cachesDirectory)
+		else {
+			return
+		}
 		
-		guard let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return }
+		let dataPath = docURL.appendingPathComponent(folderName)
+		if !FileManager.default.fileExists(atPath: dataPath.absoluteString) {
+			do {
+				try FileManager.default.createDirectory(atPath: dataPath.absoluteString, withIntermediateDirectories: true, attributes: nil)
+			} catch {
+				print(error.localizedDescription);
+			}
+		}
 		
 		let fileName = SHA256.hash(data: Data(imageName.utf8)).description
-		let fileURL = cachesDirectory.appendingPathComponent(fileName)
+		let imageFolder = cachesUrl.appendingPathComponent(folderName, isDirectory: true)
+		let fileURL = imageFolder.appendingPathComponent(fileName)
 		
 		guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
 			return
@@ -96,6 +116,46 @@ final class ImageCacheService {
 			try data.write(to: fileURL)
 		} catch {
 			print(error)
+		}
+	}
+	
+	/// Удаляет устаревшие файлы
+	private func deleteExpired() {
+		guard
+			let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+			return
+		}
+		let imagesDirectory = cachesDirectory.appendingPathComponent(folderName, isDirectory: true)
+		
+		do {
+			let directoryContents = try FileManager.default.contentsOfDirectory(at: imagesDirectory, includingPropertiesForKeys: nil)
+			
+			for imageUrl in directoryContents {
+				if checkExpiry(for: imageUrl) {
+					try FileManager.default.removeItem(at: imageUrl)
+				}
+			}
+		} catch {
+			print(error)
+		}
+	}
+	
+	/// Проверяет дату модификации файла по URL и сравнивает с expiryTime
+	/// - Returns: True если файл просрочен и False если с файлом всё хорошо
+	private func checkExpiry(for imageUrl: URL) -> Bool {
+		guard
+			let info = try? FileManager.default.attributesOfItem(atPath: imageUrl.path),
+			let modificationDate = info[FileAttributeKey.modificationDate] as? Date
+		else {
+			return true
+		}
+		
+		let lifeTime = Date().timeIntervalSince(modificationDate)
+		
+		if lifeTime >= expiryTime {
+			return true
+		} else {
+			return false
 		}
 	}
 }
