@@ -50,9 +50,17 @@ final class ImageCacheService {
 		self.countLimit = countLimit
 		self.expiryTime = expiryTime
 		
-		DispatchQueue.global(qos: .background).async { [weak self] in
-			self?.deleteExpired()
+		let deletionBlock = {
+			DispatchQueue.global(qos: .background).async { [weak self] in
+				self?.deleteExpired()
+			}
 		}
+		deletionBlock()
+	
+		let timer = Timer(timeInterval: expiryTime, repeats: true) { _ in
+			deletionBlock()
+		}
+		RunLoop.current.add(timer, forMode: .common)
 	}
 	
 	/// Загружает и возвращаетк артинку из файловой системы по имени, если нашлась
