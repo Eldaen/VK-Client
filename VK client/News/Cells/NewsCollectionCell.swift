@@ -142,7 +142,7 @@ private extension NewsCollectionCell {
 	func getCollectionLayout(isMultiple: Bool) -> UICollectionViewCompositionalLayout {
 		
 		let image = collection.first ?? UIImage()
-		let aspectRatio = image.size.height / image.size.width
+		let aspectRatio = image.size.height / ( image.size.width == 0.0 ? 1 : image.size.width )
 		
 		let itemSize = NSCollectionLayoutSize(
 		  widthDimension: .fractionalWidth(1.0),

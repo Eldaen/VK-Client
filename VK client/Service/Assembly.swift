@@ -64,7 +64,7 @@ final class Assembly {
 		if demoMode == true {
 			userService = demoUserService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 			groupsService = demoGroupService(networkManager: networkManager, cache: cacheService, persistence: persistence)
-			newsService = demoNewsServiceReal(networkManager: networkManager, cache: cacheService, persistence: persistence)
+			newsService = demoNewsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 		} else {
 			userService = UserService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 			groupsService = GroupsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
