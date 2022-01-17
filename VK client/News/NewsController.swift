@@ -9,7 +9,7 @@ import UIKit
 
 /// Протокол Делегат для обновления высоты ячейки текста
 protocol ShowMoreDelegate: AnyObject {
-	func updateTextHeight()
+	func updateTextHeight(indexPath: IndexPath)
 }
 
 /// Контроллер новостей пользователя
@@ -99,6 +99,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 			let textCell: NewsTextCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = textCell
 			textCell.delegate = self
+			textCell.indexPath = indexPath
 		case .collection:
 			let collectionCell: NewsCollectionCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = collectionCell
@@ -203,9 +204,10 @@ private extension NewsController {
 
 // MARK: - ShowMoreDelegate
 extension NewsController: ShowMoreDelegate {
-	func updateTextHeight() {
+	func updateTextHeight(indexPath: IndexPath) {
 		tableView.beginUpdates()
 		tableView.endUpdates()
+		tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 	}
 }
 

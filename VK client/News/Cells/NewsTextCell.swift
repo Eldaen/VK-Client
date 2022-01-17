@@ -50,7 +50,7 @@ final class NewsTextCell: UITableViewCell, NewsTextCellType {
 	var delegate: ShowMoreDelegate?
 	
 	/// IndexPath ячейки в таблице
-	var indexPath: IndexPath?
+	var indexPath: IndexPath = IndexPath()
 	
 	/// Конфигурирует ячейку NewsTableViewCell
 	/// - Parameters:
@@ -100,6 +100,7 @@ private extension NewsTextCell {
 		postText.text = model.postText
 	}
 	
+	/// Добавляет кнопку ReadMore после текстового поля
 	func addReadMore() {
 		contentView.addSubview(button)
 		button.addTarget(self, action: #selector(toggleText), for: .touchUpInside)
@@ -116,9 +117,12 @@ private extension NewsTextCell {
 	@objc func toggleText() {
 		if shortTextState == true {
 			showFullText()
-			removeReadMore()
-			delegate?.updateTextHeight()
+			button.setTitle("показать меньше", for: .normal)
+		} else {
+			showShortText()
+			button.setTitle("показать полностью", for: .normal)
 		}
+		delegate?.updateTextHeight(indexPath: indexPath)
 	}
 	
 	/// Отображает весь текст поста
@@ -127,8 +131,9 @@ private extension NewsTextCell {
 		shortTextState = false
 	}
 	
-	/// Убирает кнопку ReadMore
-	func removeReadMore() {
-		button.removeFromSuperview()
+	/// Отображает укороченный текст поста
+	func showShortText() {
+		postText.text = shortText
+		shortTextState = true
 	}
 }
