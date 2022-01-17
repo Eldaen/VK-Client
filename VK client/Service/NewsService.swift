@@ -144,6 +144,7 @@ private extension NewsService {
 			let date = getDate(post.date)
 			let sourceId = post.sourceID
 			let text = post.text
+			let shortText = post.shortText
 			let views = post.views
 			let postId = post.postId
 			
@@ -159,6 +160,7 @@ private extension NewsService {
 				source: source,
 				postDate: date.description,
 				postText: text ?? "",
+				shortText: shortText,
 				newsImageModels: imageLinksArray,
 				postId: postId ?? 0,
 				likesModel: post.likes,

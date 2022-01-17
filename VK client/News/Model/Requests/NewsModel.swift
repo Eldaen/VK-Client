@@ -15,6 +15,15 @@ struct NewsModel: Codable {
 	let type: String
 	let photos: Photos?
 	let attachments: [AttachmentsModel]?
+	var shortText: String? {
+		get {
+			guard let text = text else { return nil }
+			guard text.count >= 200 else { return nil }
+			
+			let shortText = text.prefix(200)
+			return String(shortText + "...")
+		}
+	}
 
 	enum CodingKeys: String, CodingKey {
 		case sourceID = "source_id"

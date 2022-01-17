@@ -7,6 +7,11 @@
 
 import UIKit
 
+/// Протокол Делегат для обновления высоты ячейки текста
+protocol ShowMoreDelegate: AnyObject {
+	func updateTextHeight()
+}
+
 /// Контроллер новостей пользователя
 final class NewsController: MyCustomUIViewController {
 	
@@ -93,6 +98,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		case .text:
 			let textCell: NewsTextCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = textCell
+			textCell.delegate = self
 		case .collection:
 			let collectionCell: NewsCollectionCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = collectionCell
@@ -103,7 +109,6 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 			let linkCell: NewsLinkCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = linkCell
 		}
-		
 		
 		viewModel.configureCell(cell: cell, index: indexPath.section, type: type)
 		return cell
@@ -193,6 +198,14 @@ private extension NewsController {
 			print("Some News Table view issue")
 			return nil
 		}
+	}
+}
+
+// MARK: - ShowMoreDelegate
+extension NewsController: ShowMoreDelegate {
+	func updateTextHeight() {
+		tableView.beginUpdates()
+		tableView.endUpdates()
 	}
 }
 

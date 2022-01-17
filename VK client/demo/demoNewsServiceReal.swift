@@ -9,15 +9,15 @@ import UIKit
 
 // Сервис для загрузки новостей из JSON файла по примеру АПИ вконтакте
 final class demoNewsServiceReal: NewsLoader {
+	var networkManager: NetworkManager
+	var cache: ImageCache
+	var persistence: PersistenceManager
+	
 	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
-		
 	}
 	
 	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
-		
 	}
-	
-
 	
 	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
 		
@@ -32,13 +32,6 @@ final class demoNewsServiceReal: NewsLoader {
 			}
 		}
 	}
-	
-	
-	var networkManager: NetworkManager
-	
-	var cache: ImageCache
-	
-	var persistence: PersistenceManager
 	
 	/// Загружает картинку и возвращает её, если получилось
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
@@ -78,7 +71,6 @@ final class demoNewsServiceReal: NewsLoader {
 }
 
 // MARK: - Private methods
-
 private extension demoNewsServiceReal {
 	
 	/// Cобирает ответ сервера в массив нужных моделей
@@ -99,6 +91,7 @@ private extension demoNewsServiceReal {
 			let date = getDate(post.date)
 			let sourceId = post.sourceID
 			let text = post.text
+			let shortText = post.shortText
 			let views = post.views
 			let postId = post.postId
 			
@@ -114,6 +107,7 @@ private extension demoNewsServiceReal {
 				source: source,
 				postDate: date.description,
 				postText: text ?? "",
+				shortText: shortText,
 				newsImageModels: imageLinksArray,
 				postId: postId ?? 0,
 				likesModel: post.likes,
@@ -245,7 +239,6 @@ private extension demoNewsServiceReal {
 			}
 		}
 		}
-		
 		return sizes
 	}
 }
