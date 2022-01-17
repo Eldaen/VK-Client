@@ -86,22 +86,21 @@ private extension NewsTextCell {
 	
 	/// обновляет данные ячейки
 	func updateCellData(with model: NewsTableViewCellModelType) {
+		fullText = model.postText
+		
 		if let shortText = model.shortText {
-			shortTextState = true
-			postText.text = shortText
 			self.shortText = shortText
-			fullText = model.postText
 			
-			addReadMore()
+			showShortText()
+			addShowMore()
 			return
 		}
-		
-		fullText = model.postText
-		postText.text = model.postText
+
+		showFullText()
 	}
 	
 	/// Добавляет кнопку ReadMore после текстового поля
-	func addReadMore() {
+	func addShowMore() {
 		contentView.addSubview(button)
 		button.addTarget(self, action: #selector(toggleText), for: .touchUpInside)
 		
