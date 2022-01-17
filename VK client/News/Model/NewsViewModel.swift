@@ -16,11 +16,14 @@ protocol NewsViewModelType {
 	/// Источник данных для отображения новостей
 	var loader: NewsLoader { get }
 	
+	/// Дата последней новости
+	var lastDate: Double? { get }
+	
 	/// Конфигурирует ячейку новости данными, которые получили из сервиса
 	func configureCell(cell: UITableViewCell, index: Int, type: NewsController.NewsCells)
 	
 	/// Скачиваем из сети список новостей для пользователя
-	func fetchNews(completion: @escaping () -> Void)
+	func fetchNews(refresh: Bool, completion: @escaping (_ indexSet: IndexSet?) -> Void)
 	
 	/// Ставит лайк текущей новости
 	func setLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void)
@@ -34,6 +37,7 @@ final class NewsViewModel: NewsViewModelType {
 
 	var news: [NewsTableViewCellModelType] = []
 	var loader: NewsLoader
+	var lastDate: Double?
 	
 	init(loader: NewsLoader){
 		self.loader = loader
@@ -69,10 +73,25 @@ final class NewsViewModel: NewsViewModelType {
 		}
 	}
 	
-	func fetchNews(completion: @escaping () -> Void) {
-		loader.loadNews { [weak self] news in
-			self?.news = news
-			completion()
+	func fetchNews(refresh: Bool, completion: @escaping (_ indexSet: IndexSet?) -> Void) {
+		if refresh {
+			lastDate = news.first?.date
+		} else {
+			lastDate = nil
+		}
+		loader.loadNews(startTime: lastDate) { [weak self] news in
+			if refresh {
+				if let newsCount = self?.news.count {
+					self?.news.insert(contentsOf: news, at: 0)
+					
+					let indexSet = IndexSet(integersIn: newsCount..<newsCount + news.count)
+					completion(indexSet)
+					return
+				}
+			} else {
+				self?.news = news
+			}
+			completion(nil)
 		}
 	}
 	

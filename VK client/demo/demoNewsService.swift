@@ -26,7 +26,7 @@ final class demoNewsService: NewsLoader {
 	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
 	}
 	
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
+	func loadNews(startTime: Double?, completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
 		if let filepath = Bundle.main.path(forResource: "news", ofType: "json") {
 			do {
 				let contents = try Data(contentsOf: URL(fileURLWithPath: filepath))

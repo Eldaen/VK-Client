@@ -11,7 +11,7 @@ import UIKit
 protocol NewsLoader: Loader {
 	
 	/// Загружает список групп пользователя
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void)
+	func loadNews(startTime: Double?, completion: @escaping ([NewsTableViewCellModelType]) -> Void)
 	
 	///   Отправляет запрос на лайк поста
 	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
@@ -33,11 +33,15 @@ final class NewsService: NewsLoader {
 		self.persistence = persistence
 	}
 	
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
-		let params = [
+	func loadNews(startTime: Double?, completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
+		var params = [
 			"filters" : "posts",
 			"return_banned" : "0",
 		]
+		
+		if let startTime = startTime {
+			params.updateValue(String(startTime + 1), forKey: "start_time")
+		}
 		
 		networkManager.request(method: .newsGet,
 							   httpMethod: .get,
@@ -159,6 +163,7 @@ private extension NewsService {
 			let newsModel = NewsTableViewCellModel(
 				source: source,
 				postDate: date.description,
+				date: Double(post.date),
 				postText: text ?? "",
 				shortText: shortText,
 				newsImageModels: imageLinksArray,

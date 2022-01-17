@@ -14,7 +14,7 @@ struct NewsContentsResponse: Codable {
 	let items: [NewsModel]
 	let profiles: [UserModel]
 	let groups: [GroupModel]
-	let nextFrom: String
+	let nextFrom: String?
 
 	enum CodingKeys: String, CodingKey {
 		case items, profiles, groups

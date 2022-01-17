@@ -13,6 +13,7 @@ struct demoNewsTableViewCellModel: Codable, NewsTableViewCellModelType {
 	var views: Views? = nil
 	var postID: Int = 0
 	var postDate: String = "0"
+	var date: Double = 0
 	var postText: String = "Text"
 	var shortText: String?
 	var newsImageModels: [Sizes] = []

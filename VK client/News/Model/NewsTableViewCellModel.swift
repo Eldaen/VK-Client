@@ -13,6 +13,7 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
 	var views: Views?
 	var postID: Int
     var postDate: String
+	var date: Double
     var postText: String
 	var shortText: String?
     var newsImageModels: [Sizes]
@@ -20,7 +21,9 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
 	var link: Link?
     
 	init(
-		source: NewsSourceProtocol, postDate: String,
+		source: NewsSourceProtocol,
+		postDate: String,
+		date: Double,
 		postText: String,
 		shortText: String?,
 		newsImageModels: [Sizes],
@@ -31,6 +34,7 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
 	) {
         self.source = source
         self.postDate = postDate
+		self.date = date
         self.postText = postText
 		self.shortText = shortText
 		self.postID = postId

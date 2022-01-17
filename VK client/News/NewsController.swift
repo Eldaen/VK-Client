@@ -24,6 +24,9 @@ final class NewsController: MyCustomUIViewController {
 		case link
 	}
 	
+	/// Cостояние загрузки через pre-fretch
+	var isLoading = false
+	
 	/// Количество ячеек в секции новости
 	private let cellsCount: Int = 4
 	
@@ -59,17 +62,37 @@ final class NewsController: MyCustomUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+		setupRefreshControl()
         tableView.reloadData()
 		tableView.separatorStyle = .none
 		
 		setupSpinner()
 		spinner.startAnimating()
 		
-		viewModel.fetchNews { [weak self] in
+		viewModel.fetchNews(refresh: false) { [weak self] _ in
 			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
     }
+	
+//MARK: - Pull to refresh
+	
+	/// Настраивает RefreshControl для контроллера
+	private func setupRefreshControl() {
+		tableView.refreshControl = UIRefreshControl()
+		tableView.refreshControl?.tintColor = .black
+		tableView.refreshControl?.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+	}
+	
+	/// Запрашивает обновление новостей, инициируется RefreshControl-ом
+	@objc func refreshNews() {
+		viewModel.fetchNews(refresh: true) { [weak self] indexSet in
+			guard let indexSet = indexSet else { return }
+			
+			self?.tableView.insertSections(indexSet, with: .automatic)
+			self?.tableView.refreshControl?.endRefreshing()
+		}
+	}
 }
 
 

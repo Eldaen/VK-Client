@@ -19,7 +19,7 @@ final class demoNewsServiceReal: NewsLoader {
 	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
 	}
 	
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
+	func loadNews(startTime: Double?, completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
 		
 		if let filepath = Bundle.main.path(forResource: "realNews", ofType: "json") {
 			do {
@@ -106,6 +106,7 @@ private extension demoNewsServiceReal {
 			let newsModel = NewsTableViewCellModel(
 				source: source,
 				postDate: date.description,
+				date: Double(post.date),
 				postText: text ?? "",
 				shortText: shortText,
 				newsImageModels: imageLinksArray,

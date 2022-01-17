@@ -14,6 +14,7 @@ protocol NewsTableViewCellModelType {
 	var views: Views? { get }
 	var postID: Int { get }
 	var postDate: String { get }
+	var date: Double { get }
 	var postText: String { get }
 	var shortText: String? { get }
 	var newsImageModels: [Sizes] { get }
