@@ -244,6 +244,12 @@ extension NewsController: UITableViewDataSourcePrefetching {
 		   isLoading == false {
 			isLoading = true
 			
+			viewModel.prefetchNews { [weak self] indexSet in
+				guard let indexSet = indexSet else { return }
+				
+				self?.tableView.insertSections(indexSet, with: .automatic)
+				self?.isLoading = false
+			}
 		}
 	}
 }

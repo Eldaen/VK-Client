@@ -11,7 +11,9 @@ import UIKit
 protocol NewsLoader: Loader {
 	
 	/// Загружает список групп пользователя
-	func loadNews(startTime: Double?, completion: @escaping ([NewsTableViewCellModelType]) -> Void)
+	func loadNews(startTime: Double?,
+				  startFrom: String?,
+				  completion: @escaping ([NewsTableViewCellModelType], String) -> Void)
 	
 	///   Отправляет запрос на лайк поста
 	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
@@ -33,14 +35,22 @@ final class NewsService: NewsLoader {
 		self.persistence = persistence
 	}
 	
-	func loadNews(startTime: Double?, completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
+	func loadNews(startTime: Double?,
+				  startFrom: String?,
+				  completion: @escaping ([NewsTableViewCellModelType], String) -> Void
+	) {
 		var params = [
 			"filters" : "posts",
 			"return_banned" : "0",
+			"count": "10",
 		]
 		
 		if let startTime = startTime {
 			params.updateValue(String(startTime + 1), forKey: "start_time")
+		}
+		
+		if let startFrom = startFrom {
+			params.updateValue(startFrom, forKey: "start_from")
 		}
 		
 		networkManager.request(method: .newsGet,
@@ -48,8 +58,10 @@ final class NewsService: NewsLoader {
 							   params: params) { [weak self] (result: Result<NewsMainResponse, Error>) in
 			switch result {
 			case .success(let newsResponse):
+				let nextFrom = newsResponse.response.nextFrom ?? ""
+				
 				if let news = self?.configureAnswer(newsResponse) {
-					completion(news)
+					completion(news, nextFrom)
 				}
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
