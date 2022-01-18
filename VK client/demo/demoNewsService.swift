@@ -16,18 +16,17 @@ import UIKit
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
 final class demoNewsService: NewsLoader {
+	var networkManager: NetworkManager
+	var cache: ImageCache
+	var persistence: PersistenceManager
+	
 	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
-		
 	}
 	
 	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
-		
 	}
 	
-
-	
 	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
-		
 		if let filepath = Bundle.main.path(forResource: "news", ofType: "json") {
 			do {
 				let contents = try Data(contentsOf: URL(fileURLWithPath: filepath))
@@ -48,13 +47,6 @@ final class demoNewsService: NewsLoader {
 			}
 		}
 	}
-	
-	
-	var networkManager: NetworkManager
-	
-	var cache: ImageCache
-	
-	var persistence: PersistenceManager
 	
 	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
 		guard let image = UIImage(named: url) else {

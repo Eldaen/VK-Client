@@ -1,130 +1,77 @@
 //
-//  NewsLoader.swift
-//  VK-Client
+//  demoNewsServiceReal.swift
+//  VK client
 //
-//  Created by Денис Сизов on 23.10.2021.
+//  Created by Денис Сизов on 14.01.2022.
 //
 
 import UIKit
 
-/// Протокол загрузки данных новостей
-protocol NewsLoader: Loader {
-	
-	/// Загружает список групп пользователя
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void)
-	
-	///   Отправляет запрос на лайк поста
-	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
-	
-	/// Отправляет запрос на отмену лайка поста
-	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
-}
-
-/// Сервис по загрузке данных новостей из сети
-final class NewsService: NewsLoader {
-	
+// Сервис для загрузки новостей из JSON файла по примеру АПИ вконтакте
+final class demoNewsServiceReal: NewsLoader {
 	var networkManager: NetworkManager
 	var cache: ImageCache
 	var persistence: PersistenceManager
+	
+	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
+	}
+	
+	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
+	}
+	
+	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
+		
+		if let filepath = Bundle.main.path(forResource: "realNews", ofType: "json") {
+			do {
+				let contents = try Data(contentsOf: URL(fileURLWithPath: filepath))
+				let decodedData = try JSONDecoder().decode(NewsMainResponse.self, from: contents)
+				let news = configureAnswer(decodedData)
+				completion(news)
+			} catch {
+				print("Demo error: \(error)")
+			}
+		}
+	}
+	
+	/// Загружает картинку и возвращает её, если получилось
+	func loadImage(url: String, completion: @escaping (UIImage) -> Void) {
+		guard let imageUrl = URL(string: url) else { return }
+		
+		// если есть в кэше, то грузить не нужно
+		if let image = cache[imageUrl] {
+			completion(image)
+			return
+		}
+		
+		// Если нигде нет, то грузим и кешируем
+		networkManager.loadImage(url: imageUrl) { [weak self] result in
+			switch result {
+			case .success(let data):
+				guard let image = UIImage(data: data) else {
+					return
+				}
+				
+				self?.cache[imageUrl] = image
+				completion(image)
+			case .failure(let error):
+				debugPrint("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String] {
+		[]
+	}
 	
 	init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
 		self.persistence = persistence
 	}
-	
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
-		let params = [
-			"filters" : "posts",
-			"return_banned" : "0",
-		]
-		
-		networkManager.request(method: .newsGet,
-							   httpMethod: .get,
-							   params: params) { [weak self] (result: Result<NewsMainResponse, Error>) in
-			switch result {
-			case .success(let newsResponse):
-				if let news = self?.configureAnswer(newsResponse) {
-					completion(news)
-				}
-			case .failure(let error):
-				debugPrint("Error: \(error.localizedDescription)")
-			}
-		}
-	}
-	
-	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
-	func sortImage(by sizeType: String, from array: [ApiImage]) -> [Sizes] {
-		var sizes: [Sizes] = []
-		
-		for model in array {
-			for size in model.sizes {
-				if size.type == sizeType {
-					sizes.append(size)
-				}
-			}
-		}
-		
-		if sizes.isEmpty {
-			let types = ["z", "k", "l", "x", "m"]
-			
-		outerLoop: for type in types {
-			for model in array {
-				for size in model.sizes {
-					if size.type == type {
-						sizes.append(size)
-						break outerLoop
-					}
-				}
-			}
-		}
-		}
-		
-		return sizes
-	}
-	
-	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
-		
-		let params = [
-			"type" : "post",
-			"item_id" : "\(id)",
-			"owner_id" : "\(owner)",
-		]
-		
-		networkManager.request(method: .setLike,
-							   httpMethod: .post,
-							   params: params) { (result: Result<LikesResponse, Error>) in
-			switch result {
-			case .success(let response):
-				completion(response.response.likes)
-			case .failure(let error):
-				debugPrint("Error: \(error.localizedDescription)")
-			}
-		}
-	}
-	
-	func removeLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void) {
-		let params = [
-			"type" : "post",
-			"item_id" : "\(id)",
-		]
-		
-		networkManager.request(method: .removeLike,
-							   httpMethod: .post,
-							   params: params) { (result: Result<BoolResponse, Error>) in
-			switch result {
-			case .success(let response):
-				completion(response.response)
-			case .failure(let error):
-				debugPrint("Error: \(error.localizedDescription)")
-			}
-		}
-	}
 }
 
 // MARK: - Private methods
-
-private extension NewsService {
+private extension demoNewsServiceReal {
 	
 	/// Cобирает ответ сервера в массив нужных моделей
 	/// - Returns: Массив моделей ячеек таблицы новостей
@@ -265,5 +212,35 @@ private extension NewsService {
 		
 		return nil
 	}
+	
+	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
+	func sortImage(by sizeType: String, from array: [ApiImage]) -> [Sizes] {
+		var sizes: [Sizes] = []
+		
+		for model in array {
+			for size in model.sizes {
+				if size.type == sizeType {
+					sizes.append(size)
+				}
+			}
+		}
+		
+		if sizes.isEmpty {
+			let types = ["z", "k", "l", "x", "m"]
+			
+		outerLoop: for type in types {
+			for model in array {
+				for size in model.sizes {
+					if size.type == type {
+						sizes.append(size)
+						break outerLoop
+					}
+				}
+			}
+		}
+		}
+		return sizes
+	}
 }
+
 

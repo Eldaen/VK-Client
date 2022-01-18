@@ -14,6 +14,7 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
 	var postID: Int
     var postDate: String
     var postText: String
+	var shortText: String?
     var newsImageModels: [Sizes]
     var collection: [UIImage] = [] // у каждой table view должен быть массив ячеек коллекции для отображения картинок
 	var link: Link?
@@ -21,6 +22,7 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
 	init(
 		source: NewsSourceProtocol, postDate: String,
 		postText: String,
+		shortText: String?,
 		newsImageModels: [Sizes],
 		postId: Int,
 		likesModel: LikesModel? = nil,
@@ -30,6 +32,7 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
         self.source = source
         self.postDate = postDate
         self.postText = postText
+		self.shortText = shortText
 		self.postID = postId
         self.newsImageModels = newsImageModels
 		self.likesModel = likesModel
