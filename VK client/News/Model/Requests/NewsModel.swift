@@ -11,6 +11,8 @@ struct NewsModel: Codable {
 	let postId: Int?
 	let postType, text: String?
 	let likes: LikesModel?
+	let comments: CommentsModel?
+	let reposts: RepostsModel?
 	let views: Views?
 	let type: String
 	let photos: Photos?
@@ -33,6 +35,8 @@ struct NewsModel: Codable {
 		case text
 		case attachments
 		case likes
+		case comments
+		case reposts
 		case views
 		case type
 		case photos
@@ -41,6 +45,14 @@ struct NewsModel: Codable {
 
 /// Модель для получения кол-ва просмотров
 struct Views: Codable {
+	let count: Int
+}
+
+struct CommentsModel: Codable {
+	let count: Int
+}
+
+struct RepostsModel: Codable {
 	let count: Int
 }
 

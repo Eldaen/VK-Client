@@ -11,7 +11,9 @@ import UIKit
 protocol NewsLoader: Loader {
 	
 	/// Загружает список групп пользователя
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void)
+	func loadNews(startTime: Double?,
+				  startFrom: String?,
+				  completion: @escaping ([NewsTableViewCellModelType], String) -> Void)
 	
 	///   Отправляет запрос на лайк поста
 	func setLike(for id: Int, owner: Int, completion: @escaping (Int) -> Void)
@@ -33,19 +35,33 @@ final class NewsService: NewsLoader {
 		self.persistence = persistence
 	}
 	
-	func loadNews(completion: @escaping ([NewsTableViewCellModelType]) -> Void) {
-		let params = [
+	func loadNews(startTime: Double?,
+				  startFrom: String?,
+				  completion: @escaping ([NewsTableViewCellModelType], String) -> Void
+	) {
+		var params = [
 			"filters" : "posts",
 			"return_banned" : "0",
+			"count": "10",
 		]
+		
+		if let startTime = startTime {
+			params.updateValue(String(startTime + 1), forKey: "start_time")
+		}
+		
+		if let startFrom = startFrom {
+			params.updateValue(startFrom, forKey: "start_from")
+		}
 		
 		networkManager.request(method: .newsGet,
 							   httpMethod: .get,
 							   params: params) { [weak self] (result: Result<NewsMainResponse, Error>) in
 			switch result {
 			case .success(let newsResponse):
+				let nextFrom = newsResponse.response.nextFrom ?? ""
+				
 				if let news = self?.configureAnswer(newsResponse) {
-					completion(news)
+					completion(news, nextFrom)
 				}
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")
@@ -143,10 +159,6 @@ private extension NewsService {
 			
 			let date = getDate(post.date)
 			let sourceId = post.sourceID
-			let text = post.text
-			let shortText = post.shortText
-			let views = post.views
-			let postId = post.postId
 			
 			source = getSource(groups: groups, users: users, sourceId: sourceId)
 			let imageLinksArray = getImages(post: post)
@@ -159,12 +171,15 @@ private extension NewsService {
 			let newsModel = NewsTableViewCellModel(
 				source: source,
 				postDate: date.description,
-				postText: text ?? "",
-				shortText: shortText,
+				date: Double(post.date),
+				postText: post.text ?? "",
+				shortText: post.shortText,
 				newsImageModels: imageLinksArray,
-				postId: postId ?? 0,
+				postId: post.postId ?? 0,
 				likesModel: post.likes,
-				views: views,
+				views: post.views,
+				comments: post.comments,
+				reposts: post.reposts,
 				link: link
 			)
 			news.append(newsModel)

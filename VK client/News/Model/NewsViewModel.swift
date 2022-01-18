@@ -16,11 +16,23 @@ protocol NewsViewModelType {
 	/// Источник данных для отображения новостей
 	var loader: NewsLoader { get }
 	
+	/// Дата последней новости
+	var lastDate: Double? { get }
+	
+	/// Данные по следующей prefetch подгрузке
+	var nextFrom: String? { get }
+	
 	/// Конфигурирует ячейку новости данными, которые получили из сервиса
 	func configureCell(cell: UITableViewCell, index: Int, type: NewsController.NewsCells)
 	
 	/// Скачиваем из сети список новостей для пользователя
 	func fetchNews(completion: @escaping () -> Void)
+	
+	/// Загружает свежие новости
+	func fetchFreshNews(completion: @escaping (_ indexSet: IndexSet?) -> Void)
+	
+	/// Догружает новости в конец, infinite Scrolling
+	func prefetchNews(completion: @escaping (_ indexSet: IndexSet?) -> Void)
 	
 	/// Ставит лайк текущей новости
 	func setLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void)
@@ -34,6 +46,8 @@ final class NewsViewModel: NewsViewModelType {
 
 	var news: [NewsTableViewCellModelType] = []
 	var loader: NewsLoader
+	var lastDate: Double?
+	var nextFrom: String?
 	
 	init(loader: NewsLoader){
 		self.loader = loader
@@ -69,10 +83,42 @@ final class NewsViewModel: NewsViewModelType {
 		}
 	}
 	
+	/// Загружает все новости
 	func fetchNews(completion: @escaping () -> Void) {
-		loader.loadNews { [weak self] news in
+		loader.loadNews(startTime: nil, startFrom: nil) { [weak self] news, nextFrom in
 			self?.news = news
+			self?.nextFrom = nextFrom
 			completion()
+		}
+	}
+	
+	/// Загружает свежие новости
+	func fetchFreshNews(completion: @escaping (_ indexSet: IndexSet?) -> Void) {
+
+		loader.loadNews(startTime: lastDate, startFrom: nil) { [weak self] news, _ in
+			if let newsCount = self?.news.count {
+				self?.news.insert(contentsOf: news, at: 0)
+				
+				let indexSet = IndexSet(integersIn: newsCount..<newsCount + news.count)
+				completion(indexSet)
+				return
+			}
+			completion(nil)
+		}
+	}
+	
+	/// Загружает свежие новости
+	func prefetchNews(completion: @escaping (_ indexSet: IndexSet?) -> Void) {
+		loader.loadNews(startTime: nil, startFrom: nextFrom) { [weak self] news, nextFrom in
+			if let newsCount = self?.news.count {
+				self?.nextFrom = nextFrom
+				self?.news.append(contentsOf: news)
+				
+				let indexSet = IndexSet(integersIn: newsCount..<newsCount + news.count)
+				completion(indexSet)
+				return
+			}
+			completion(nil)
 		}
 	}
 	

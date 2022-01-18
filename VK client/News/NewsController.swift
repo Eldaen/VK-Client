@@ -24,6 +24,9 @@ final class NewsController: MyCustomUIViewController {
 		case link
 	}
 	
+	/// Cостояние загрузки через pre-fretch
+	var isLoading = false
+	
 	/// Количество ячеек в секции новости
 	private let cellsCount: Int = 4
 	
@@ -59,6 +62,7 @@ final class NewsController: MyCustomUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+		setupRefreshControl()
         tableView.reloadData()
 		tableView.separatorStyle = .none
 		
@@ -70,6 +74,25 @@ final class NewsController: MyCustomUIViewController {
 			self?.tableView.reloadData()
 		}
     }
+	
+//MARK: - Pull to refresh
+	
+	/// Настраивает RefreshControl для контроллера
+	private func setupRefreshControl() {
+		tableView.refreshControl = UIRefreshControl()
+		tableView.refreshControl?.tintColor = .black
+		tableView.refreshControl?.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+	}
+	
+	/// Запрашивает обновление новостей, инициируется RefreshControl-ом
+	@objc func refreshNews() {
+		viewModel.fetchFreshNews { [weak self] indexSet in
+			guard let indexSet = indexSet else { return }
+			
+			self?.tableView.insertSections(indexSet, with: .automatic)
+			self?.tableView.refreshControl?.endRefreshing()
+		}
+	}
 }
 
 
@@ -162,8 +185,10 @@ private extension NewsController {
 		tableView.register(registerClass: NewsFooterCell.self)
 		tableView.register(registerClass: NewsLinkCell.self)
 		tableView.showsVerticalScrollIndicator = false
+		
 		tableView.dataSource = self
 		tableView.delegate = self
+		tableView.prefetchDataSource = self
 		
 		self.view.addSubview(tableView)
 	}
@@ -207,7 +232,25 @@ extension NewsController: ShowMoreDelegate {
 	func updateTextHeight(indexPath: IndexPath) {
 		tableView.beginUpdates()
 		tableView.endUpdates()
-		tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+	}
+}
+
+// MARK: - UITableViewDataSourcePrefetching
+extension NewsController: UITableViewDataSourcePrefetching {
+	func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+		guard let maxSection = indexPaths.map({ $0.section }).max() else { return }
+		
+		if maxSection > ( viewModel.news.count - 3 ),
+		   isLoading == false {
+			isLoading = true
+			
+			viewModel.prefetchNews { [weak self] indexSet in
+				guard let indexSet = indexSet else { return }
+				
+				self?.tableView.insertSections(indexSet, with: .automatic)
+				self?.isLoading = false
+			}
+		}
 	}
 }
 
