@@ -23,7 +23,10 @@ protocol NewsViewModelType {
 	func configureCell(cell: UITableViewCell, index: Int, type: NewsController.NewsCells)
 	
 	/// Скачиваем из сети список новостей для пользователя
-	func fetchNews(refresh: Bool, completion: @escaping (_ indexSet: IndexSet?) -> Void)
+	func fetchNews(completion: @escaping () -> Void)
+	
+	/// Загружает свежие новости
+	func fetchFreshNews(completion: @escaping (_ indexSet: IndexSet?) -> Void)
 	
 	/// Ставит лайк текущей новости
 	func setLike(post postId: Int, owner ownerId: Int, completion: @escaping (Int) -> Void)
@@ -73,23 +76,25 @@ final class NewsViewModel: NewsViewModelType {
 		}
 	}
 	
-	func fetchNews(refresh: Bool, completion: @escaping (_ indexSet: IndexSet?) -> Void) {
-		if refresh {
-			lastDate = news.first?.date
-		} else {
-			lastDate = nil
+	/// Загружает все новости
+	func fetchNews(completion: @escaping () -> Void) {
+		loader.loadNews(startTime: nil) { [weak self] news in
+			self?.news = news
+			completion()
 		}
+	}
+	
+	/// Загружает свежие новости
+	func fetchFreshNews(completion: @escaping (_ indexSet: IndexSet?) -> Void) {
+		lastDate = news.first?.date
+		
 		loader.loadNews(startTime: lastDate) { [weak self] news in
-			if refresh {
-				if let newsCount = self?.news.count {
-					self?.news.insert(contentsOf: news, at: 0)
-					
-					let indexSet = IndexSet(integersIn: newsCount..<newsCount + news.count)
-					completion(indexSet)
-					return
-				}
-			} else {
-				self?.news = news
+			if let newsCount = self?.news.count {
+				self?.news.insert(contentsOf: news, at: 0)
+				
+				let indexSet = IndexSet(integersIn: newsCount..<newsCount + news.count)
+				completion(indexSet)
+				return
 			}
 			completion(nil)
 		}

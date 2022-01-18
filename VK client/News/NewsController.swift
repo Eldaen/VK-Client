@@ -69,7 +69,7 @@ final class NewsController: MyCustomUIViewController {
 		setupSpinner()
 		spinner.startAnimating()
 		
-		viewModel.fetchNews(refresh: false) { [weak self] _ in
+		viewModel.fetchNews { [weak self] in
 			self?.spinner.stopAnimating()
 			self?.tableView.reloadData()
 		}
@@ -86,7 +86,7 @@ final class NewsController: MyCustomUIViewController {
 	
 	/// Запрашивает обновление новостей, инициируется RefreshControl-ом
 	@objc func refreshNews() {
-		viewModel.fetchNews(refresh: true) { [weak self] indexSet in
+		viewModel.fetchFreshNews { [weak self] indexSet in
 			guard let indexSet = indexSet else { return }
 			
 			self?.tableView.insertSections(indexSet, with: .automatic)
@@ -185,8 +185,10 @@ private extension NewsController {
 		tableView.register(registerClass: NewsFooterCell.self)
 		tableView.register(registerClass: NewsLinkCell.self)
 		tableView.showsVerticalScrollIndicator = false
+		
 		tableView.dataSource = self
 		tableView.delegate = self
+		tableView.prefetchDataSource = self
 		
 		self.view.addSubview(tableView)
 	}
@@ -230,6 +232,19 @@ extension NewsController: ShowMoreDelegate {
 	func updateTextHeight(indexPath: IndexPath) {
 		tableView.beginUpdates()
 		tableView.endUpdates()
+	}
+}
+
+// MARK: - UITableViewDataSourcePrefetching
+extension NewsController: UITableViewDataSourcePrefetching {
+	func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+		guard let maxSection = indexPaths.map({ $0.section }).max() else { return }
+		
+		if maxSection > ( viewModel.news.count - 3 ),
+		   isLoading == false {
+			isLoading = true
+			
+		}
 	}
 }
 
