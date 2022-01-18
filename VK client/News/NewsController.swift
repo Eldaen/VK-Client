@@ -82,47 +82,30 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 		}
 	}
 	
-	// отрисовываем ячейки
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		var cell: UITableViewCell = UITableViewCell()
 		guard let type = getCellType(for: indexPath) else { return UITableViewCell () }
 		
 		switch type {
 		case .author:
-			guard let authorCell = tableView.dequeueReusableCell(withIdentifier: NewsAuthorCell.reuseIdentifier,
-																 for: indexPath) as? NewsAuthorCell else {
-				return UITableViewCell()
-			}
+			let authorCell: NewsAuthorCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = authorCell
 		case .text:
-			guard let textCell = tableView.dequeueReusableCell(withIdentifier: NewsTextCell.reuseIdentifier,
-															   for: indexPath) as? NewsTextCell else {
-				return UITableViewCell()
-			}
+			let textCell: NewsTextCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = textCell
 		case .collection:
-			guard let collectionCell = tableView.dequeueReusableCell(withIdentifier: NewsCollectionCell.reuseIdentifier,
-																	 for: indexPath) as? NewsCollectionCell else {
-				return UITableViewCell()
-			}
+			let collectionCell: NewsCollectionCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = collectionCell
 		case .footer:
-			guard let footerCell = tableView.dequeueReusableCell(withIdentifier: NewsFooterCell.reuseIdentifier,
-																 for: indexPath) as? NewsFooterCell else {
-				return UITableViewCell()
-			}
+			let footerCell: NewsFooterCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = footerCell
 		case .link:
-			guard let linkCell = tableView.dequeueReusableCell(withIdentifier: NewsLinkCell.reuseIdentifier,
-															   for: indexPath) as? NewsLinkCell else {
-				return UITableViewCell()
-			}
+			let linkCell: NewsLinkCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 			cell = linkCell
 		}
 		
-		// конфигурируем ячейку
-		viewModel.configureCell(cell: cell, index: indexPath.section, type: type)
 		
+		viewModel.configureCell(cell: cell, index: indexPath.section, type: type)
 		return cell
 	}
 	
@@ -167,11 +150,11 @@ private extension NewsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		
-		tableView.register(NewsAuthorCell.self, forCellReuseIdentifier: NewsAuthorCell.reuseIdentifier)
-		tableView.register(NewsTextCell.self, forCellReuseIdentifier: NewsTextCell.reuseIdentifier)
-		tableView.register(NewsCollectionCell.self, forCellReuseIdentifier: NewsCollectionCell.reuseIdentifier)
-		tableView.register(NewsFooterCell.self, forCellReuseIdentifier: NewsFooterCell.reuseIdentifier)
-		tableView.register(NewsLinkCell.self, forCellReuseIdentifier: NewsLinkCell.reuseIdentifier)
+		tableView.register(registerClass: NewsAuthorCell.self)
+		tableView.register(registerClass: NewsTextCell.self)
+		tableView.register(registerClass: NewsCollectionCell.self)
+		tableView.register(registerClass: NewsFooterCell.self)
+		tableView.register(registerClass: NewsLinkCell.self)
 		tableView.showsVerticalScrollIndicator = false
 		tableView.dataSource = self
 		tableView.delegate = self

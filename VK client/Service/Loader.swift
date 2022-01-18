@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CryptoKit
 
 /// Протокол лоадера данных
 protocol Loader {
@@ -31,50 +30,6 @@ protocol Loader {
 
 // MARK: - Common methods
 extension Loader {
-	
-	/// Сохраняет картинку в файловую систему и удаляет текущую, если она есть с таким названием
-	func saveImage(imageName: String, image: UIImage) {
-		
-		guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-		
-		let fileName = SHA256.hash(data: Data(imageName.utf8)).description
-		let fileURL = documentsDirectory.appendingPathComponent(fileName)
-		
-		guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
-			return
-		}
-		
-		//Если файл есть, то удаляем
-		if FileManager.default.fileExists(atPath: fileURL.path) {
-			try? FileManager.default.removeItem(atPath: fileURL.path)
-		}
-		
-		// Пробуем записать, если не получилось, то ничего страшного
-		do {
-			try data.write(to: fileURL)
-		} catch {
-			print(error)
-		}
-	}
-	
-	
-	/// Загружает и возвращаетк артинку из файловой системы по имени, если нашлась
-	func loadImageFromDiskWith(imageName: String) -> UIImage? {
-		
-		let imageName = SHA256.hash(data: Data(imageName.utf8)).description
-		let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
-		
-		let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
-		let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
-		
-		if let dirPath = paths.first {
-			let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(imageName)
-			let image = UIImage(contentsOfFile: imageUrl.path)
-			return image
-		}
-		
-		return nil
-	}
 	
 	/// Проверяет, свежие ли данные, true - всё хорошо
 	func checkExpiry(key: String) -> Bool {
@@ -109,13 +64,7 @@ extension Loader {
 			return
 		}
 		
-		// Проверим наличие в файлах
-		if let image = loadImageFromDiskWith(imageName: imageUrl.absoluteString) {
-			completion(image)
-			return
-		}
-		
-		// Если нигде нет, то грузим
+		// Если нигде нет, то грузим и кешируем
 		networkManager.loadImage(url: imageUrl) { result in
 			switch result {
 			case .success(let data):
@@ -123,14 +72,7 @@ extension Loader {
 					return
 				}
 				
-				// Если пришлось загружать, то добавим в кэш
 				cache[imageUrl] = image
-				
-				// И в файлы сохраним
-				DispatchQueue.global(qos: .background).async {
-					saveImage(imageName: imageUrl.absoluteString, image: image)
-				}
-				
 				completion(image)
 			case .failure(let error):
 				debugPrint("Error: \(error.localizedDescription)")

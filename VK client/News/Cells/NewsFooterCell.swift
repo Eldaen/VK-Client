@@ -87,7 +87,6 @@ private extension NewsFooterCell {
 	func setupConstraints() {
 		
 		NSLayoutConstraint.activate([
-			footerView.topAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
 			footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
 			footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
 			footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -100,6 +99,10 @@ private extension NewsFooterCell {
 			viewsLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -10),
 			viewsLabel.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
 		])
+		
+		let footerTop = footerView.topAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20)
+		footerTop.priority = .init(rawValue: 999)
+		footerTop.isActive = true
 	}
 	
 	func setupCell() {

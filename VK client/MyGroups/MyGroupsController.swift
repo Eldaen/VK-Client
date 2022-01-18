@@ -79,12 +79,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(
-			withIdentifier: MyGroupsCell.reuseIdentifier,
-			for: indexPath) as? MyGroupsCell else {
-				return UITableViewCell()
-			}
-
+		let cell: MyGroupsCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 		viewModel.configureCell(cell: cell, index: indexPath.row)
 		return cell
 	}
@@ -136,7 +131,7 @@ private extension MyGroupsController {
 	func setupTableView() {
 		tableView.frame = self.view.bounds
 		tableView.rowHeight = 80
-		tableView.register(MyGroupsCell.self, forCellReuseIdentifier: MyGroupsCell.reuseIdentifier)
+		tableView.register(registerClass: MyGroupsCell.self)
 		tableView.dataSource = self
 		tableView.delegate = self
 		tableView.tableHeaderView = searchBar
