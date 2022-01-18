@@ -63,6 +63,13 @@ final class NewsTextCell: UITableViewCell, NewsTextCellType {
 		
 		selectionStyle = .none
 	}
+	
+	override func prepareForReuse() {
+		shortText = nil
+		fullText = nil
+		shortTextState = false
+		button.removeFromSuperview()
+	}
 }
 
 // MARK: - Private methods

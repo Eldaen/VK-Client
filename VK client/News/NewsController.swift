@@ -230,7 +230,6 @@ extension NewsController: ShowMoreDelegate {
 	func updateTextHeight(indexPath: IndexPath) {
 		tableView.beginUpdates()
 		tableView.endUpdates()
-		tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 	}
 }
 
