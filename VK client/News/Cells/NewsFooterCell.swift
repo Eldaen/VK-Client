@@ -121,9 +121,9 @@ private extension NewsFooterCell {
 	/// обновляет данные ячейки
 	func updateCellData(with model: NewsTableViewCellModelType) {
 		likesControl.setCount(with: model.likesModel?.count ?? 0)
-		commentsControl.setCount(with: 125)
+		commentsControl.setCount(with: model.comments?.count ?? 0)
 		commentsControl.setImage(with: "bubble.left")
-		repostsControl.setCount(with: 21)
+		repostsControl.setCount(with: model.reposts?.count ?? 0)
 		repostsControl.setImage(with: "arrowshape.turn.up.right")
 		viewsLabel.text = "🔍 \(model.views?.count ?? 0)"
 	}

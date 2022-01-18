@@ -10,6 +10,8 @@ import UIKit.UIImage
 struct demoNewsTableViewCellModel: Codable, NewsTableViewCellModelType {
 	var source: NewsSourceProtocol = UserModel()
 	var likesModel: LikesModel? = nil
+	var comments: CommentsModel? = nil
+	var reposts: RepostsModel? = nil
 	var views: Views? = nil
 	var postID: Int = 0
 	var postDate: String = "0"

@@ -12,6 +12,8 @@ protocol NewsTableViewCellModelType {
 	var source: NewsSourceProtocol { get }
 	var likesModel: LikesModel? { get }
 	var views: Views? { get }
+	var comments: CommentsModel? { get }
+	var reposts: RepostsModel? { get }
 	var postID: Int { get }
 	var postDate: String { get }
 	var date: Double { get }

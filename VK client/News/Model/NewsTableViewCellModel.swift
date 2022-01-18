@@ -11,6 +11,8 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
     var source: NewsSourceProtocol
 	var likesModel: LikesModel?
 	var views: Views?
+	var comments: CommentsModel?
+	var reposts: RepostsModel?
 	var postID: Int
     var postDate: String
 	var date: Double
@@ -30,6 +32,8 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
 		postId: Int,
 		likesModel: LikesModel? = nil,
 		views: Views? = nil,
+		comments: CommentsModel? = nil,
+		reposts: RepostsModel? = nil,
 		link: Link? = nil
 	) {
         self.source = source
@@ -41,6 +45,8 @@ struct NewsTableViewCellModel: NewsTableViewCellModelType {
         self.newsImageModels = newsImageModels
 		self.likesModel = likesModel
 		self.views = views
+		self.comments = comments
+		self.reposts = reposts
 		self.link = link
     }
 }

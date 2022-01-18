@@ -106,7 +106,6 @@ final class NetworkManager {
 		guard let url = urlComponents.url else {
 			fatalError("URL is invalid")
 		}
-		print("Request URL: \(url)")
 		
 		return url
 	}

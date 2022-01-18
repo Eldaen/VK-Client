@@ -159,10 +159,6 @@ private extension NewsService {
 			
 			let date = getDate(post.date)
 			let sourceId = post.sourceID
-			let text = post.text
-			let shortText = post.shortText
-			let views = post.views
-			let postId = post.postId
 			
 			source = getSource(groups: groups, users: users, sourceId: sourceId)
 			let imageLinksArray = getImages(post: post)
@@ -176,12 +172,14 @@ private extension NewsService {
 				source: source,
 				postDate: date.description,
 				date: Double(post.date),
-				postText: text ?? "",
-				shortText: shortText,
+				postText: post.text ?? "",
+				shortText: post.shortText,
 				newsImageModels: imageLinksArray,
-				postId: postId ?? 0,
+				postId: post.postId ?? 0,
 				likesModel: post.likes,
-				views: views,
+				views: post.views,
+				comments: post.comments,
+				reposts: post.reposts,
 				link: link
 			)
 			news.append(newsModel)
