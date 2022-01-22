@@ -64,11 +64,6 @@ class NewsControl: UIControl {
 		}
 	}
 	
-	/// Отправляет в ячейку информацию о том, что кто-то что-то лайкнул
-//	func setClickResponder(responder: CanLike) {
-//		self.responder = responder
-//	}
-	
 	/// Меняет вью с одной картинкой на вью с другой
 	@objc func onClick() {
 		

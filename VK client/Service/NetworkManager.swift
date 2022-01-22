@@ -8,7 +8,6 @@
 import UIKit
 
 /// Перечисление используемых нами методов из АПИ
-// TODO: - вынести такие методы отдельно в классы, из которых будут запросы
 enum apiMethods: String {
 	case friendsGet = "/method/friends.get"
 	case usersGet = "/method/users.get"
