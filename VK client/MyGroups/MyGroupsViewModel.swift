@@ -103,8 +103,14 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 	}
 	
 	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void) {
-		guard index < filteredGroups.count else { return }
-		guard index < groups.count else { return }
+		guard index < filteredGroups.count else {
+			completion(false)
+			return
+		}
+		guard index < groups.count else {
+			completion(false)
+			return
+		}
 		
 		loader.leaveGroup(id: id) { [weak self] result in
 			DispatchQueue.main.async {

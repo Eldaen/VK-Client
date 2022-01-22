@@ -117,4 +117,72 @@ class MyGroupsViewModelTests: XCTestCase {
 		}
 	}
 	
+	func testLeaveGroupCorrectId() throws {
+		//Given
+		let group1 = GroupModel()
+		group1.id = 1
+		
+		let group2 = GroupModel()
+		group2.id = 2
+		
+		let group3 = GroupModel()
+		group3.id = 3
+		
+		model.groups = [group1, group2, group3]
+		model.filteredGroups = [group1, group2, group3]
+		var leavingResult: Bool? = nil
+		let validatorExpectation = expectation(description: #function)
+		
+		//When
+		model.leaveGroup(id: 2, index: 1) { result in
+			leavingResult = result
+			validatorExpectation.fulfill()
+		}
+		
+		//Then
+		waitForExpectations(timeout: 1.0) { error in
+			if error != nil {
+				XCTFail()
+			}
+			
+			XCTAssertEqual(leavingResult, true)
+			XCTAssertEqual(self.model.groups, [group1, group3])
+			XCTAssertEqual(self.model.groups, self.model.filteredGroups)
+		}
+	}
+	
+	func testLeaveGroupBadIndex() throws {
+		//Given
+		let group1 = GroupModel()
+		group1.id = 1
+		
+		let group2 = GroupModel()
+		group2.id = 2
+		
+		let group3 = GroupModel()
+		group3.id = 3
+		
+		model.groups = [group1, group2, group3]
+		model.filteredGroups = [group1, group2, group3]
+		var leavingResult: Bool? = nil
+		let validatorExpectation = expectation(description: #function)
+		
+		//When
+		model.leaveGroup(id: 2, index: 5) { result in
+			leavingResult = result
+			validatorExpectation.fulfill()
+		}
+		
+		//Then
+		waitForExpectations(timeout: 1.0) { error in
+			if error != nil {
+				XCTFail()
+			}
+			
+			XCTAssertEqual(leavingResult, false)
+			XCTAssertEqual(self.model.groups, [group1, group2, group3])
+			XCTAssertEqual(self.model.groups, self.model.filteredGroups)
+		}
+	}
+	
 }
