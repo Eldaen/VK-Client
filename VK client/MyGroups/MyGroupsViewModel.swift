@@ -52,7 +52,7 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 	}
 	
 	func configureCell(cell: MyGroupsCell, index: Int) {
-		guard index <= filteredGroups.count else { return }
+		guard index < filteredGroups.count else { return }
 		
 		let name = filteredGroups[index].name
 		let image = filteredGroups[index].image
@@ -103,6 +103,9 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 	}
 	
 	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void) {
+		guard index < filteredGroups.count else { return }
+		guard index < groups.count else { return }
+		
 		loader.leaveGroup(id: id) { [weak self] result in
 			DispatchQueue.main.async {
 				if result == 1 {
