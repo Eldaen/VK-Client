@@ -80,6 +80,8 @@
 		D0D2F0BB2748EBD0008E9AB4 /* GroupsMyMainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0BA2748EBD0008E9AB4 /* GroupsMyMainResponse.swift */; };
 		D0E93FFE279168CC005A2879 /* demoNewsServiceReal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E93FFD279168CC005A2879 /* demoNewsServiceReal.swift */; };
 		D0E9400027916AC2005A2879 /* realNews.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E93FFF27916AC2005A2879 /* realNews.json */; };
+		D0E94015279C43C9005A2879 /* MyGroupsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E94014279C43C9005A2879 /* MyGroupsViewModelTests.swift */; };
+		D0E9401C279EB1CE005A2879 /* FriendsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E9401B279EB1CE005A2879 /* FriendsViewModelTests.swift */; };
 		D0EFE7D127635A8C00A8E66E /* AttachmentsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D027635A8C00A8E66E /* AttachmentsModel.swift */; };
 		D0EFE7D327673B9300A8E66E /* LikesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EFE7D227673B9300A8E66E /* LikesResponse.swift */; };
 		D0EFE7D5276795F200A8E66E /* news.json in Resources */ = {isa = PBXBuildFile; fileRef = D0EFE7D4276795F200A8E66E /* news.json */; };
@@ -110,6 +112,16 @@
 		D0F3CBB3277B0C82004653AE /* GroupsCompletionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB2277B0C82004653AE /* GroupsCompletionOperation.swift */; };
 		D0F3CBB5277B1409004653AE /* UpdateRealmDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3CBB4277B1409004653AE /* UpdateRealmDataOperation.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D0E9400E279C4353005A2879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D06313B8270B147E00D0E12C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D06313BF270B147E00D0E12C;
+			remoteInfo = "VK client";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		2818C9549F4475EAAA12766A /* Pods_VK_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VK_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +190,9 @@
 		D0D2F0BA2748EBD0008E9AB4 /* GroupsMyMainResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsMyMainResponse.swift; sourceTree = "<group>"; };
 		D0E93FFD279168CC005A2879 /* demoNewsServiceReal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoNewsServiceReal.swift; sourceTree = "<group>"; };
 		D0E93FFF27916AC2005A2879 /* realNews.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = realNews.json; sourceTree = "<group>"; };
+		D0E9400A279C4353005A2879 /* VKclientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKclientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0E94014279C43C9005A2879 /* MyGroupsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewModelTests.swift; sourceTree = "<group>"; };
+		D0E9401B279EB1CE005A2879 /* FriendsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewModelTests.swift; sourceTree = "<group>"; };
 		D0EFE7D027635A8C00A8E66E /* AttachmentsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsModel.swift; sourceTree = "<group>"; };
 		D0EFE7D227673B9300A8E66E /* LikesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesResponse.swift; sourceTree = "<group>"; };
 		D0EFE7D4276795F200A8E66E /* news.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = news.json; sourceTree = "<group>"; };
@@ -226,6 +241,13 @@
 				D095CAF3275F45E3002F66CC /* FirebaseDynamicLinks in Frameworks */,
 				D095CAED275F45E3002F66CC /* FirebaseAuth in Frameworks */,
 				D0F3CBAA277B00FD004653AE /* Alamofire in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0E94007279C4353005A2879 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				D06313C2270B147E00D0E12C /* VK client */,
+				D0E9400B279C4353005A2879 /* VKclientTests */,
 				D06313C1270B147E00D0E12C /* Products */,
 				0E1CB22FF9F1EDD05785EC55 /* Pods */,
 				6E6D29F8C27AB9FF2551FC7C /* Frameworks */,
@@ -408,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				D06313C0270B147E00D0E12C /* VK client.app */,
+				D0E9400A279C4353005A2879 /* VKclientTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -511,6 +535,15 @@
 				D0D2F0BA2748EBD0008E9AB4 /* GroupsMyMainResponse.swift */,
 			);
 			path = ApiGetGroups;
+			sourceTree = "<group>";
+		};
+		D0E9400B279C4353005A2879 /* VKclientTests */ = {
+			isa = PBXGroup;
+			children = (
+				D0E94014279C43C9005A2879 /* MyGroupsViewModelTests.swift */,
+				D0E9401B279EB1CE005A2879 /* FriendsViewModelTests.swift */,
+			);
+			path = VKclientTests;
 			sourceTree = "<group>";
 		};
 		D0EFE7DD276BB04300A8E66E /* Requests */ = {
@@ -617,6 +650,24 @@
 			productReference = D06313C0270B147E00D0E12C /* VK client.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D0E94009279C4353005A2879 /* VKclientTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0E94012279C4353005A2879 /* Build configuration list for PBXNativeTarget "VKclientTests" */;
+			buildPhases = (
+				D0E94006279C4353005A2879 /* Sources */,
+				D0E94007279C4353005A2879 /* Frameworks */,
+				D0E94008279C4353005A2879 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D0E9400F279C4353005A2879 /* PBXTargetDependency */,
+			);
+			name = VKclientTests;
+			productName = VKclientTests;
+			productReference = D0E9400A279C4353005A2879 /* VKclientTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -624,11 +675,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1300;
 				TargetAttributes = {
 					D06313BF270B147E00D0E12C = {
 						CreatedOnToolsVersion = 13.0;
+					};
+					D0E94009279C4353005A2879 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = D06313BF270B147E00D0E12C;
 					};
 				};
 			};
@@ -650,6 +705,7 @@
 			projectRoot = "";
 			targets = (
 				D06313BF270B147E00D0E12C /* VK client */,
+				D0E94009279C4353005A2879 /* VKclientTests */,
 			);
 		};
 /* End PBXProject section */
@@ -665,6 +721,13 @@
 				D095CAE6275F45B3002F66CC /* GoogleService-Info.plist in Resources */,
 				D03B188D275192BA00C483B3 /* groups.json in Resources */,
 				D03B18972754F26800C483B3 /* friends.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0E94008279C4353005A2879 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,7 +885,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0E94006279C4353005A2879 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0E9401C279EB1CE005A2879 /* FriendsViewModelTests.swift in Sources */,
+				D0E94015279C43C9005A2879 /* MyGroupsViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D0E9400F279C4353005A2879 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D06313BF270B147E00D0E12C /* VK client */;
+			targetProxy = D0E9400E279C4353005A2879 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D06313D2270B148000D0E12C /* Debug */ = {
@@ -1003,6 +1083,53 @@
 			};
 			name = Release;
 		};
+		D0E94010279C4353005A2879 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LSA8V5M5Q4;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Denis-Sizov.VKclientTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VK client.app/VK client";
+			};
+			name = Debug;
+		};
+		D0E94011279C4353005A2879 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LSA8V5M5Q4;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Denis-Sizov.VKclientTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VK client.app/VK client";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1020,6 +1147,15 @@
 			buildConfigurations = (
 				D06313D5270B148000D0E12C /* Debug */,
 				D06313D6270B148000D0E12C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0E94012279C4353005A2879 /* Build configuration list for PBXNativeTarget "VKclientTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0E94010279C4353005A2879 /* Debug */,
+				D0E94011279C4353005A2879 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

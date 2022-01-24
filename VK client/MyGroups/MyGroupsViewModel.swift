@@ -52,6 +52,8 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 	}
 	
 	func configureCell(cell: MyGroupsCell, index: Int) {
+		guard index < filteredGroups.count else { return }
+		
 		let name = filteredGroups[index].name
 		let image = filteredGroups[index].image
 		let id = filteredGroups[index].id
@@ -101,6 +103,15 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 	}
 	
 	func leaveGroup(id: Int, index: Int, completion: @escaping (Bool) -> Void) {
+		guard index < filteredGroups.count else {
+			completion(false)
+			return
+		}
+		guard index < groups.count else {
+			completion(false)
+			return
+		}
+		
 		loader.leaveGroup(id: id) { [weak self] result in
 			DispatchQueue.main.async {
 				if result == 1 {
@@ -113,26 +124,26 @@ final class MyGroupsViewModel: MyGroupsViewModelType {
 			}
 		}
 	}
-
-func search(_ text: String, completion: @escaping () -> Void) {
-	filteredGroups = []
 	
-	// Если строка поиска пустая, то показываем все группы
-	if text == "" {
+	func search(_ text: String, completion: @escaping () -> Void) {
+		filteredGroups = []
+		
+		// Если строка поиска пустая, то показываем все группы
+		if text == "" {
+			filteredGroups = groups
+			completion()
+		} else {
+			for group in groups {
+				if group.name.lowercased().contains(text.lowercased()) {
+					filteredGroups.append(group)
+				}
+			}
+			completion()
+		}
+	}
+	
+	func cancelSearch(completion: @escaping() -> Void) {
 		filteredGroups = groups
 		completion()
-	} else {
-		for group in groups {
-			if group.name.lowercased().contains(text.lowercased()) {
-				filteredGroups.append(group)
-			}
-		}
-		completion()
 	}
-}
-
-func cancelSearch(completion: @escaping() -> Void) {
-	filteredGroups = groups
-	completion()
-}
 }

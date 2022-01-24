@@ -48,7 +48,10 @@ final class FriendsViewModel: FriendsViewModelType {
 	}
 	
 	func configureCell(cell: FriendsTableViewCell, indexPath: IndexPath) {
+		guard indexPath.section < filteredData.count else { return }
 		let section = filteredData[indexPath.section]
+		
+		guard indexPath.row < section.data.count else { return }
 		let name = section.data[indexPath.row].name
 		let image = section.data[indexPath.row].image
 		
