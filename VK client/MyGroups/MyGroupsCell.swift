@@ -14,14 +14,14 @@ final class MyGroupsCell: UITableViewCell {
 	var id: Int?
     
 	/// Название группы
-	private let groupName: UILabel = {
+	let groupName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}()
 	
 	/// Логотип группы
-	private let groupImage: UIImageView = {
+	let groupImage: UIImageView = {
 		let image = UIImageView()
 		image.translatesAutoresizingMaskIntoConstraints = false
 		image.contentMode = .scaleAspectFit

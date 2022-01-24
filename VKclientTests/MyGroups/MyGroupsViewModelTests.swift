@@ -185,4 +185,42 @@ class MyGroupsViewModelTests: XCTestCase {
 		}
 	}
 	
+	func testConfigureCellWithValues() throws {
+		
+		//Given
+		let cell = MyGroupsCell()
+		
+		let group1 = GroupModel()
+		group1.id = 1
+		group1.image = "pepe-pirate"
+		group1.name = "Пикабу"
+		let index = 0
+		
+		let expectedResult = UILabel()
+		expectedResult.text = group1.name
+		
+		model.filteredGroups = [group1]
+		
+		//When
+		model.configureCell(cell: cell, index: index)
+		
+		//Then
+		XCTAssertEqual(cell.groupName.text, group1.name)
+	}
+	
+	func testConfigureCellBadIndex() throws {
+		//Given
+		let index = 10
+		let cell = MyGroupsCell()
+		let group1 = GroupModel()
+		group1.name = "Программисты"
+		
+		model.filteredGroups = [group1]
+		
+		//When
+		model.configureCell(cell: cell, index: index)
+		
+		//Then
+		XCTAssertNotEqual(cell.groupName.text, group1.name)
+	}
 }
