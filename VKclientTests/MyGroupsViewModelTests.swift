@@ -66,6 +66,7 @@ class MyGroupsViewModelTests: XCTestCase {
 		}
 	}
 	
+	/// Тест поиска с корректными данными
 	func testSearchWithValues() throws {
 		
 		//Given
@@ -98,6 +99,7 @@ class MyGroupsViewModelTests: XCTestCase {
 		}
 	}
 	
+	/// Тест отмены поиска
 	func testCancelSearch() throws {
 		
 		//Given
@@ -117,7 +119,9 @@ class MyGroupsViewModelTests: XCTestCase {
 		}
 	}
 	
+	/// Тест выхода из группы с корректным ID
 	func testLeaveGroupCorrectId() throws {
+		
 		//Given
 		let group1 = GroupModel()
 		group1.id = 1
@@ -151,6 +155,7 @@ class MyGroupsViewModelTests: XCTestCase {
 		}
 	}
 	
+	/// Тест выхода из группы с плохим ID
 	func testLeaveGroupBadIndex() throws {
 		//Given
 		let group1 = GroupModel()
@@ -185,6 +190,7 @@ class MyGroupsViewModelTests: XCTestCase {
 		}
 	}
 	
+	/// Тест конфигурации ячейки с корректными данными
 	func testConfigureCellWithValues() throws {
 		
 		//Given
@@ -208,6 +214,7 @@ class MyGroupsViewModelTests: XCTestCase {
 		XCTAssertEqual(cell.groupName.text, group1.name)
 	}
 	
+	/// Тест конфигурации с плохим индексом
 	func testConfigureCellBadIndex() throws {
 		//Given
 		let index = 10

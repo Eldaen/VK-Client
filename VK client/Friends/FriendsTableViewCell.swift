@@ -42,6 +42,11 @@ final class FriendsTableViewCell: UITableViewCell {
 		return self.friendImage.image
 	}
 	
+	/// Возвращает имя друга
+	func getFriendName() -> String {
+		return friendName.text ?? ""
+	}
+	
 	/// Меняет картинку, используется для замены после подгрузки из сети
 	func updateImage(with image: UIImage) {
 		friendImage.image = image
