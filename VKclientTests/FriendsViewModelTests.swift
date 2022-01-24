@@ -168,4 +168,37 @@ class FriendsViewModelTests: XCTestCase {
 			XCTAssertEqual(self.model.filteredData, self.model.friends)
 		}
 	}
+	
+	func testCancelSearch() {
+		//Given
+		let user1 = UserModel()
+		user1.name = "Vasia"
+		user1.image = "vasia"
+		let section1 = FriendsSection(key: "V", data: [user1])
+		
+		let user2 = UserModel()
+		user2.name = "Misha"
+		user2.image = "misha"
+		let section2 = FriendsSection(key: "M", data: [user2])
+		
+		let user3 = UserModel()
+		user3.name = "Petia"
+		user3.image = "petia"
+		let section3 = FriendsSection(key: "P", data: [user3])
+		
+		model.friends = [section1, section2, section3]
+		let validatorExpectation = expectation(description: #function)
+		
+		//When
+		model.cancelSearch { validatorExpectation.fulfill() }
+		
+		//Then
+		waitForExpectations(timeout: 1.0) { error in
+			if error != nil {
+				XCTFail()
+			}
+			
+			XCTAssertEqual(self.model.filteredData, self.model.friends)
+		}
+	}
 }
