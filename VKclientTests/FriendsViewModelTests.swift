@@ -100,7 +100,13 @@ class FriendsViewModelTests: XCTestCase {
 		let user3 = UserModel()
 		user3.name = "Petia"
 		user3.image = "petia"
-		let section3 = FriendsSection(key: "P", data: [user3])
+		
+		let user4 = UserModel()
+		user4.name = "Penia"
+		user4.image = "dima"
+		
+		let section3 = FriendsSection(key: "P", data: [user3, user4])
+
 		
 		model.friends = [section1, section2, section3]
 		let searchQuery = "ia"
@@ -120,9 +126,46 @@ class FriendsViewModelTests: XCTestCase {
 			XCTAssertEqual(self.model.filteredData.count, 2)
 			XCTAssertEqual(self.model.filteredData[0], section1)
 			XCTAssertEqual(self.model.filteredData[1], section3)
+			XCTAssertEqual(self.model.filteredData[1].data.count, 2)
 			XCTAssertEqual(self.model.filteredData[0].data.first?.name, user1.name)
 			XCTAssertEqual(self.model.filteredData[1].data.first?.name, user3.name)
 		}
 	}
-
+	
+	/// Тестирует поиск по друзьям c пустым запросом
+	func testSearchEmptyData() throws {
+		//Given
+		let user1 = UserModel()
+		user1.name = "Vasia"
+		user1.image = "vasia"
+		let section1 = FriendsSection(key: "V", data: [user1])
+		
+		let user2 = UserModel()
+		user2.name = "Misha"
+		user2.image = "misha"
+		let section2 = FriendsSection(key: "M", data: [user2])
+		
+		let user3 = UserModel()
+		user3.name = "Petia"
+		user3.image = "petia"
+		let section3 = FriendsSection(key: "P", data: [user3])
+		
+		model.friends = [section1, section2, section3]
+		let searchQuery = ""
+		let validatorExpectation = expectation(description: #function)
+		
+		//When
+		model.search(searchQuery) {
+			validatorExpectation.fulfill()
+		}
+		
+		//Then
+		waitForExpectations(timeout: 1.0) { error in
+			if error != nil {
+				XCTFail()
+			}
+			
+			XCTAssertEqual(self.model.filteredData, self.model.friends)
+		}
+	}
 }
