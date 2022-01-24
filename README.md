@@ -23,7 +23,7 @@
 ![изображение](https://user-images.githubusercontent.com/13965776/143597464-1f039172-ff20-469d-8b4e-ce2235a17568.png)
 ![изображение](https://user-images.githubusercontent.com/13965776/143597527-67403a2d-6f53-460a-b69e-6d7405ff9452.png)
 ![изображение](https://user-images.githubusercontent.com/13965776/143597655-1b30fda5-b893-474e-ad63-32325aca5572.png)
-![изображение](https://user-images.githubusercontent.com/13965776/143597696-ca1b7503-2514-441a-babb-128990ab2b16.png)
+![изображение](https://user-images.githubusercontent.com/13965776/150780859-ae17eae1-2e68-410c-9e1d-f37b30c769f1.png)
 
 # Возможности <a name="features"></a>
 - Авторизация через Webview вконтакте
@@ -50,6 +50,7 @@
 	- Отображение новостей
 	- Возможность лайкнуть
 	- Скролл нескольких картинок
+	- Показать полностью текст новости
 
 # Инструменты и технологии <a name="technologies"></a>
 
@@ -60,11 +61,14 @@
 5. Dependency Injection
 6. Assembly сервис, загружает разные модели в live и demo режимах
 7. GCD
-8. Кастомные ячейки таблиц
-9. Кастомные ячейки коллекций
-10. UICollectionViewDiffableDataSource
-11. **Composition Layout** в коллекции новостей
-12. Отдельные сервисы для загрузки данных
-13. Сохранение картинок в файловую систему с именем SHA256 от ссылки
+8. Operations
+9. Кастомные ячейки таблиц
+10. Кастомные ячейки коллекций
+11. UICollectionViewDiffableDataSource
+12. **Composition Layout** в коллекции новостей
+13. Infinite scroll + Pull to refresh в новостях
+14. Отдельные сервисы для загрузки данных
+15. Сохранение картинок в файловую систему с именем SHA256 от ссылки
+16. **XCTest**
 
 и другое
