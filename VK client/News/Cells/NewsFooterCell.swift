@@ -54,7 +54,7 @@ final class NewsFooterCell: UITableViewCell, NewsFooterCellType {
 	
 	private let viewsLabel: UILabel = {
 		let views = UILabel(frame: .zero)
-		views.font = UIFont.systemFont(ofSize: 14)
+		views.font = UIFont.fourteen
 		views.translatesAutoresizingMaskIntoConstraints = false
 		return views
 	}()

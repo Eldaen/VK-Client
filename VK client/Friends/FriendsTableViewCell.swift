@@ -13,7 +13,7 @@ final class FriendsTableViewCell: UITableViewCell {
 	private let friendName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 17)
+		label.font = UIFont.seventeen
 		label.textColor = .black
 		return label
 	}()

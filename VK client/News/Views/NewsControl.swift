@@ -40,7 +40,7 @@ class NewsControl: UIControl {
 		label.frame = CGRect(x: 30, y: 8, width: 50, height: 12)
 		label.text = String(count)
 		label.textAlignment = .left
-		label.font = UIFont.systemFont(ofSize: 16)
+		label.font = UIFont.sixteen
 		
 		// нужно создать пустую вью подложку, чтобы на ней анимировались лайки, на сам лайк контрол нельзя
 		bgView.frame = bounds

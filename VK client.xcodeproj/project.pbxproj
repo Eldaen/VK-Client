@@ -47,6 +47,7 @@
 		D06313C6270B147E00D0E12C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06313C5270B147E00D0E12C /* SceneDelegate.swift */; };
 		D06313C8270B147E00D0E12C /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06313C7270B147E00D0E12C /* LoginController.swift */; };
 		D06313CD270B148000D0E12C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D06313CC270B148000D0E12C /* Assets.xcassets */; };
+		D07CB52E27AE9B0800308A20 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CB52D27AE9B0800308A20 /* UIFont.swift */; };
 		D0800D13272698BF00347AB7 /* NewsTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D12272698BF00347AB7 /* NewsTableViewCellModel.swift */; };
 		D0800D15272698DA00347AB7 /* NewsCollectionViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D14272698DA00347AB7 /* NewsCollectionViewCellModel.swift */; };
 		D0800D192727F73900347AB7 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D182727F73900347AB7 /* LoadingView.swift */; };
@@ -168,6 +169,7 @@
 		D06313C7270B147E00D0E12C /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		D06313CC270B148000D0E12C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D06313D1270B148000D0E12C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D07CB52D27AE9B0800308A20 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		D0800D12272698BF00347AB7 /* NewsTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCellModel.swift; sourceTree = "<group>"; };
 		D0800D14272698DA00347AB7 /* NewsCollectionViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCellModel.swift; sourceTree = "<group>"; };
 		D0800D182727F73900347AB7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -597,6 +599,7 @@
 			children = (
 				D0F3CBA42776186D004653AE /* UICollectionReusableView.swift */,
 				D0F3CBA6277618E2004653AE /* UITableReusableView.swift */,
+				D07CB52D27AE9B0800308A20 /* UIFont.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				D0F3CBA7277618E2004653AE /* UITableReusableView.swift in Sources */,
 				D0D2F0AD2747CD17008E9AB4 /* ApiImage.swift in Sources */,
 				D050CCFD2716D8AE0076D78E /* FriendsTableViewCell.swift in Sources */,
+				D07CB52E27AE9B0800308A20 /* UIFont.swift in Sources */,
 				D0F3CBA52776186D004653AE /* UICollectionReusableView.swift in Sources */,
 				D0EFE7EA2770B22800A8E66E /* NewsCollectionCell.swift in Sources */,
 				D0EFE7E1276BB08800A8E66E /* FriendsCountResponse.swift in Sources */,

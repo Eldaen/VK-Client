@@ -29,7 +29,7 @@ final class NewsAuthorCell: UITableViewCell, NewsAuthorCellType {
 	private let userName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 17)
+		label.font = UIFont.seventeen
 		label.textColor = .black
 		return label
 	}()
@@ -37,7 +37,7 @@ final class NewsAuthorCell: UITableViewCell, NewsAuthorCellType {
 	private let postDate: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 14)
+		label.font = UIFont.fourteen
 		label.textColor = .black
 		return label
 	}()
