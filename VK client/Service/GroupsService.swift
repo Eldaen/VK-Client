@@ -26,7 +26,7 @@ protocol GroupsLoader: Loader {
 /// Сервис загрузки данных для групп из сети
 final class GroupsService: GroupsLoader {
 	
-	internal var networkManager: NetworkManager
+	internal var networkManager: NetworkManagerInterface
 	internal var cache: ImageCache
 	internal var persistence: PersistenceManager
 	
@@ -41,7 +41,7 @@ final class GroupsService: GroupsLoader {
 	/// Ключ для сохранения данных о просрочке в Userdefaults
 	let cacheKey = "groupsExpiry"
 	
-	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
+	required init(networkManager: NetworkManagerInterface, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
 		self.persistence = persistence

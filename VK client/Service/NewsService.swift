@@ -25,11 +25,11 @@ protocol NewsLoader: Loader {
 /// Сервис по загрузке данных новостей из сети
 final class NewsService: NewsLoader {
 	
-	var networkManager: NetworkManager
+	var networkManager: NetworkManagerInterface
 	var cache: ImageCache
 	var persistence: PersistenceManager
 	
-	init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
+	init(networkManager: NetworkManagerInterface, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
 		self.persistence = persistence

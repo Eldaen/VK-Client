@@ -16,7 +16,7 @@ import UIKit
 
 // Возвращаем какой-то массив данных, тут могла бы быть подгрузка из API
 final class demoNewsService: NewsLoader {
-	var networkManager: NetworkManager
+	var networkManager: NetworkManagerInterface
 	var cache: ImageCache
 	var persistence: PersistenceManager
 	
@@ -59,7 +59,7 @@ final class demoNewsService: NewsLoader {
 		[]
 	}
 	
-	init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
+	init(networkManager: NetworkManagerInterface, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
 		self.persistence = persistence
