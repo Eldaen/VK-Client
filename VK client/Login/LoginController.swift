@@ -34,7 +34,7 @@ final class LoginController: UIViewController {
 	
 	private let loginLabel: UILabel = {
 		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 17)
+		label.font = UIFont.seventeen
 		label.textColor = .black
 		label.text = "Login"
 		label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +43,7 @@ final class LoginController: UIViewController {
 	
 	private let passwordLabel: UILabel = {
 		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 17)
+		label.font = UIFont.seventeen
 		label.textColor = .black
 		label.text = "Password"
 		label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +53,7 @@ final class LoginController: UIViewController {
 	private let loginInput: UITextField = {
 		let textField = UITextField()
 		textField.layer.cornerRadius = 8
-		textField.font = UIFont.systemFont(ofSize: 14)
+		textField.font = UIFont.fourteen
 		textField.textColor = .black
 		textField.backgroundColor = .white
 		textField.textAlignment = .center
@@ -65,7 +65,7 @@ final class LoginController: UIViewController {
 	private let passwordInput: UITextField = {
 		let textField = UITextField()
 		textField.layer.cornerRadius = 8
-		textField.font = UIFont.systemFont(ofSize: 14)
+		textField.font = UIFont.fourteen
 		textField.textColor = .black
 		textField.backgroundColor = .white
 		textField.textAlignment = .center

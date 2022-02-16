@@ -22,7 +22,7 @@ final class NewsTextCell: UITableViewCell, NewsTextCellType {
 		text.translatesAutoresizingMaskIntoConstraints = false
 		text.lineBreakMode = .byWordWrapping
 		text.numberOfLines = 0
-		text.font = UIFont.systemFont(ofSize: 14)
+		text.font = UIFont.fourteen
 		text.textColor = .black
 		return text
 	}()

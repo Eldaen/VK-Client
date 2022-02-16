@@ -51,7 +51,7 @@ final class LikeControl: NewsControl {
         likesLabel.text = String(count)
         likesLabel.textAlignment = .left
         likesLabel.textColor = .red
-        likesLabel.font = UIFont.systemFont(ofSize: 16)
+        likesLabel.font = UIFont.sixteen
         
         // нужно создать пустую вью подложку, чтобы на ней анимировались лайки, на сам лайк контрол нельзя
         bgView.frame = bounds

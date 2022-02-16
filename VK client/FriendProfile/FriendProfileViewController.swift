@@ -19,7 +19,7 @@ final class FriendProfileViewController: UIViewController {
 	private let friendName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 17)
+		label.font = UIFont.seventeen
 		label.textColor = .black
 		return label
 	}()
@@ -27,7 +27,7 @@ final class FriendProfileViewController: UIViewController {
 	private let friendsCount: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 15)
+		label.font = UIFont.fithteen
 		label.textColor = .black
 		label.text = "300"
 		return label
@@ -36,7 +36,7 @@ final class FriendProfileViewController: UIViewController {
 	private let friendsText: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 15)
+		label.font = UIFont.fithteen
 		label.textColor = .black
 		label.text = "Друзья"
 		return label
@@ -45,7 +45,7 @@ final class FriendProfileViewController: UIViewController {
 	private let photosText: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 15)
+		label.font = UIFont.fithteen
 		label.textColor = .black
 		label.text = "Фото"
 		return label
@@ -54,7 +54,7 @@ final class FriendProfileViewController: UIViewController {
 	private let photosCount: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 15)
+		label.font = UIFont.fithteen
 		label.textColor = .black
 		return label
 	}()

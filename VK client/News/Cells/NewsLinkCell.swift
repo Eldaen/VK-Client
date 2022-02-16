@@ -21,7 +21,7 @@ final class NewsLinkCell: UITableViewCell, NewsLinkCellType {
 	private let linkTitle: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 14)
+		label.font = UIFont.fourteen
 		label.textColor = .black
 		return label
 	}()
@@ -29,7 +29,7 @@ final class NewsLinkCell: UITableViewCell, NewsLinkCellType {
 	private let linkCaption: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = UIFont.systemFont(ofSize: 12)
+		label.font = UIFont.twelve
 		label.textColor = .gray
 		return label
 	}()
