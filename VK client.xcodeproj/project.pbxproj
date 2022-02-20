@@ -387,6 +387,7 @@
 		D050CD122716E2830076D78E /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				D03B188F2752D7D400C483B3 /* CustomControllers */,
 				D0F3CBAB277B0283004653AE /* Operations */,
 				D050CD132716E2990076D78E /* UserService.swift */,
 				D050CD152716E2A50076D78E /* GroupsService.swift */,
@@ -397,6 +398,7 @@
 				D03B18822750EDC200C483B3 /* Assembly.swift */,
 				D03B18922754D56400C483B3 /* PersistenceManager.swift */,
 				D040E8D527BCF9130042FA12 /* NetworkLoggingProxy.swift */,
+				D0CB5639273E65FD00AE85DF /* Session.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -444,25 +446,32 @@
 		D06313C2270B147E00D0E12C /* VK client */ = {
 			isa = PBXGroup;
 			children = (
+				D07B34CB27BF9F7700172807 /* Flows */,
 				D0F3CB992775D765004653AE /* Extensions */,
-				D03B188F2752D7D400C483B3 /* CustomControllers */,
 				D03B18872751737A00C483B3 /* demo */,
 				D03B18812750EDA500C483B3 /* common */,
 				D0CB5638273E65EF00AE85DF /* Session */,
-				D050CD5A27241BAA0076D78E /* News */,
 				D050CD122716E2830076D78E /* Service */,
 				D050CD0D2716E1B30076D78E /* Model */,
-				D050CD082716E10F0076D78E /* Search Groups */,
-				D050CD032716DF680076D78E /* MyGroups */,
-				D050CCFE2716DDFF0076D78E /* FriendProfile */,
-				D03B187E2750DF1300C483B3 /* Gallery */,
-				D050CCF92716D87B0076D78E /* Friends */,
-				D08132142710719B00A280B0 /* Login */,
 				D06313CC270B148000D0E12C /* Assets.xcassets */,
 				D095CAE5275F45B3002F66CC /* GoogleService-Info.plist */,
 				D06313D1270B148000D0E12C /* Info.plist */,
 			);
 			path = "VK client";
+			sourceTree = "<group>";
+		};
+		D07B34CB27BF9F7700172807 /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				D050CD032716DF680076D78E /* MyGroups */,
+				D050CD082716E10F0076D78E /* Search Groups */,
+				D050CD5A27241BAA0076D78E /* News */,
+				D050CCFE2716DDFF0076D78E /* FriendProfile */,
+				D03B187E2750DF1300C483B3 /* Gallery */,
+				D050CCF92716D87B0076D78E /* Friends */,
+				D08132142710719B00A280B0 /* Login */,
+			);
+			path = Flows;
 			sourceTree = "<group>";
 		};
 		D0800D112726987A00347AB7 /* Model */ = {
@@ -508,7 +517,6 @@
 		D0CB5638273E65EF00AE85DF /* Session */ = {
 			isa = PBXGroup;
 			children = (
-				D0CB5639273E65FD00AE85DF /* Session.swift */,
 			);
 			path = Session;
 			sourceTree = "<group>";
