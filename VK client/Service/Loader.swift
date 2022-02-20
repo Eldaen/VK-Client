@@ -11,7 +11,7 @@ import UIKit
 protocol Loader {
 	
 	/// Переменная, хранящая в себе Networkmanager, он у нас один и других не будет, так что без протокола
-	var networkManager: NetworkManager { get set }
+	var networkManager: NetworkManagerInterface { get set }
 	
 	/// Кэш сервис
 	var cache: ImageCache { get set }
@@ -25,7 +25,7 @@ protocol Loader {
 	/// Вытаскивает из моделей картинок URL-ы картинок нужного размера
 	func sortImage(by sizeType: String, from array: [ApiImage]) -> [String]
 	
-	init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager)
+	init(networkManager: NetworkManagerInterface, cache: ImageCache, persistence: PersistenceManager)
 }
 
 // MARK: - Common methods

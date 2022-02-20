@@ -9,7 +9,7 @@ import UIKit
 
 // Сервис для загрузки новостей из JSON файла по примеру АПИ вконтакте
 final class demoNewsServiceReal: NewsLoader {
-	var networkManager: NetworkManager
+	var networkManager: NetworkManagerInterface
 	var cache: ImageCache
 	var persistence: PersistenceManager
 	
@@ -63,7 +63,7 @@ final class demoNewsServiceReal: NewsLoader {
 		[]
 	}
 	
-	init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
+	init(networkManager: NetworkManagerInterface, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
 		self.persistence = persistence

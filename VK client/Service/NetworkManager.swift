@@ -28,7 +28,21 @@ enum httpMethods: String {
 }
 
 /// Класс, управляющий запросами в сеть
-final class NetworkManager {
+protocol NetworkManagerInterface {
+	
+	/// Запрашивает данные по заданным параметрам. Возвращает либо результат Generic типа, либо ошибку
+	func request<T: Decodable>(method: apiMethods,
+							   httpMethod: httpMethods,
+							   params: [String: String],
+							   completion: @escaping (Result<T, Error>) -> Void
+	)
+	
+	/// Загружает данные для картинки и возвращает их, если получилось
+	func loadImage(url: URL, completion: @escaping (Result<Data, Error>) -> Void)
+}
+
+/// Класс, управляющий запросами в сеть
+final class NetworkManager: NetworkManagerInterface {
 	
 	private let session: URLSession = {
 		let config = URLSessionConfiguration.default
@@ -37,13 +51,12 @@ final class NetworkManager {
 	}()
 	
 	/// Декордер JSON, который используем для парсинга ответов
-	let decoder = JSONDecoder()
+	private let decoder = JSONDecoder()
 	
 	// Cтандартные данные
 	private let scheme = "https"
 	private let host = "api.vk.com"
 	
-	/// Запрашивает данные по заданным параметрам. Возвращает либо результат Generic типа, либо ошибку
 	func request<T: Decodable>(method: apiMethods,
 							   httpMethod: httpMethods,
 							   params: [String: String],
@@ -80,7 +93,7 @@ final class NetworkManager {
 		}.resume()
 	}
 	
-	func configureUrl(token: String,
+	private func configureUrl(token: String,
 					  method: apiMethods,
 					  httpMethod: httpMethods,
 					  params: [String: String]) -> URL {
@@ -109,7 +122,6 @@ final class NetworkManager {
 		return url
 	}
 	
-	/// Загружает данные для картинки и возвращает их, если получилось
 	func loadImage(url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
 		
 		/// Возвращаем разультат через клоужер в основую очередь

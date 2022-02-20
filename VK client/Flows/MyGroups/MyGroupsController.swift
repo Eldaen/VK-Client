@@ -159,17 +159,11 @@ private extension MyGroupsController {
 	
 	/// Отображение ошибки о том, что не удалось выйти из группы
 	func showLeavingError() {
-		// Создаём контроллер
 		let alert = UIAlertController(title: "Ошибка",
 									  message: "Не получилось выйти из группы", preferredStyle: .alert)
-		
-		// Создаем кнопку для UIAlertController
 		let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-		
-		// Добавляем кнопку на UIAlertController
 		alert.addAction(action)
 		
-		// Показываем UIAlertController
 		present(alert, animated: true, completion: nil)
 	}
 	

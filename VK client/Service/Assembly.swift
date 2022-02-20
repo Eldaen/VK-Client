@@ -15,6 +15,7 @@ final class Assembly {
 	var networkManager: NetworkManager
 	var cacheService: ImageCache
 	var persistence: PersistenceManager
+	var networkProxy: NetworkLoggingProxy
 	
 	var userService: UserLoader
 	var groupsService: GroupsLoader
@@ -39,16 +40,19 @@ final class Assembly {
 		let network = NetworkManager()
 		self.networkManager = network
 		
+		let proxy = NetworkLoggingProxy(networkManager: network)
+		self.networkProxy = proxy
+		
 		let persistence = RealmService()
 		self.persistence = persistence
 		
-		let userService = UserService(networkManager: network, cache: cache, persistence: persistence)
+		let userService = UserService(networkManager: proxy, cache: cache, persistence: persistence)
 		self.userService = userService
 		
-		let groupsService = GroupsService(networkManager: network, cache: cache, persistence: persistence)
+		let groupsService = GroupsService(networkManager: proxy, cache: cache, persistence: persistence)
 		self.groupsService = groupsService
 		
-		let newsService = NewsService(networkManager: network, cache: cache, persistence: persistence)
+		let newsService = NewsService(networkManager: proxy, cache: cache, persistence: persistence)
 		self.newsService = newsService
 		
 		self.myGroupsViewModel = MyGroupsViewModel(loader: groupsService)
@@ -66,9 +70,9 @@ final class Assembly {
 			groupsService = demoGroupService(networkManager: networkManager, cache: cacheService, persistence: persistence)
 			newsService = demoNewsServiceReal(networkManager: networkManager, cache: cacheService, persistence: persistence)
 		} else {
-			userService = UserService(networkManager: networkManager, cache: cacheService, persistence: persistence)
-			groupsService = GroupsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
-			newsService = NewsService(networkManager: networkManager, cache: cacheService, persistence: persistence)
+			userService = UserService(networkManager: networkProxy, cache: cacheService, persistence: persistence)
+			groupsService = GroupsService(networkManager: networkProxy, cache: cacheService, persistence: persistence)
+			newsService = NewsService(networkManager: networkProxy, cache: cacheService, persistence: persistence)
 		}
 		
 		myGroupsViewModel = MyGroupsViewModel(loader: groupsService)

@@ -23,14 +23,14 @@ protocol UserLoader: Loader {
 /// Сервис для загрузки данных пользователей из сети
 final class UserService: UserLoader {
 	
-	internal var networkManager: NetworkManager
+	internal var networkManager: NetworkManagerInterface
 	internal var cache: ImageCache
 	internal var persistence: PersistenceManager
 	
 	/// Ключ для сохранения данных о просрочке в Userdefaults
 	let cacheKey = "usersExpiry"
 	
-	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
+	required init(networkManager: NetworkManagerInterface, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
 		self.persistence = persistence

@@ -11,11 +11,11 @@ class demoGroupService: GroupsLoader {
 	
 	var groups: [GroupModel] = []
 	
-	var networkManager: NetworkManager
+	var networkManager: NetworkManagerInterface
 	var cache: ImageCache
 	var persistence: PersistenceManager
 	
-	required init(networkManager: NetworkManager, cache: ImageCache, persistence: PersistenceManager) {
+	required init(networkManager: NetworkManagerInterface, cache: ImageCache, persistence: PersistenceManager) {
 		self.networkManager = networkManager
 		self.cache = cache
 		self.persistence = persistence
