@@ -49,6 +49,7 @@
 		D06313C8270B147E00D0E12C /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06313C7270B147E00D0E12C /* LoginController.swift */; };
 		D06313CD270B148000D0E12C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D06313CC270B148000D0E12C /* Assets.xcassets */; };
 		D07B34CE27C22D1100172807 /* MyGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B34CD27C22D1100172807 /* MyGroupsView.swift */; };
+		D07B34D327C2352400172807 /* SearchGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B34D227C2352400172807 /* SearchGroupsView.swift */; };
 		D07CB52E27AE9B0800308A20 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CB52D27AE9B0800308A20 /* UIFont.swift */; };
 		D0800D13272698BF00347AB7 /* NewsTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D12272698BF00347AB7 /* NewsTableViewCellModel.swift */; };
 		D0800D15272698DA00347AB7 /* NewsCollectionViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D14272698DA00347AB7 /* NewsCollectionViewCellModel.swift */; };
@@ -173,6 +174,7 @@
 		D06313CC270B148000D0E12C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D06313D1270B148000D0E12C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D07B34CD27C22D1100172807 /* MyGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsView.swift; sourceTree = "<group>"; };
+		D07B34D227C2352400172807 /* SearchGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupsView.swift; sourceTree = "<group>"; };
 		D07CB52D27AE9B0800308A20 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		D0800D12272698BF00347AB7 /* NewsTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCellModel.swift; sourceTree = "<group>"; };
 		D0800D14272698DA00347AB7 /* NewsCollectionViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCellModel.swift; sourceTree = "<group>"; };
@@ -368,9 +370,10 @@
 		D050CD082716E10F0076D78E /* Search Groups */ = {
 			isa = PBXGroup;
 			children = (
+				D07B34D127C2351600172807 /* Model */,
+				D07B34D027C2351100172807 /* View */,
 				D050CD092716E12B0076D78E /* SearchGroupsController.swift */,
 				D050CD0B2716E13A0076D78E /* SearchGroupsCell.swift */,
-				D03B1877274FAABB00C483B3 /* SearchGroupsViewModel.swift */,
 			);
 			path = "Search Groups";
 			sourceTree = "<group>";
@@ -489,6 +492,22 @@
 			isa = PBXGroup;
 			children = (
 				D03B1875274F94DB00C483B3 /* MyGroupsViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D07B34D027C2351100172807 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D07B34D227C2352400172807 /* SearchGroupsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D07B34D127C2351600172807 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D03B1877274FAABB00C483B3 /* SearchGroupsViewModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -900,6 +919,7 @@
 				D0F3CBB5277B1409004653AE /* UpdateRealmDataOperation.swift in Sources */,
 				D050CD0C2716E13A0076D78E /* SearchGroupsCell.swift in Sources */,
 				D03B1876274F94DB00C483B3 /* MyGroupsViewModel.swift in Sources */,
+				D07B34D327C2352400172807 /* SearchGroupsView.swift in Sources */,
 				D03B187D2750D39300C483B3 /* FriendsProfileViewModel.swift in Sources */,
 				D095CAFF275F9756002F66CC /* FirebaseUser.swift in Sources */,
 				D06313C6270B147E00D0E12C /* SceneDelegate.swift in Sources */,

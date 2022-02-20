@@ -1,5 +1,5 @@
 //
-//  MyGroupsView.swift
+//  SearchGroupsView.swift
 //  VK client
 //
 //  Created by Денис Сизов on 20.02.2022.
@@ -7,18 +7,10 @@
 
 import UIKit
 
-/// Вью для MyGroupsController
-final class MyGroupsView: UIView {
+/// Вью для SearchGroupsController
+final class SearchGroupsView: UIView {
 	
 	// MARK: - Subviews
-	
-	/// Таблица с ячейками групп, в которых состоит пользователь
-	public let tableView: UITableView = {
-		let tableView = UITableView()
-		tableView.translatesAutoresizingMaskIntoConstraints = false
-		tableView.backgroundColor = .white
-		return tableView
-	}()
 	
 	/// Вью поиска
 	public let searchBar: UISearchBar = {
@@ -28,6 +20,14 @@ final class MyGroupsView: UIView {
 		searchBar.isTranslucent = false
 		searchBar.sizeToFit()
 		return searchBar
+	}()
+	
+	/// Таблица для найденных групп
+	public let tableView: UITableView = {
+		let tableView = UITableView()
+		tableView.translatesAutoresizingMaskIntoConstraints = false
+		tableView.backgroundColor = .white
+		return tableView
 	}()
 	
 	/// Индикатор загрузки
@@ -51,28 +51,17 @@ final class MyGroupsView: UIView {
 	
 	// MARK: - UI
 	
-	/// Конфигурирует вью
-	private func configureUI() {
+	/// Конфигурирует UI
+	private func configureUI () {
 		addSubviews()
-		setupTableView()
 		setupSpinner()
 		setupConstraints()
-	}
-	
-	/// Конфигурирует таблицу
-	private func setupTableView() {
-		tableView.rowHeight = 80
-	}
-	
-	/// Конфигурирует спиннер загрузки
-	func setupSpinner() {
-		spinner.center = self.center
+		setupTableView()
 	}
 	
 	/// Добавляет сабвью на основную вью
 	private func addSubviews() {
 		self.addSubview(tableView)
-		self.addSubview(spinner)
 		tableView.tableHeaderView = searchBar
 	}
 	
@@ -82,7 +71,16 @@ final class MyGroupsView: UIView {
 			tableView.topAnchor.constraint(equalTo: self.topAnchor),
 			tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 			tableView.leftAnchor.constraint(equalTo: self.leftAnchor),
-			tableView.rightAnchor.constraint(equalTo: self.rightAnchor)
+			tableView.rightAnchor.constraint(equalTo: self.rightAnchor),
 		])
+	}
+	
+	/// Конфигурирует спиннер загрузки
+	private func setupSpinner() {
+		spinner.center = self.center
+	}
+	
+	private func setupTableView() {
+		tableView.rowHeight = 80
 	}
 }

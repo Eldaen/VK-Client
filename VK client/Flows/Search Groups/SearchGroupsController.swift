@@ -9,20 +9,10 @@ import UIKit
 
 final class SearchGroupsController: UIViewController {
 	
-	private let searchBar: UISearchBar = {
-		let searchBar = UISearchBar()
-		searchBar.frame = .zero
-		searchBar.searchBarStyle = UISearchBar.Style.default
-		searchBar.isTranslucent = false
-		searchBar.sizeToFit()
-		return searchBar
-	}()
-	
-	private let tableView: UITableView = {
-		let tableView = UITableView()
-		tableView.backgroundColor = .white
-		return tableView
-	}()
+	private var groupsView: SearchGroupsView {
+		guard let view = self.view as? SearchGroupsView else { return SearchGroupsView() }
+		return view
+	}
 	
 	/// Делегат для добавления групп в список моих групп
 	weak var delegate: MyGroupsDelegate?
@@ -41,14 +31,22 @@ final class SearchGroupsController: UIViewController {
 	}
 
 	// MARK: - View controller life cycle
+	
+	override func loadView() {
+		super.loadView()
+		self.view = SearchGroupsView()
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
+		groupsView.searchBar.delegate = self
 		setupTableView()
-		setupConstraints()
+		
+		groupsView.spinner.startAnimating()
 		
 		viewModel.fetchGroups { [weak self] in
-			self?.tableView.reloadData()
+			self?.groupsView.spinner.stopAnimating()
+			self?.groupsView.tableView.reloadData()
 		}
     }
 }
@@ -81,7 +79,7 @@ extension SearchGroupsController: UITableViewDataSource, UITableViewDelegate {
 			} else {
 				self?.showJoiningError()
 			}
-			self?.tableView.deselectRow(at: indexPath, animated: true)
+			self?.groupsView.tableView.deselectRow(at: indexPath, animated: true)
 		}
 	}
 }
@@ -91,14 +89,14 @@ extension SearchGroupsController: UISearchBarDelegate {
 	
 	/// Основной метод, который осуществляет поиск
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		viewModel.search(searchText) {
-			self.tableView.reloadData()
+		viewModel.search(searchText) { [weak self] in
+			self?.groupsView.tableView.reloadData()
 		}
     }
 	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		viewModel.cancelSearch() {
-			self.tableView.reloadData()
+		viewModel.cancelSearch() { [weak self] in
+			self?.groupsView.tableView.reloadData()
 		}
 	}
 }
@@ -106,26 +104,11 @@ extension SearchGroupsController: UISearchBarDelegate {
 // MARK: - Private methods
 private extension SearchGroupsController {
 	
-	/// Задаём констрейнты таблице
-	func setupConstraints() {
-		NSLayoutConstraint.activate([
-			tableView.topAnchor.constraint(equalTo: view.topAnchor),
-			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-		])
-	}
-	
 	/// Конфигурируем ячейку
 	func setupTableView() {
-		tableView.frame = self.view.bounds
-		tableView.rowHeight = 80
-		tableView.register(registerClass: SearchGroupsCell.self)
-		tableView.dataSource = self
-		tableView.delegate = self
-		
-		self.view.addSubview(tableView)
-		tableView.tableHeaderView = searchBar
+		groupsView.tableView.register(registerClass: SearchGroupsCell.self)
+		groupsView.tableView.dataSource = self
+		groupsView.tableView.delegate = self
 	}
 	
 	/// Отображение ошибки о том, что уже состоит в группе
