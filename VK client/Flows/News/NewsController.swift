@@ -24,6 +24,12 @@ final class NewsController: MyCustomUIViewController {
 		case link
 	}
 	
+	/// Основная вью
+	private var newsView: NewsView {
+		guard let view = self.view as? NewsView else { return NewsView() }
+		return view
+	}
+	
 	/// Cостояние загрузки через pre-fretch
 	var isLoading = false
 	
@@ -32,20 +38,8 @@ final class NewsController: MyCustomUIViewController {
 	
 	/// Количество ячеек в секции новости, если есть ссылка
 	private let cellsWithLink: Int = 5
-    
-	private let tableView: UITableView = {
-		let tableView = UITableView()
-		tableView.backgroundColor = .white
-		tableView.translatesAutoresizingMaskIntoConstraints = false
-		return tableView
-	}()
 	
-	private let spinner: UIActivityIndicatorView = {
-		let spinner = UIActivityIndicatorView(style: .medium)
-		spinner.color = .black
-		return spinner
-	}()
-	
+	/// Вью модель новостей
 	private var viewModel: NewsViewModelType
 	
 	init(model: NewsViewModelType) {
@@ -59,29 +53,39 @@ final class NewsController: MyCustomUIViewController {
 	
 	
 // MARK: - View controller life cycle
+	
+	override func loadView() {
+		super.loadView()
+		self.view = NewsView()
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
 		setupRefreshControl()
-        tableView.reloadData()
-		tableView.separatorStyle = .none
+		newsView.tableView.reloadData()
+		newsView.tableView.separatorStyle = .none
 		
-		setupSpinner()
-		spinner.startAnimating()
+		newsView.spinner.startAnimating()
 		
 		viewModel.fetchNews { [weak self] in
-			self?.spinner.stopAnimating()
-			self?.tableView.reloadData()
+			self?.newsView.spinner.stopAnimating()
+			self?.newsView.tableView.reloadData()
 		}
     }
+	
+	override func viewWillLayoutSubviews() {
+		super.viewWillLayoutSubviews()
+		newsView.tableView.frame = newsView.bounds
+	}
 	
 //MARK: - Pull to refresh
 	
 	/// Настраивает RefreshControl для контроллера
 	private func setupRefreshControl() {
-		tableView.refreshControl = UIRefreshControl()
-		tableView.refreshControl?.tintColor = .black
-		tableView.refreshControl?.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+		newsView.tableView.refreshControl = UIRefreshControl()
+		newsView.tableView.refreshControl?.tintColor = .black
+		newsView.tableView.refreshControl?.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
 	}
 	
 	/// Запрашивает обновление новостей, инициируется RefreshControl-ом
@@ -89,8 +93,8 @@ final class NewsController: MyCustomUIViewController {
 		viewModel.fetchFreshNews { [weak self] indexSet in
 			guard let indexSet = indexSet else { return }
 			
-			self?.tableView.insertSections(indexSet, with: .automatic)
-			self?.tableView.refreshControl?.endRefreshing()
+			self?.newsView.tableView.insertSections(indexSet, with: .automatic)
+			self?.newsView.tableView.refreshControl?.endRefreshing()
 		}
 	}
 }
@@ -168,7 +172,7 @@ extension NewsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.tableView.deselectRow(at: indexPath, animated: true)
+		self.newsView.tableView.deselectRow(at: indexPath, animated: true)
 	}
 }
 
@@ -177,27 +181,19 @@ private extension NewsController {
 	
 	/// Конфигурируем TableView
 	func setupTableView() {
-		tableView.frame = self.view.bounds
+		let tableView = newsView.tableView
 		
 		tableView.register(registerClass: NewsAuthorCell.self)
 		tableView.register(registerClass: NewsTextCell.self)
 		tableView.register(registerClass: NewsCollectionCell.self)
 		tableView.register(registerClass: NewsFooterCell.self)
 		tableView.register(registerClass: NewsLinkCell.self)
-		tableView.showsVerticalScrollIndicator = false
 		
 		tableView.dataSource = self
 		tableView.delegate = self
 		tableView.prefetchDataSource = self
-		
-		self.view.addSubview(tableView)
 	}
-	
-	/// Конфигурирует спиннер загрузки
-	func setupSpinner() {
-		self.view.addSubview(spinner)
-		spinner.center = self.view.center
-	}
+
 	
 	/// Проверяет наличие ссылки в новости
 	func checkLink(for section: Int) -> Bool {
@@ -230,8 +226,8 @@ private extension NewsController {
 // MARK: - ShowMoreDelegate
 extension NewsController: ShowMoreDelegate {
 	func updateTextHeight(indexPath: IndexPath) {
-		tableView.beginUpdates()
-		tableView.endUpdates()
+		newsView.tableView.beginUpdates()
+		newsView.tableView.endUpdates()
 	}
 }
 
@@ -247,7 +243,7 @@ extension NewsController: UITableViewDataSourcePrefetching {
 			viewModel.prefetchNews { [weak self] indexSet in
 				guard let indexSet = indexSet else { return }
 				
-				self?.tableView.insertSections(indexSet, with: .automatic)
+				self?.newsView.tableView.insertSections(indexSet, with: .automatic)
 				self?.isLoading = false
 			}
 		}
