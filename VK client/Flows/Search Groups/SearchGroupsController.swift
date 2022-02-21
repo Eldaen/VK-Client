@@ -89,12 +89,17 @@ extension SearchGroupsController: UISearchBarDelegate {
 	
 	/// Основной метод, который осуществляет поиск
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		searchBar.showsCancelButton = true
 		viewModel.search(searchText) { [weak self] in
 			self?.groupsView.tableView.reloadData()
 		}
     }
 	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		searchBar.showsCancelButton = false
+		searchBar.text = nil
+		searchBar.resignFirstResponder() // скрыть клавиатуру
+		
 		viewModel.cancelSearch() { [weak self] in
 			self?.groupsView.tableView.reloadData()
 		}

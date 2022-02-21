@@ -93,7 +93,6 @@ extension FriendsViewController: UISearchBarDelegate {
 		}
 	}
 	
-	/// отмена поиска (через кнопку Cancel)
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
 		self.friendsView.searchBar.showsCancelButton = true // показыть кнопку Cancel
 		
@@ -121,8 +120,6 @@ extension FriendsViewController: UISearchBarDelegate {
 			
 			self.friendsView.searchBar.layoutSubviews()
 		})
-		
-		
 	}
 	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

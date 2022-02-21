@@ -158,6 +158,7 @@ final class LoginController: UIViewController {
 	}
 	
 	// MARK: - Keyboard methods
+	
 	/// Клавиатура появилась
 	@objc private func keyboardWasShown(notification: Notification) {
 		
@@ -200,6 +201,8 @@ private extension LoginController {
 		// если не задать frame, то не отрисовывается О_о
 		scrollView.frame = self.view.bounds
 		loginButton.addTarget(self, action: #selector(checkLogin), for: .touchUpInside)
+		loginInput.delegate = self
+		passwordInput.delegate = self
 		
 		view.addSubview(scrollView)
 		scrollView.addSubview(cloudView)
@@ -248,5 +251,15 @@ private extension LoginController {
 			loginButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 			loginButton.widthAnchor.constraint(equalToConstant: 65),
 		])
+	}
+}
+
+// MARK: - UITextFieldDelegate
+
+extension LoginController: UITextFieldDelegate {
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
 	}
 }
