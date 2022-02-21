@@ -10,27 +10,10 @@ import UIKit
 /// Отображает список всех пользователей
 final class FriendsViewController: MyCustomUIViewController {
 	
-	private let searchBar: UISearchBar = {
-		let searchBar = UISearchBar()
-		searchBar.frame = .zero
-		searchBar.searchBarStyle = UISearchBar.Style.default
-		searchBar.isTranslucent = false
-		searchBar.placeholder = "Искать"
-		searchBar.sizeToFit()
-		return searchBar
-	}()
-	
-	private let tableView: UITableView = {
-		let tableView = UITableView()
-		tableView.backgroundColor = .white
-		return tableView
-	}()
-	
-	private let spinner: UIActivityIndicatorView = {
-		let spinner = UIActivityIndicatorView(style: .medium)
-		spinner.color = .black
-		return spinner
-	}()
+	private var friendsView: FriendsView {
+		guard let view = self.view as? FriendsView else { return FriendsView() }
+		return view
+	}
 	
 	/// Вью модель контроллера Friends
 	private var viewModel: FriendsViewModelType
@@ -44,15 +27,18 @@ final class FriendsViewController: MyCustomUIViewController {
 	// Вынес сюда closure анимации, чтобы 2 раза не повторять код.
 	private func searchBarAnimationClosure () -> () -> Void {
 		
-		return {
-			guard let scopeView = self.searchBar.searchTextField.leftView else { return }
-			guard let placeholderLabel = self.searchBar.textField?.value(forKey: "placeholderLabel") as? UILabel else {
+		return { [weak self] in
+			guard let scopeView = self?.friendsView.searchBar.searchTextField.leftView else { return }
+			guard let placeholderLabel = self?.friendsView.searchBar.textField?.value(forKey: "placeholderLabel")
+					as? UILabel else {
 				return
 			}
 			
 			UIView.animate(withDuration: 0.3,
-						   animations: {
-				scopeView.frame = CGRect(x: self.searchBar.frame.width / 2 - 15,
+						   animations: { [weak self] in
+				guard let self = self else { return }
+				
+				scopeView.frame = CGRect(x: self.friendsView.searchBar.frame.width / 2 - 15,
 										 y: scopeView.frame.origin.y,
 										 width: scopeView.frame.width,
 										 height: scopeView.frame.height)
@@ -62,7 +48,7 @@ final class FriendsViewController: MyCustomUIViewController {
 				if xPosition > 20 {
 					placeholderLabel.frame.origin.x -= 20
 				}
-				self.searchBar.layoutSubviews()
+				self.friendsView.searchBar.layoutSubviews()
 			})
 		}
 	}
@@ -79,17 +65,21 @@ final class FriendsViewController: MyCustomUIViewController {
 	}
 	
 	// MARK: - View controller life cycle
+	
+	override func loadView() {
+		super.loadView()
+		self.view = FriendsView()
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupTableView()
-		setupConstraints()
 		
-		setupSpinner()
-		spinner.startAnimating()
+		friendsView.spinner.startAnimating()
 		
 		viewModel.fetchFriends { [weak self] in
-			self?.spinner.stopAnimating()
-			self?.tableView.reloadData()
+			self?.friendsView.spinner.stopAnimating()
+			self?.friendsView.tableView.reloadData()
 		}
 	}
 }
@@ -98,21 +88,22 @@ final class FriendsViewController: MyCustomUIViewController {
 extension FriendsViewController: UISearchBarDelegate {
 	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		viewModel.search(searchText) {
-			self.tableView.reloadData()
+		viewModel.search(searchText) { [weak self] in
+			self?.friendsView.tableView.reloadData()
 		}
 	}
 	
-	// отмена поиска (через кнопку Cancel)
+	/// отмена поиска (через кнопку Cancel)
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-		self.searchBar.showsCancelButton = true // показыть кнопку Cancel
+		self.friendsView.searchBar.showsCancelButton = true // показыть кнопку Cancel
 		
 		let cBtn = searchBar.value(forKey: "cancelButton") as! UIButton
 		cBtn.backgroundColor = .red
 		cBtn.setTitleColor(.white, for: .normal)
 		
 		UIView.animate(withDuration: 0.3,
-					   animations: {
+					   animations: { [weak self] in
+			guard let self = self else { return }
 			
 			// двигаем кнопку cancel
 			cBtn.frame = CGRect(x: cBtn.frame.origin.x - 50,
@@ -122,13 +113,13 @@ extension FriendsViewController: UISearchBarDelegate {
 			)
 			
 			// анимируем запуск поиска. -1 чтобы пошла анимация, тогда лупа плавно откатывается О_о
-			self.searchBar.frame = CGRect(x: self.searchBar.frame.origin.x,
-										  y: self.searchBar.frame.origin.y,
-										  width: self.searchBar.frame.size.width - 1,
-										  height: self.searchBar.frame.size.height
+			self.friendsView.searchBar.frame = CGRect(x: self.friendsView.searchBar.frame.origin.x,
+										  y: self.friendsView.searchBar.frame.origin.y,
+										  width: self.friendsView.searchBar.frame.size.width - 1,
+										  height: self.friendsView.searchBar.frame.size.height
 			)
 			
-			self.searchBar.layoutSubviews()
+			self.friendsView.searchBar.layoutSubviews()
 		})
 		
 		
@@ -148,8 +139,8 @@ extension FriendsViewController: UISearchBarDelegate {
 			closure()
 		})
 		
-		viewModel.cancelSearch() {
-			self.tableView.reloadData()
+		viewModel.cancelSearch() { [weak self] in
+			self?.friendsView.tableView.reloadData()
 		}
 	}
 }
@@ -159,17 +150,7 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	// настройка хедера ячеек и добавление букв в него
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		//Создаём кастомную вьюху заголовка
-		let header = UIView()
-		header.backgroundColor = .lightGray.withAlphaComponent(0.5)
-		
-		let leter: UILabel = UILabel(frame: CGRect(x: 30, y: 5, width: 20, height: 20))
-		leter.textColor = UIColor.black.withAlphaComponent(0.5)  // прозрачность только надписи
-		leter.text = String(viewModel.filteredData[section].key) // В зависимости от номера секции - даём ей разные названия из массива имён секций
-		leter.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
-		header.addSubview(leter)
-		
-		return header
+		return getHeader(for: section)
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -187,18 +168,15 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		// Кол-во секций
 		return viewModel.filteredData.count
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		// Кол-во рядов в секции
 		return viewModel.filteredData[section].data.count
 	}
 	
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 		let section = viewModel.friends[section]
-		
 		return String(section.key)
 	}
 	
@@ -229,43 +207,32 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
 			)
 		)
 		
-		self.tableView.deselectRow(at: indexPath, animated: true)
+		self.friendsView.tableView.deselectRow(at: indexPath, animated: true)
 		self.navigationController?.pushViewController(profileController, animated: true)
+	}
+	
+	private func getHeader(for section: Int) -> UIView {
+		let header = UIView()
+		header.backgroundColor = .lightGray.withAlphaComponent(0.5)
+		
+		let leter: UILabel = UILabel(frame: CGRect(x: 30, y: 5, width: 20, height: 20))
+		leter.textColor = UIColor.black.withAlphaComponent(0.5)
+		leter.text = String(viewModel.filteredData[section].key)
+		leter.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
+	
+		header.addSubview(leter)
+		return header
 	}
 }
 
 // MARK: - Private methods
 private extension FriendsViewController {
 	
-	/// Конфигурируем TableView
+	/// Конфигурирует TableView
 	func setupTableView() {
-		tableView.frame = self.view.bounds
-		tableView.rowHeight = 70
-		tableView.register(registerClass: FriendsTableViewCell.self)
-		tableView.showsVerticalScrollIndicator = false
-		tableView.sectionHeaderTopPadding = 0
-		tableView.sectionIndexColor = .black
-		tableView.dataSource = self
-		tableView.delegate = self
-		self.view.addSubview(tableView)
-		
-		searchBar.delegate = self
-		tableView.tableHeaderView = searchBar
-	}
-	
-	/// Задаём констрейнты таблице
-	func setupConstraints() {
-		NSLayoutConstraint.activate([
-			tableView.topAnchor.constraint(equalTo: view.topAnchor),
-			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-			tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-		])
-	}
-	
-	/// Конфигурирует спиннер загрузки
-	func setupSpinner() {
-		self.view.addSubview(spinner)
-		spinner.center = self.view.center
+		friendsView.tableView.register(registerClass: FriendsTableViewCell.self)
+		friendsView.tableView.dataSource = self
+		friendsView.tableView.delegate = self
+		friendsView.searchBar.delegate = self
 	}
 }

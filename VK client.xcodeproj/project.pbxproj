@@ -50,6 +50,7 @@
 		D06313CD270B148000D0E12C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D06313CC270B148000D0E12C /* Assets.xcassets */; };
 		D07B34CE27C22D1100172807 /* MyGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B34CD27C22D1100172807 /* MyGroupsView.swift */; };
 		D07B34D327C2352400172807 /* SearchGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B34D227C2352400172807 /* SearchGroupsView.swift */; };
+		D07B34D627C38D5200172807 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B34D527C38D5200172807 /* FriendsView.swift */; };
 		D07CB52E27AE9B0800308A20 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CB52D27AE9B0800308A20 /* UIFont.swift */; };
 		D0800D13272698BF00347AB7 /* NewsTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D12272698BF00347AB7 /* NewsTableViewCellModel.swift */; };
 		D0800D15272698DA00347AB7 /* NewsCollectionViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0800D14272698DA00347AB7 /* NewsCollectionViewCellModel.swift */; };
@@ -175,6 +176,7 @@
 		D06313D1270B148000D0E12C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D07B34CD27C22D1100172807 /* MyGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsView.swift; sourceTree = "<group>"; };
 		D07B34D227C2352400172807 /* SearchGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupsView.swift; sourceTree = "<group>"; };
+		D07B34D527C38D5200172807 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		D07CB52D27AE9B0800308A20 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		D0800D12272698BF00347AB7 /* NewsTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCellModel.swift; sourceTree = "<group>"; };
 		D0800D14272698DA00347AB7 /* NewsCollectionViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCellModel.swift; sourceTree = "<group>"; };
@@ -335,10 +337,10 @@
 		D050CCF92716D87B0076D78E /* Friends */ = {
 			isa = PBXGroup;
 			children = (
-				D0800D1C27283D1000347AB7 /* Views */,
+				D07B34D427C38D3C00172807 /* Model */,
+				D0800D1C27283D1000347AB7 /* View */,
 				D050CCFA2716D89A0076D78E /* FriendsViewController.swift */,
 				D050CCFC2716D8AE0076D78E /* FriendsTableViewCell.swift */,
-				D03B1879274FC5B200C483B3 /* FriendsViewModel.swift */,
 			);
 			path = Friends;
 			sourceTree = "<group>";
@@ -512,6 +514,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		D07B34D427C38D3C00172807 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D03B1879274FC5B200C483B3 /* FriendsViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D0800D112726987A00347AB7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -525,13 +535,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		D0800D1C27283D1000347AB7 /* Views */ = {
+		D0800D1C27283D1000347AB7 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				D050CD1727197EB30076D78E /* AvatarView.swift */,
 				D0800D1A27283B0800347AB7 /* CustomSearchBar.swift */,
+				D07B34D527C38D5200172807 /* FriendsView.swift */,
 			);
-			path = Views;
+			path = View;
 			sourceTree = "<group>";
 		};
 		D0800D1D272BF08300347AB7 /* Cells */ = {
@@ -925,6 +936,7 @@
 				D06313C6270B147E00D0E12C /* SceneDelegate.swift in Sources */,
 				D03B18912752D7EB00C483B3 /* MyCustomUIViewController.swift in Sources */,
 				D03B1874274F850900C483B3 /* NewsViewModel.swift in Sources */,
+				D07B34D627C38D5200172807 /* FriendsView.swift in Sources */,
 				D050CD1C271A07BA0076D78E /* LikeControl.swift in Sources */,
 				D0D2F0AB27478C53008E9AB4 /* Loader.swift in Sources */,
 				D0EFE7D72767A94600A8E66E /* NewsTableViewCellModelType.swift in Sources */,
