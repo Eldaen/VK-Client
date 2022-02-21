@@ -99,7 +99,6 @@ final class SearchGroupsViewModel: SearchGroupsViewModelType {
 		
 		loader.searchGroups(with: query) { [weak self] groups in
 			DispatchQueue.main.async {
-				self?.groups = groups
 				self?.filteredGroups = groups
 				completion()
 			}

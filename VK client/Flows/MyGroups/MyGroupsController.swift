@@ -18,27 +18,10 @@ final class MyGroupsController: MyCustomUIViewController {
 	/// Вью модель контроллера MyGroups
 	private var viewModel: MyGroupsViewModelType
 	
-	/// Таблица с ячейками групп, в которых состоит пользователь
-	private let tableView: UITableView = {
-		let tableView = UITableView()
-		tableView.backgroundColor = .white
-		return tableView
-	}()
-	
-	private let searchBar: UISearchBar = {
-		let searchBar = UISearchBar()
-		searchBar.frame = .zero
-		searchBar.searchBarStyle = UISearchBar.Style.default
-		searchBar.isTranslucent = false
-		searchBar.sizeToFit()
-		return searchBar
-	}()
-	
-	private let spinner: UIActivityIndicatorView = {
-		let spinner = UIActivityIndicatorView(style: .medium)
-		spinner.color = .black
-		return spinner
-	}()
+	private var myGroupsView: MyGroupsView {
+		guard let view = self.view as? MyGroupsView else { return MyGroupsView() }
+		return view
+	}
 	
 	// MARK: - Init
 	init(model: MyGroupsViewModelType) {
@@ -52,20 +35,23 @@ final class MyGroupsController: MyCustomUIViewController {
 	
 // MARK: - View controller life cycle
 	
+	override func loadView() {
+		super.loadView()
+		self.view = MyGroupsView()
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-		searchBar.delegate = self
+		myGroupsView.searchBar.delegate = self
 		
 		configureNavigation()
 		setupTableView()
-		setupConstraints()
 		
-		setupSpinner()
-		spinner.startAnimating()
+		myGroupsView.spinner.startAnimating()
 		
 		viewModel.fetchGroups { [weak self] in
-			self?.spinner.stopAnimating()
-			self?.tableView.reloadData()
+			self?.myGroupsView.spinner.stopAnimating()
+			self?.myGroupsView.tableView.reloadData()
 		}
     }
 }
@@ -93,7 +79,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 			
 			viewModel.leaveGroup(id: id, index: indexPath.row) { [weak self] result in
 				if result == true {
-					self?.tableView.deleteRows(at: [indexPath], with: .fade)
+					self?.myGroupsView.tableView.deleteRows(at: [indexPath], with: .fade)
 					self?.viewModel.fetchGroups { }
 				} else {
 					self?.showLeavingError()
@@ -107,7 +93,7 @@ extension MyGroupsController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.tableView.deselectRow(at: indexPath, animated: true)
+		myGroupsView.tableView.deselectRow(at: indexPath, animated: true)
 	}
 }
 
@@ -129,25 +115,9 @@ private extension MyGroupsController {
 	
 	// Конфигурируем ячейку
 	func setupTableView() {
-		tableView.frame = self.view.bounds
-		tableView.rowHeight = 80
-		tableView.register(registerClass: MyGroupsCell.self)
-		tableView.dataSource = self
-		tableView.delegate = self
-		tableView.tableHeaderView = searchBar
-		
-		self.view.addSubview(tableView)
-		
-	}
-	
-	// Задаём констрейнты таблице
-	func setupConstraints() {
-		NSLayoutConstraint.activate([
-			tableView.topAnchor.constraint(equalTo: view.topAnchor),
-			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-			tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-			tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
-		])
+		myGroupsView.tableView.register(registerClass: MyGroupsCell.self)
+		myGroupsView.tableView.dataSource = self
+		myGroupsView.tableView.delegate = self
 	}
 	
 	/// Запускает переход на экран со всеми группами
@@ -166,12 +136,6 @@ private extension MyGroupsController {
 		
 		present(alert, animated: true, completion: nil)
 	}
-	
-	/// Конфигурирует спиннер загрузки
-	func setupSpinner() {
-		self.view.addSubview(spinner)
-		spinner.center = self.view.center
-	}
 }
 
 // MARK: - Delegate for SearchGroupsController
@@ -181,7 +145,7 @@ extension MyGroupsController: MyGroupsDelegate {
 	func groupDidSelect(name: String, id: Int) {
 		viewModel.addFirebaseUser(name: name, id: id)
 		viewModel.fetchGroups() { [weak self] in
-			self?.tableView.reloadData()
+			self?.myGroupsView.tableView.reloadData()
 		}
 	}
 }
@@ -191,15 +155,20 @@ extension MyGroupsController: UISearchBarDelegate {
 	
 	/// Основной метод, который осуществляет поиск
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		viewModel.search(searchText) {
-			self.tableView.reloadData()
+		searchBar.showsCancelButton = true
+		viewModel.search(searchText) { [weak self] in
+			self?.myGroupsView.tableView.reloadData()
 		}
 	}
 	
 	/// Отменяет поиск
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		viewModel.cancelSearch() {
-			self.tableView.reloadData()
+		searchBar.showsCancelButton = false
+		searchBar.text = nil
+		searchBar.resignFirstResponder()
+		
+		viewModel.cancelSearch() { [weak self] in
+			self?.myGroupsView.tableView.reloadData()
 		}
 	}
 }
