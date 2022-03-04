@@ -75,6 +75,8 @@
 		D095CAFD275F45E3002F66CC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D095CAFC275F45E3002F66CC /* FirebaseStorage */; };
 		D095CAFF275F9756002F66CC /* FirebaseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D095CAFE275F9756002F66CC /* FirebaseUser.swift */; };
 		D095CB01275F97D2002F66CC /* FirebaseGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D095CB00275F97D2002F66CC /* FirebaseGroup.swift */; };
+		D0B1C23B27D232EF006EE376 /* AppStartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B1C23A27D232EF006EE376 /* AppStartManager.swift */; };
+		D0B1C23E27D238A9006EE376 /* AppModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B1C23D27D238A9006EE376 /* AppModeManager.swift */; };
 		D0CB563A273E65FD00AE85DF /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB5639273E65FD00AE85DF /* Session.swift */; };
 		D0CB563C2743A5D200AE85DF /* VKLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB563B2743A5D200AE85DF /* VKLoginController.swift */; };
 		D0CB563E2743F58300AE85DF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB563D2743F58300AE85DF /* NetworkManager.swift */; };
@@ -192,6 +194,8 @@
 		D095CAE5275F45B3002F66CC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D095CAFE275F9756002F66CC /* FirebaseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUser.swift; sourceTree = "<group>"; };
 		D095CB00275F97D2002F66CC /* FirebaseGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseGroup.swift; sourceTree = "<group>"; };
+		D0B1C23A27D232EF006EE376 /* AppStartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartManager.swift; sourceTree = "<group>"; };
+		D0B1C23D27D238A9006EE376 /* AppModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModeManager.swift; sourceTree = "<group>"; };
 		D0CB5639273E65FD00AE85DF /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		D0CB563B2743A5D200AE85DF /* VKLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginController.swift; sourceTree = "<group>"; };
 		D0CB563D2743F58300AE85DF /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -387,6 +391,7 @@
 		D050CD0D2716E1B30076D78E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D050CD122716E2830076D78E /* Service */,
 				D05028E82749087C00F912EE /* BasicModels */,
 				D0D2F0B62748EAF5008E9AB4 /* ApiGetGroups */,
 				D0D2F0B32747D1F0008E9AB4 /* ApiUserImages */,
@@ -399,6 +404,8 @@
 		D050CD122716E2830076D78E /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				D0B1C23C27D2389D006EE376 /* AppModeManager */,
+				D0B1C23927D232DC006EE376 /* AppStartManager */,
 				D03B188F2752D7D400C483B3 /* CustomControllers */,
 				D0F3CBAB277B0283004653AE /* Operations */,
 				D050CD132716E2990076D78E /* UserService.swift */,
@@ -463,7 +470,6 @@
 				D0F3CB992775D765004653AE /* Extensions */,
 				D03B18872751737A00C483B3 /* demo */,
 				D03B18812750EDA500C483B3 /* common */,
-				D050CD122716E2830076D78E /* Service */,
 				D050CD0D2716E1B30076D78E /* Model */,
 				D06313CC270B148000D0E12C /* Assets.xcassets */,
 				D095CAE5275F45B3002F66CC /* GoogleService-Info.plist */,
@@ -565,6 +571,22 @@
 				D0CB563B2743A5D200AE85DF /* VKLoginController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		D0B1C23927D232DC006EE376 /* AppStartManager */ = {
+			isa = PBXGroup;
+			children = (
+				D0B1C23A27D232EF006EE376 /* AppStartManager.swift */,
+			);
+			path = AppStartManager;
+			sourceTree = "<group>";
+		};
+		D0B1C23C27D2389D006EE376 /* AppModeManager */ = {
+			isa = PBXGroup;
+			children = (
+				D0B1C23D27D238A9006EE376 /* AppModeManager.swift */,
+			);
+			path = AppModeManager;
 			sourceTree = "<group>";
 		};
 		D0D2F0AE2747D0D4008E9AB4 /* ApiGetFriends */ = {
@@ -907,6 +929,8 @@
 				D0F2B1132761E64A00C70517 /* demoNewsService.swift in Sources */,
 				D03B1872274E2F4700C483B3 /* ImageCache.swift in Sources */,
 				D0F3CBAD277B029C004653AE /* AsyncOperation.swift in Sources */,
+				D0B1C23B27D232EF006EE376 /* AppStartManager.swift in Sources */,
+				D0B1C23E27D238A9006EE376 /* AppModeManager.swift in Sources */,
 				D0800D1B27283B0800347AB7 /* CustomSearchBar.swift in Sources */,
 				D050CD112716E1CF0076D78E /* GroupModel.swift in Sources */,
 				D03B18932754D56400C483B3 /* PersistenceManager.swift in Sources */,

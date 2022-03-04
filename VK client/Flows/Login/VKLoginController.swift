@@ -8,6 +8,7 @@
 import WebKit
 import UIKit
 
+/// Контроллер для авторизации через Webview Вконтакте
 final class VKLoginController: UIViewController {
 	
 	private let vkWebView: WKWebView = {
@@ -30,11 +31,26 @@ final class VKLoginController: UIViewController {
 		return button
 	}()
 	
+	/// Сервис конфигурации приложения
+	var appModeManager: AppModeManager?
+	
 	/// Контроллер, на который перекинет при успешной авторизации
-	private lazy var nextController: UITabBarController = CustomTabBarController()
+	var nextController: UITabBarController?
+	
+	// MARK: - Init
+	
+	init(nextController: UITabBarController, appModeManager: AppModeManager) {
+		self.nextController = nextController
+		self.appModeManager = appModeManager
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 	
 	// MARK: - View controller life cycle
-	// заменяем стандартную вьюху
+	
 	override func loadView() {
 		self.view = vkWebView
 	}
@@ -80,8 +96,11 @@ extension VKLoginController: WKNavigationDelegate {
 			}
 		
 		// Сохраняем данные авторизации, если она успешна и всё нужное есть
-		if let token = params["access_token"], let userId = params["user_id"], let id = Int(userId) {
+		if let token = params["access_token"], let userId = params["user_id"], let id = Int(userId),
+		   let nextController = nextController {
+			
 			Session.instance.loginUser(with: token, userId: id)
+			appModeManager?.setDemoMode(false, nextController: nextController)
 			self.navigationController?.pushViewController(nextController, animated: true)
 		}
 		
@@ -132,7 +151,11 @@ private extension VKLoginController {
 	}
 	
 	@objc func demoOn () {
-		Assembly.instance.setDemoMode(true)
-		self.navigationController?.pushViewController(LoginController(), animated: true)
+		guard let nextController = nextController else { return }
+		
+		appModeManager?.setDemoMode(true, nextController: nextController)
+		let demoLogin = LoginController()
+		demoLogin.nextVC = nextController
+		self.navigationController?.pushViewController(demoLogin, animated: true)
 	}
 }

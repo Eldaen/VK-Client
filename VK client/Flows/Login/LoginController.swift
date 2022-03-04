@@ -17,7 +17,7 @@ final class LoginController: UIViewController {
 	}
 	
 	/// Контроллер, на который перекинет при успешной авторизации
-	private let nextController: UITabBarController = CustomTabBarController()
+	weak var nextVC: UITabBarController?
 	
 	// MARK: - ViewController life cycle
 	
@@ -71,7 +71,7 @@ final class LoginController: UIViewController {
 				self?.showLoginError()
 				return
 			}
-			if let controller = self?.nextController {
+			if let controller = self?.nextVC {
 				self?.navigationController?.pushViewController(controller, animated: true)
 			}
 		}
