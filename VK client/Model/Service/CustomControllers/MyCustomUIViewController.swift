@@ -7,7 +7,11 @@
 
 import UIKit
 
+/// Базовый класс для вью контроллеров внутри таб контроллера
 class MyCustomUIViewController: UIViewController {
+	
+	/// Делегат для перезапуска приложения
+	weak var restartDelegate: RestartDelegate?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -26,7 +30,7 @@ private extension MyCustomUIViewController {
 									  message: "Вы уверены, что хотите выйти?", preferredStyle: .alert)
 		
 		let actionYes = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
-			self?.routeToEntry()
+			self?.restartDelegate?.restart()
 		}
 		
 		let actionCancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
@@ -35,24 +39,6 @@ private extension MyCustomUIViewController {
 		alter.addAction(actionCancel)
 		
 		present(alter, animated: true, completion: nil)
-	}
-	
-	/// Осуществляет навигацию в точку входа
-	func routeToEntry() {
-		
-		let tabBarController = CustomTabBarController()
-		let appModeManager = AppModeManager()
-		
-		let loginController = VKLoginController(nextController: tabBarController, appModeManager: appModeManager)
-		let navigationController = UINavigationController(rootViewController: loginController)
-		navigationController.modalPresentationStyle = .fullScreen
-		
-		if Assembly.instance.getDemoMode() == true {
-			Assembly.instance.setDemoMode(false)
-		}
-		
-		Session.instance.clean()
-		self.present(navigationController, animated: true, completion: nil)
 	}
 	
 	/// Добавляет кнопку Logout в Navigation Bar

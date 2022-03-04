@@ -14,6 +14,9 @@ protocol ModeManagerProtocol {
 /// Конфигурирует режим работы приложения, с реальным API или в ДЕМО режим
 final class AppModeManager {
 	
+	/// Делегат для перезапуска приложения
+	weak var restartDelegate: RestartDelegate?
+	
 	// MARK: - Private methods
 	
 	private func createNavController(for rootViewController: UIViewController,
@@ -32,16 +35,19 @@ final class AppModeManager {
 		let friendsVM = Assembly.instance.friendsViewModel
 		let newsVM = Assembly.instance.newsViewModel
 		
-		let myGroups = createNavController(for: MyGroupsController(
-			model: groupsVM),
+		let myGroupsVC = MyGroupsController(model: groupsVM)
+		myGroupsVC.restartDelegate = restartDelegate
+		let myGroups = createNavController(for: myGroupsVC,
 								  title: "Мои группы", image: UIImage(systemName: "person.3")!)
 		
-		let friends = createNavController(for: FriendsViewController(
-			model: friendsVM),
+		let friendsVC = FriendsViewController(model: friendsVM)
+		friendsVC.restartDelegate = restartDelegate
+		let friends = createNavController(for: friendsVC,
 								  title: "Друзья", image: UIImage(systemName: "person")!)
 		
-		let news = createNavController(for: NewsController(
-			model: newsVM),
+		let newsVC = NewsController(model: newsVM)
+		newsVC.restartDelegate = restartDelegate
+		let news = createNavController(for: newsVC,
 										  title: "Новости", image: UIImage(systemName: "newspaper")!)
 		
 		controller.viewControllers = [myGroups, friends, news]

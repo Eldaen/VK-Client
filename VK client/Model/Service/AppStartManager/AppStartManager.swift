@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol RestartDelegate: AnyObject {
+	func restart()
+}
+
 /// Сборщик первоначального запуска приложения
 final class AppStartManager {
 	
@@ -19,6 +23,7 @@ final class AppStartManager {
 	func start() {
 		let tabBarController = CustomTabBarController()
 		let appModeManager = AppModeManager()
+		appModeManager.restartDelegate = self
 		
 		let loginController = VKLoginController(nextController: tabBarController, appModeManager: appModeManager)
 		let navigationController = UINavigationController(rootViewController: loginController)
@@ -36,5 +41,16 @@ final class AppStartManager {
 		rootViewController.navigationItem.title = title
 		navController.navigationBar.tintColor = .black
 		return navController
+	}
+}
+
+extension AppStartManager: RestartDelegate {
+	func restart() {
+		if Assembly.instance.getDemoMode() == true {
+			Assembly.instance.setDemoMode(false)
+		}
+		
+		Session.instance.clean()
+		start()
 	}
 }
