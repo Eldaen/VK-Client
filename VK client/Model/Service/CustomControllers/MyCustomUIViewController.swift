@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RealmSwift
 
 class MyCustomUIViewController: UIViewController {
 	
@@ -40,7 +39,11 @@ private extension MyCustomUIViewController {
 	
 	/// Осуществляет навигацию в точку входа
 	func routeToEntry() {
-		let loginController = VKLoginController()
+		
+		let tabBarController = CustomTabBarController()
+		let appModeManager = AppModeManager()
+		
+		let loginController = VKLoginController(nextController: tabBarController, appModeManager: appModeManager)
 		let navigationController = UINavigationController(rootViewController: loginController)
 		navigationController.modalPresentationStyle = .fullScreen
 		
