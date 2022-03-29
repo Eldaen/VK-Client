@@ -81,7 +81,6 @@ final class FriendsViewModel: FriendsViewModelType {
 		//занулим для повторных поисков
 		filteredData = []
 		
-		// Если поиск пустой, то ничего фильтровать нам не нужно
 		if text == "" {
 			filteredData = friends
 			completion()
@@ -95,29 +94,29 @@ final class FriendsViewModel: FriendsViewModelType {
 						if filteredData.isEmpty {
 							searchedSection.data = [friend]
 							filteredData.append(searchedSection)
-							break
-						}
-						
-						// Если в массиве секций уже есть секция с таким ключом, то нужно к имеющемуся массиву друзей добавить друга
-						var found = false
-						for (sectionIndex, filteredSection) in filteredData.enumerated() {
-							if filteredSection.key == section.key {
-								filteredData[sectionIndex].data.append(friend)
-								found = true
-								break
+						} else {
+							
+							// Если в массиве секций уже есть секция с таким ключом, то нужно к имеющемуся массиву друзей добавить друга
+							var found = false
+							for (sectionIndex, filteredSection) in filteredData.enumerated() {
+								if filteredSection.key == section.key {
+									filteredData[sectionIndex].data.append(friend)
+									found = true
+									break
+								}
 							}
-						}
-						
-						// Если такого ключа ещё нет, то создаём новый массив с нашим найденным другом
-						if !found {
-							searchedSection.data = [friend]
-							filteredData.append(searchedSection)
+							
+							// Если такого ключа ещё нет, то создаём новый массив с нашим найденным другом
+							if !found {
+								searchedSection.data = [friend]
+								filteredData.append(searchedSection)
+							}
 						}
 					}
 				}
 			}
-			completion()
 		}
+		completion()
 	}
 	
 	func cancelSearch(completion: @escaping () -> Void) {

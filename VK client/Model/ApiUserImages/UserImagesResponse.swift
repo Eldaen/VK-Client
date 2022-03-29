@@ -1,5 +1,5 @@
 //
-//  UserImagesResponse.swift.swift
+//  UserImagesResponse.swift
 //  VK client
 //
 //  Created by Денис Сизов on 19.11.2021.

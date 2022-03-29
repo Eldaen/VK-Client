@@ -82,7 +82,7 @@
 		D0CB563E2743F58300AE85DF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB563D2743F58300AE85DF /* NetworkManager.swift */; };
 		D0D2F0AB27478C53008E9AB4 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0AA27478C53008E9AB4 /* Loader.swift */; };
 		D0D2F0AD2747CD17008E9AB4 /* ApiImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0AC2747CD17008E9AB4 /* ApiImage.swift */; };
-		D0D2F0B02747D107008E9AB4 /* UserImagesResponse.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0AF2747D107008E9AB4 /* UserImagesResponse.swift.swift */; };
+		D0D2F0B02747D107008E9AB4 /* UserImagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0AF2747D107008E9AB4 /* UserImagesResponse.swift */; };
 		D0D2F0B22747D1EB008E9AB4 /* Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0B12747D1EB008E9AB4 /* Sizes.swift */; };
 		D0D2F0B52747D658008E9AB4 /* UserImagesMainResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0B42747D658008E9AB4 /* UserImagesMainResponse.swift */; };
 		D0D2F0B92748EB7A008E9AB4 /* GroupsMyResponse.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2F0B82748EB7A008E9AB4 /* GroupsMyResponse.swift.swift */; };
@@ -201,7 +201,7 @@
 		D0CB563D2743F58300AE85DF /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		D0D2F0AA27478C53008E9AB4 /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		D0D2F0AC2747CD17008E9AB4 /* ApiImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiImage.swift; sourceTree = "<group>"; };
-		D0D2F0AF2747D107008E9AB4 /* UserImagesResponse.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImagesResponse.swift.swift; sourceTree = "<group>"; };
+		D0D2F0AF2747D107008E9AB4 /* UserImagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImagesResponse.swift; sourceTree = "<group>"; };
 		D0D2F0B12747D1EB008E9AB4 /* Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizes.swift; sourceTree = "<group>"; };
 		D0D2F0B42747D658008E9AB4 /* UserImagesMainResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImagesMainResponse.swift; sourceTree = "<group>"; };
 		D0D2F0B82748EB7A008E9AB4 /* GroupsMyResponse.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsMyResponse.swift.swift; sourceTree = "<group>"; };
@@ -601,7 +601,7 @@
 		D0D2F0B32747D1F0008E9AB4 /* ApiUserImages */ = {
 			isa = PBXGroup;
 			children = (
-				D0D2F0AF2747D107008E9AB4 /* UserImagesResponse.swift.swift */,
+				D0D2F0AF2747D107008E9AB4 /* UserImagesResponse.swift */,
 				D0D2F0AC2747CD17008E9AB4 /* ApiImage.swift */,
 				D0D2F0B12747D1EB008E9AB4 /* Sizes.swift */,
 				D0D2F0B42747D658008E9AB4 /* UserImagesMainResponse.swift */,
@@ -948,7 +948,7 @@
 				D04F214627463F6F00968CB5 /* VkFriendsResponse.swift in Sources */,
 				D0F3CBAF277B0398004653AE /* GroupsDataOperation.swift in Sources */,
 				D0EFE8142771D93B00A8E66E /* RepostsControl.swift in Sources */,
-				D0D2F0B02747D107008E9AB4 /* UserImagesResponse.swift.swift in Sources */,
+				D0D2F0B02747D107008E9AB4 /* UserImagesResponse.swift in Sources */,
 				D095CB01275F97D2002F66CC /* FirebaseGroup.swift in Sources */,
 				D0EFE7E82770AFB000A8E66E /* NewsTextCell.swift in Sources */,
 				D0F3CBB5277B1409004653AE /* UpdateRealmDataOperation.swift in Sources */,
